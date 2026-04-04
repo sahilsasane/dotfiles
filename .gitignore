@@ -1,0 +1,72 @@
+# ========================
+# OS junk
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Logs
+# ========================
+*.log
+
+# ========================
+# Neovim
+# ========================
+# backup / swap / undo
+*.swp
+*.swo
+*.bak
+*.tmp
+undo/
+shada/
+session/
+
+# Lazy / plugin cache (DON’T commit)
+nvim/.cache/
+nvim/.local/
+nvim/.luarc.json
+nvim/.cursor/
+
+# ========================
+# TMUX
+# ========================
+# plugins should NOT be committed
+tmux/plugins/
+
+# ========================
+# Python / UV / venvs
+# ========================
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# uv specific
+uv/
+*.venv/
+
+# ========================
+# Node (if ever used)
+# ========================
+node_modules/
+
+# ========================
+# iTerm / macOS app data
+# ========================
+iterm2/AppSupport
+iterm2/sockets/
+raycast/ai/
+cagent/
+
+# ========================
+# Backup configs (your case)
+# ========================
+nvim-backupl/
+
+# ========================
+# Misc
+# ========================
+*.lock
+*.out
+*.pid

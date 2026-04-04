@@ -1,0 +1,5 @@
+# Local-only secrets and machine-specific overrides.
+# Copy to ~/.zshrc.local on a machine that needs these values.
+
+# export WIZ_CLIENT_ID="replace-me"
+# export WIZ_CLIENT_SECRET="replace-me"

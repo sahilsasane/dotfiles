@@ -1,0 +1,32 @@
+#!/bin/bash
+
+PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+PROJECT=$(basename "$PROJECT_DIR")
+
+# If session already exists, attach to it
+if tmux has-session -t "$PROJECT" 2>/dev/null; then
+  tmux attach-session -t "$PROJECT"
+  exit 0
+fi
+
+# Window 1: code (full-screen Neovim)
+tmux new-session -d -s "$PROJECT" -n code -c "$PROJECT_DIR"
+tmux send-keys -t "$PROJECT:code" "nvim ." Enter
+
+# Window 2: services (manual)
+tmux new-window -t "$PROJECT" -n services -c "$PROJECT_DIR"
+tmux send-keys -t "$PROJECT:services" "# Start server here" Enter
+
+# Window 3: cursor CLI
+tmux new-window -t "$PROJECT" -n cursor -c "$PROJECT_DIR"
+tmux send-keys -t "$PROJECT:cursor" "agent ls" Enter
+
+# Window 4: test (manual)
+tmux new-window -t "$PROJECT" -n test -c "$PROJECT_DIR"
+tmux send-keys -t "$PROJECT:test" "# Test server" Enter
+
+# Start in code window
+tmux select-window -t "$PROJECT:code"
+
+# Attach
+tmux attach-session -t "$PROJECT"

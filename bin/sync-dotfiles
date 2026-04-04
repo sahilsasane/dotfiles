@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+mkdir -p \
+  "$ROOT_DIR/bin" \
+  "$ROOT_DIR/fish" \
+  "$ROOT_DIR/git" \
+  "$ROOT_DIR/git-config" \
+  "$ROOT_DIR/htop" \
+  "$ROOT_DIR/iterm2" \
+  "$ROOT_DIR/nvim" \
+  "$ROOT_DIR/tmux" \
+  "$ROOT_DIR/zsh"
+
+rsync -a --delete \
+  --exclude '.DS_Store' \
+  --exclude '.cursor/' \
+  "$HOME/.config/nvim/" "$ROOT_DIR/nvim/"
+
+rsync -a --delete --exclude '.DS_Store' "$HOME/.config/fish/" "$ROOT_DIR/fish/"
+rsync -a --delete --exclude '.DS_Store' "$HOME/.config/git/" "$ROOT_DIR/git/"
+rsync -a --delete --exclude '.DS_Store' "$HOME/.config/htop/" "$ROOT_DIR/htop/"
+
+install -m 0644 "$HOME/.gitconfig" "$ROOT_DIR/git-config/.gitconfig"
+install -m 0644 "$HOME/.gitignore_global" "$ROOT_DIR/git-config/.gitignore_global"
+
+install -m 0644 "$HOME/.zshrc" "$ROOT_DIR/zsh/.zshrc"
+install -m 0644 "$HOME/.zshenv" "$ROOT_DIR/zsh/.zshenv"
+install -m 0644 "$HOME/.zprofile" "$ROOT_DIR/zsh/.zprofile"
+install -m 0644 "$HOME/.p10k.zsh" "$ROOT_DIR/zsh/.p10k.zsh"
+
+perl -0pi -e '
+  s/^export WIZ_CLIENT_SECRET=.*\n//mg;
+  s/^export WIZ_CLIENT_ID=.*\n//mg;
+  s#/Users/sahilsasane/\.antigravity/antigravity/bin#\$HOME/.antigravity/antigravity/bin#g;
+  s#^source \$\(brew --prefix\)/share/zsh-autosuggestions/zsh-autosuggestions\.zsh$#[[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"#mg;
+' "$ROOT_DIR/zsh/.zshrc"
+
+grep -q 'source ~/.zshrc.local' "$ROOT_DIR/zsh/.zshrc" || perl -0pi -e '
+  s!(export TER_MODEL_ID=.*\n)!$1\n# Local-only secrets and machine-specific overrides.\n[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local\n!;
+' "$ROOT_DIR/zsh/.zshrc"
+
+install -m 0644 "$HOME/.tmux.conf" "$ROOT_DIR/tmux/.tmux.conf"
+perl -0pi -e '
+  s#~/.config/tmux/tmux\.conf#~/.tmux.conf#g;
+  s#~/.config/tmux/plugins/catppuccin/tmux#~/.tmux/plugins/catppuccin/tmux#g;
+  s#~/.config/tmux/plugins/tmux-plugins/tmux-cpu/cpu\.tmux#~/.tmux/plugins/tmux-cpu/cpu.tmux#g;
+  s#~/.config/tmux/plugins/tmux-plugins/tmux-battery/battery\.tmux#~/.tmux/plugins/tmux-battery/battery.tmux#g;
+' "$ROOT_DIR/tmux/.tmux.conf"
+
+if [ -f "$HOME/bin/tmxp" ]; then
+  install -m 0755 "$HOME/bin/tmxp" "$ROOT_DIR/bin/tmxp"
+fi
+
+plutil -convert xml1 -o "$ROOT_DIR/iterm2/com.googlecode.iterm2.plist" \
+  "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+
+echo "Sync complete. Review with: git status --short"

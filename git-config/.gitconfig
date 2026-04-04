@@ -1,0 +1,44 @@
+[user]
+	name = sahil
+	email = sahil.sasane@tmdc.io
+[init]
+	defaultBranch = main
+[core]
+	pager = delta
+	excludesfile = /Users/sahilsasane/.gitignore_global
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = true
+[diff]
+	colorMoved = zebra
+	colorMovedWS = allow-indentation-change
+[merge]
+	conflictstyle = zdiff3
+[alias]
+	d = diff
+	ds = diff --staged
+	dw = diff -w
+	pr = diff origin/main...HEAD
+	prw = diff -w origin/main...HEAD
+	w = diff --word-diff=color
+	f = diff -W
+	names = diff --name-status origin/main...HEAD
+	stat = diff --stat origin/main...HEAD
+	pick = log -p -S
+	gr = log --graph --decorate --oneline --all
+	s = status -sb
+	sw = switch
+	sc = switch -c
+	br = branch
+	unstage = restore --staged
+	discard = restore
+	undo = reset --soft HEAD~1
+	hardundo = reset --hard HEAD~1
+	rr = reflog
+	up = pull --rebase --autostash
+	fpush = push --force-with-lease
+	l = log --oneline --decorate
+	last = log -1 --stat
