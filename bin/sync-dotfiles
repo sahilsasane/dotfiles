@@ -13,7 +13,9 @@ mkdir -p \
   "$ROOT_DIR/iterm2" \
   "$ROOT_DIR/nvim" \
   "$ROOT_DIR/tmux" \
-  "$ROOT_DIR/zsh"
+  "$ROOT_DIR/zsh" \
+  "$ROOT_DIR/zsh/profile.d" \
+  "$ROOT_DIR/zsh/rc.d"
 
 rsync -a --delete \
   --exclude '.DS_Store' \
@@ -26,22 +28,15 @@ rsync -a --delete --exclude '.DS_Store' "$HOME/.config/htop/" "$ROOT_DIR/htop/"
 
 install -m 0644 "$HOME/.gitconfig" "$ROOT_DIR/git-config/.gitconfig"
 install -m 0644 "$HOME/.gitignore_global" "$ROOT_DIR/git-config/.gitignore_global"
-
-install -m 0644 "$HOME/.zshrc" "$ROOT_DIR/zsh/.zshrc"
-install -m 0644 "$HOME/.zshenv" "$ROOT_DIR/zsh/.zshenv"
-install -m 0644 "$HOME/.zprofile" "$ROOT_DIR/zsh/.zprofile"
-install -m 0644 "$HOME/.p10k.zsh" "$ROOT_DIR/zsh/.p10k.zsh"
-
 perl -0pi -e '
-  s/^export WIZ_CLIENT_SECRET=.*\n//mg;
-  s/^export WIZ_CLIENT_ID=.*\n//mg;
-  s#/Users/sahilsasane/\.antigravity/antigravity/bin#\$HOME/.antigravity/antigravity/bin#g;
-  s#^source \$\(brew --prefix\)/share/zsh-autosuggestions/zsh-autosuggestions\.zsh$#[[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"#mg;
-' "$ROOT_DIR/zsh/.zshrc"
+  s#^(\s*excludesfile\s*=\s*).*$#$1~/.gitignore_global#mg;
+' "$ROOT_DIR/git-config/.gitconfig"
 
-grep -q 'source ~/.zshrc.local' "$ROOT_DIR/zsh/.zshrc" || perl -0pi -e '
-  s!(export TER_MODEL_ID=.*\n)!$1\n# Local-only secrets and machine-specific overrides.\n[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local\n!;
-' "$ROOT_DIR/zsh/.zshrc"
+if [ -f "$HOME/.p10k.zsh" ]; then
+  install -m 0644 "$HOME/.p10k.zsh" "$ROOT_DIR/zsh/.p10k.zsh"
+fi
+
+echo "Skipping zsh loader/module sync: dotfiles is the source of truth for zsh."
 
 install -m 0644 "$HOME/.tmux.conf" "$ROOT_DIR/tmux/.tmux.conf"
 perl -0pi -e '

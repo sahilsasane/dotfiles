@@ -1,10 +1,7 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+typeset -g DOTFILES_ZSH_DIR="${${(%):-%N}:A:h}"
 
-export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-export PATH="$PATH:/usr/local/go/bin"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-export PATH="$HOME/.dataos/bin/dataos-ctl:$PATH"
+for _dotfiles_profile in "$DOTFILES_ZSH_DIR"/profile.d/*.zsh(N); do
+  source "$_dotfiles_profile"
+done
 
-export LIBRARY_PATH="$LIBRARY_PATH:/usr/local/opt/openssl/lib/"
+unset _dotfiles_profile

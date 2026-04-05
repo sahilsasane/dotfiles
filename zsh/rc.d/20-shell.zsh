@@ -1,0 +1,11 @@
+export CLICOLOR=1
+export TERM=xterm-256color
+export LSCOLORS="ExFxGxdxCxDxBxabagacad"
+export CLAUDE_CODE_NO_FLICKER=1
+
+if command -v security >/dev/null 2>&1; then
+  export OPENAI_API_KEY="$(security find-generic-password -a "$USER" -s openai_api_key -w 2>/dev/null)"
+fi
+
+export OPENAI_MODEL="${OPENAI_MODEL:-gpt-5-nano-2025-08-07}"
+export TER_MODEL_ID="BAAI/bge-small-en-v1.5"

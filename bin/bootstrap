@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is required before running bootstrap."
+  echo "Install Homebrew first, then rerun ./bin/bootstrap."
+  exit 1
+fi
+
+brew bundle --file "$ROOT_DIR/Brewfile"
+"$ROOT_DIR/bin/install.sh"
+
+echo
+echo "Bootstrap complete."
+echo "Open Neovim once to install plugins."

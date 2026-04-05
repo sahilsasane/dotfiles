@@ -73,6 +73,9 @@ return {
         },
         ruff = {},
         stylua = {},
+        ts_ls = {},
+        eslint = {},
+        prettierd = {},
         lua_ls = {
           on_init = function(client)
             if client.workspace_folders then
@@ -143,6 +146,15 @@ return {
         lua = { 'stylua' },
         python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
         go = { 'goimports', 'gofmt' },
+        javascript = { 'prettierd', stop_after_first = true },
+        javascriptreact = { 'prettierd', stop_after_first = true },
+        typescript = { 'prettierd', stop_after_first = true },
+        typescriptreact = { 'prettierd', stop_after_first = true },
+        json = { 'prettierd', stop_after_first = true },
+        css = { 'prettierd', stop_after_first = true },
+        scss = { 'prettierd', stop_after_first = true },
+        html = { 'prettierd', stop_after_first = true },
+        markdown = { 'prettierd', stop_after_first = true },
       },
     },
   },

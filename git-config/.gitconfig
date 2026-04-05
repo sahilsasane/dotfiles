@@ -1,11 +1,11 @@
 [user]
 	name = sahil
-	email = sahil.sasane@tmdc.io
+	email = shsasane22@gmail.com
 [init]
 	defaultBranch = main
 [core]
 	pager = delta
-	excludesfile = /Users/sahilsasane/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [interactive]
 	diffFilter = delta --color-only
 [delta]

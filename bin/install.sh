@@ -1,21 +1,64 @@
 #!/usr/bin/env bash
-DOTFILES="$(cd "$(dirname "$0")" && pwd)"
+set -euo pipefail
 
-ln -sf "$DOTFILES/zsh/.zshrc"   "$HOME/.zshrc"
-ln -sf "$DOTFILES/zsh/.zshenv"  "$HOME/.zshenv"
-ln -sf "$DOTFILES/zsh/.zprofile" "$HOME/.zprofile"
+DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-mkdir -p "$HOME/.config/zsh"
-for f in "$DOTFILES/zsh/config/"*.zsh; do
-  ln -sf "$f" "$HOME/.config/zsh/$(basename "$f")"
-done
+backup_path() {
+  local target="$1"
+  if [[ -e "$target" && ! -L "$target" ]]; then
+    local backup="${target}.backup.$(date +%Y%m%d%H%M%S)"
+    mv "$target" "$backup"
+    echo "Backed up $target -> $backup"
+  fi
+}
 
-git clone https://github.com/zsh-users/zsh-autosuggestions \
-  $ZSH_CUSTOM/plugins/zsh-autosuggestions 2>/dev/null || \
-  git -C $ZSH_CUSTOM/plugins/zsh-autosuggestions pull
+link_path() {
+  local source="$1"
+  local target="$2"
+  mkdir -p "$(dirname "$target")"
+  backup_path "$target"
+  ln -sfn "$source" "$target"
+}
 
-git clone https://github.com/zsh-users/zsh-syntax-highlighting \
-  $ZSH_CUSTOM/plugins/zsh-syntax-highlighting 2>/dev/null || \
-  git -C $ZSH_CUSTOM/plugins/zsh-syntax-highlighting pull
+clone_or_update() {
+  local repo="$1"
+  local target="$2"
+  if [[ -d "$target/.git" ]]; then
+    git -C "$target" pull --ff-only
+  else
+    mkdir -p "$(dirname "$target")"
+    git clone --depth=1 "$repo" "$target"
+  fi
+}
 
-echo "Linked."
+clone_or_update https://github.com/ohmyzsh/ohmyzsh.git \
+  "$HOME/.oh-my-zsh"
+clone_or_update https://github.com/romkatv/powerlevel10k.git \
+  "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+
+clone_or_update https://github.com/tmux-plugins/tpm \
+  "$HOME/.tmux/plugins/tpm"
+clone_or_update https://github.com/catppuccin/tmux \
+  "$HOME/.tmux/plugins/catppuccin"
+clone_or_update https://github.com/tmux-plugins/tmux-cpu \
+  "$HOME/.tmux/plugins/tmux-cpu"
+clone_or_update https://github.com/tmux-plugins/tmux-battery \
+  "$HOME/.tmux/plugins/tmux-battery"
+
+link_path "$DOTFILES_ROOT/zsh/.zshrc" "$HOME/.zshrc"
+link_path "$DOTFILES_ROOT/zsh/.zshenv" "$HOME/.zshenv"
+link_path "$DOTFILES_ROOT/zsh/.zprofile" "$HOME/.zprofile"
+link_path "$DOTFILES_ROOT/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
+
+link_path "$DOTFILES_ROOT/git-config/.gitconfig" "$HOME/.gitconfig"
+link_path "$DOTFILES_ROOT/git-config/.gitignore_global" "$HOME/.gitignore_global"
+
+link_path "$DOTFILES_ROOT/tmux/.tmux.conf" "$HOME/.tmux.conf"
+
+link_path "$DOTFILES_ROOT/nvim" "$HOME/.config/nvim"
+link_path "$DOTFILES_ROOT/fish" "$HOME/.config/fish"
+link_path "$DOTFILES_ROOT/git" "$HOME/.config/git"
+link_path "$DOTFILES_ROOT/htop" "$HOME/.config/htop"
+link_path "$DOTFILES_ROOT/iterm2/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+
+echo "Linked dotfiles into $HOME."
