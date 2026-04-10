@@ -12,8 +12,8 @@ if [[ -d "$HOME/.antigravity/antigravity/bin" ]]; then
   path=("$HOME/.antigravity/antigravity/bin" $path)
 fi
 
-if [[ -d "$HOME/.dataos/bin/dataos-ctl" ]]; then
-  path=("$HOME/.dataos/bin/dataos-ctl" $path)
+if [[ -d "$HOME/.dataos/v2/bin/dataos-ctl" ]]; then
+  path=("$HOME/.dataos/v2/bin/dataos-ctl" $path)
 fi
 
 if [[ -d /usr/local/go/bin ]]; then

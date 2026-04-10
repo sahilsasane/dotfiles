@@ -5,3 +5,5 @@ for _dotfiles_rc in "$DOTFILES_ZSH_DIR"/rc.d/*.zsh(N); do
 done
 
 unset _dotfiles_rc
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
