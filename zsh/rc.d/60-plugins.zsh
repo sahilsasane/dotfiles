@@ -3,7 +3,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 DISABLE_AUTO_UPDATE=true
 ZSH_DISABLE_COMPFIX=true
 
-plugins=(git)
+plugins=(git colored-man-pages)
 
 if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
   source "$ZSH/oh-my-zsh.sh"
