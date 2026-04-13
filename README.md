@@ -22,6 +22,8 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `bin/install.sh`: link tracked files into `$HOME`
 - `bin/sync-dotfiles`: copy current machine config back into the repo and sanitize it
 - `nvim/`: Neovim config, keymaps, plugins, lockfile
+- `eza/`: eza theme config
+- `yazi/`: Yazi config and flavor assets
 - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
 - `tmux/`: tmux config using `~/.tmux.conf` and `~/.tmux/plugins`
 - `git-config/`: Git config and global ignore

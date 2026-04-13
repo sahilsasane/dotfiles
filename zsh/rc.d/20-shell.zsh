@@ -1,6 +1,8 @@
 export CLICOLOR=1
 export TERM=xterm-256color
-export LSCOLORS="ExFxGxdxCxDxBxabagacad"
+export EZA_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/eza"
+unset LSCOLORS
+export LS_COLORS="$(vivid generate catppuccin-mocha)"
 export CLAUDE_CODE_NO_FLICKER=1
 
 if command -v security >/dev/null 2>&1; then

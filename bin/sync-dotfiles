@@ -6,6 +6,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 mkdir -p \
   "$ROOT_DIR/bin" \
+  "$ROOT_DIR/eza" \
   "$ROOT_DIR/fish" \
   "$ROOT_DIR/git" \
   "$ROOT_DIR/git-config" \
@@ -13,6 +14,7 @@ mkdir -p \
   "$ROOT_DIR/iterm2" \
   "$ROOT_DIR/nvim" \
   "$ROOT_DIR/tmux" \
+  "$ROOT_DIR/yazi" \
   "$ROOT_DIR/zsh" \
   "$ROOT_DIR/zsh/profile.d" \
   "$ROOT_DIR/zsh/rc.d"
@@ -22,9 +24,16 @@ rsync -a --delete \
   --exclude '.cursor/' \
   "$HOME/.config/nvim/" "$ROOT_DIR/nvim/"
 
+if [ -d "$HOME/.config/eza" ]; then
+  rsync -a --delete --exclude '.DS_Store' "$HOME/.config/eza/" "$ROOT_DIR/eza/"
+fi
+
 rsync -a --delete --exclude '.DS_Store' "$HOME/.config/fish/" "$ROOT_DIR/fish/"
 rsync -a --delete --exclude '.DS_Store' "$HOME/.config/git/" "$ROOT_DIR/git/"
 rsync -a --delete --exclude '.DS_Store' "$HOME/.config/htop/" "$ROOT_DIR/htop/"
+if [ -d "$HOME/.config/yazi" ]; then
+  rsync -a --delete --exclude '.DS_Store' "$HOME/.config/yazi/" "$ROOT_DIR/yazi/"
+fi
 
 install -m 0644 "$HOME/.gitconfig" "$ROOT_DIR/git-config/.gitconfig"
 install -m 0644 "$HOME/.gitignore_global" "$ROOT_DIR/git-config/.gitignore_global"

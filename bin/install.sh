@@ -56,9 +56,11 @@ link_path "$DOTFILES_ROOT/git-config/.gitignore_global" "$HOME/.gitignore_global
 link_path "$DOTFILES_ROOT/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 link_path "$DOTFILES_ROOT/nvim" "$HOME/.config/nvim"
+link_path "$DOTFILES_ROOT/eza" "$HOME/.config/eza"
 link_path "$DOTFILES_ROOT/fish" "$HOME/.config/fish"
 link_path "$DOTFILES_ROOT/git" "$HOME/.config/git"
 link_path "$DOTFILES_ROOT/htop" "$HOME/.config/htop"
+link_path "$DOTFILES_ROOT/yazi" "$HOME/.config/yazi"
 link_path "$DOTFILES_ROOT/iterm2/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 
 echo "Linked dotfiles into $HOME."
