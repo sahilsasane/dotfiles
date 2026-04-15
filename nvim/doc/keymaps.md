@@ -100,7 +100,7 @@
 
 ## 7. Window Management
 
-- `<C-h>` / `<C-l>` / `<C-j>` / `<C-k>` — Move focus between splits
+- `<C-j>` / `<C-k>` — Scroll the viewport down / up by one line
 - `<leader>h` — Focus NERDTree window
 - `<leader>l` — Focus code window (back from NERDTree)
 

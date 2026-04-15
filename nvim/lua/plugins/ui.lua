@@ -27,7 +27,7 @@ return {
           return {
             NormalFloat = { bg = colors.crust },
             FloatBorder = { bg = colors.crust, fg = colors.lavender },
-            NormalNC = { fg = colors.overlay0 },
+            NormalNC = { fg = colors.text },
 
             ['@comment'] = { fg = colors.overlay1, style = { 'italic' } },
             CursorLine = { bg = colors.mantle, blend = 99 },
