@@ -35,7 +35,7 @@ vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' 
 vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Delete without overwriting register' })
 
--- NERDTree / window navigation
+-- Window navigation
 vim.keymap.set('n', '<leader>h', '<C-w>h', { desc = 'Focus left window' })
 vim.keymap.set('n', '<leader>l', '<C-w>l', { desc = 'Focus right window' })
 vim.keymap.set('n', '<leader>j', '<C-w>j', { desc = 'Focus lower window' })

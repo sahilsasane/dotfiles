@@ -28,6 +28,7 @@ return {
       vim.g.NERDTreeQuitOnOpen = 1
     end,
   },
+
   -- {
   --   'karb94/neoscroll.nvim',
   --   config = function()
@@ -48,12 +49,15 @@ return {
   --     require('neoscroll.config').set_mappings(t)
   --   end,
   -- },
+
   {
     'stevearc/oil.nvim',
     lazy = false,
     dependencies = { { 'nvim-mini/mini.icons', opts = {} } },
     config = function()
-      require('oil').setup {
+      local oil = require 'oil'
+
+      oil.setup {
         default_file_explorer = true,
         delete_to_trash = true,
         skip_confirm_for_simple_edits = true,
@@ -73,7 +77,7 @@ return {
       }
 
       vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-      vim.keymap.set('n', '<leader>e', function() require('oil').toggle_float() end, { desc = 'Toggle file [E]xplorer (float)' })
+      vim.keymap.set('n', '<leader>e', function() oil.toggle_float() end, { desc = 'Toggle file [E]xplorer (float)' })
     end,
   },
 

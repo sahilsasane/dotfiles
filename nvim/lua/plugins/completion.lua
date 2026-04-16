@@ -29,7 +29,7 @@ return {
         menu = { auto_show = true, auto_show_delay_ms = 0 },
       },
       sources = {
-        default = { 'lsp', 'path', 'snippets' },
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
       },
       snippets = { preset = 'luasnip' },
       fuzzy = { implementation = 'lua' },

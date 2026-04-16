@@ -33,6 +33,7 @@ return {
       spec = {
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
+        { '<leader>x', group = 'Diagnostics' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { 'gr', group = 'LSP Actions', mode = { 'n' } },
       },
@@ -47,5 +48,22 @@ return {
     ---@type TodoOptions
     ---@diagnostic disable-next-line: missing-fields
     opts = { signs = false },
+  },
+
+  {
+    'folke/trouble.nvim',
+    cmd = 'Trouble',
+    keys = {
+      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics' },
+      { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics' },
+      { '<leader>xs', '<cmd>Trouble symbols toggle focus=false<cr>', desc = 'Symbols' },
+      { '<leader>xl', '<cmd>Trouble lsp toggle focus=false win.position=right<cr>', desc = 'LSP List' },
+      { '<leader>xq', '<cmd>Trouble qflist toggle<cr>', desc = 'Quickfix List' },
+      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>', desc = 'Location List' },
+    },
+    opts = {
+      focus = false,
+      win = { type = 'split', position = 'right' },
+    },
   },
 }

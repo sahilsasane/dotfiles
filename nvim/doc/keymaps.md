@@ -101,8 +101,8 @@
 ## 7. Window Management
 
 - `<C-j>` / `<C-k>` — Scroll the viewport down / up by one line
-- `<leader>h` — Focus NERDTree window
-- `<leader>l` — Focus code window (back from NERDTree)
+- `<leader>h` — Focus left window
+- `<leader>l` — Focus right window
 
 ---
 
@@ -148,10 +148,10 @@ nvim .
 | --- | --- |
 | Toggle file explorer float | `<leader>e` |
 | Open Oil in current dir | `-` |
-| Show/hide dotfiles | `g.` inside Oil |
 | Reveal current file in NERDTree | `<leader>n` |
-| Focus NERDTree window | `<leader>h` |
-| Focus code window | `<leader>l` |
+| Show/hide dotfiles | `g.` inside Oil |
+| Focus left window | `<leader>h` |
+| Focus right window | `<leader>l` |
 
 ### 3. Find files & search code
 
@@ -188,6 +188,8 @@ nvim .
 | Hover docs | `K` |
 | Symbols in file | `gO` |
 | Symbols in workspace | `gW` |
+| Flash jump | `s` |
+| Flash Treesitter jump | `S` |
 | Jump back after `grd` | `<C-o>` |
 
 ### 5. Diagnostics
@@ -198,6 +200,12 @@ nvim .
 | Prev diagnostic | `[d` |
 | Search all diagnostics | `<leader>sd` |
 | Quickfix list | `<leader>q` |
+| Trouble diagnostics | `<leader>xx` |
+| Trouble buffer diagnostics | `<leader>xX` |
+| Trouble symbols | `<leader>xs` |
+| Trouble LSP list | `<leader>xl` |
+| Trouble quickfix | `<leader>xq` |
+| Trouble location list | `<leader>xL` |
 | Toggle inlay hints | `<leader>th` |
 
 ### 6. Pin files with Harpoon
