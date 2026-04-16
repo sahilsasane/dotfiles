@@ -6,8 +6,6 @@ done
 
 unset _dotfiles_rc
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 if command -v atuin >/dev/null 2>&1; then
   bindkey '^R' atuin-search 2>/dev/null
   bindkey '^[[A' up-line-or-history 2>/dev/null
