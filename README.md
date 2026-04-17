@@ -55,13 +55,13 @@ After bootstrap:
 
 Optional AI commit flow for Lazygit:
 
-- install `aicommits`: `npm install -g aicommits`
-- run `aicommits setup` and choose your provider/model
+- install `aichat`: `brew install aichat`
+- run `aichat` once and choose/configure your provider and model
 - rerun `./bin/install.sh` if needed so Lazygit's config dir and `~/.local/bin/lg-ai-commit` are linked
 - in Lazygit, stage changes and press `CtrlG` from the files view
-- edit the generated message in `$VISUAL` or `$EDITOR` before the commit is created
+- `lg-ai-commit` sends the staged diff plus recent commit subjects to `aichat`, lets you pick a suggestion in `fzf`, then opens the selected message in `$VISUAL` or `$EDITOR` before committing
 
-To switch from a cloud model to Ollama later, update `aicommits` with `aicommits setup` or `aicommits model`. The Lazygit keybinding stays the same.
+To switch from a cloud model to Ollama later, update your `aichat` model config. The Lazygit keybinding stays the same.
 On macOS, `lazygit --print-config-dir` commonly resolves to `~/Library/Application Support/lazygit` rather than `~/.config/lazygit`.
 
 ## Sync From Current Machine

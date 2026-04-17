@@ -17,10 +17,6 @@ cleanup() {
     rm -f "${__lg_ai_commit_tmp}"
   fi
 
-  if [[ -n "${__lg_ai_commit_restore_clipboard:-}" ]]; then
-    printf '%s' "${__lg_ai_commit_clipboard_backup:-}" | pbcopy
-  fi
-
   exit "$status"
 }
 
@@ -28,43 +24,50 @@ trap cleanup EXIT
 
 require_cmd git
 require_cmd mktemp
-require_cmd pbcopy
-require_cmd pbpaste
+require_cmd fzf
 
-if ! command -v aicommits >/dev/null 2>&1; then
-  die "lg-ai-commit: aicommits is not installed. Run 'npm install -g aicommits' and 'aicommits setup'."
+if ! command -v aichat >/dev/null 2>&1; then
+  die "lg-ai-commit: aichat is not installed. Install it with 'brew install aichat' and configure a model with 'aichat'."
 fi
 
 git rev-parse --git-dir >/dev/null 2>&1 || die "lg-ai-commit: not a git repository."
 git diff --staged --quiet && die "lg-ai-commit: no staged changes."
 
-__lg_ai_commit_clipboard_backup="$(pbpaste 2>/dev/null || true)"
-__lg_ai_commit_restore_clipboard=1
+recent_count="${LG_AI_COMMIT_RECENT_COUNT:-15}"
+suggestion_count="${LG_AI_COMMIT_SUGGESTIONS:-10}"
+diff_chars="${LG_AI_COMMIT_DIFF_CHARS:-120000}"
+recent_chars="${LG_AI_COMMIT_RECENT_CHARS:-4000}"
 
-aicommits_args=(--clipboard --type conventional)
+staged_diff="$(git diff --staged --patch --minimal | head -c "${diff_chars}")"
+recent_commits="$(git log -n "${recent_count}" --pretty=format:%s 2>/dev/null | sed 's/^/- /' | head -c "${recent_chars}")"
 
-if [[ -n "${LG_AI_COMMIT_GENERATE:-}" ]]; then
-  aicommits_args+=(--generate "${LG_AI_COMMIT_GENERATE}")
-fi
+prompt=$'You write git commit message candidates for the STAGED diff only.\n\n'\
+$'Use the recent commit subjects only to infer style and level of abstraction, not to copy content.\n\n'\
+$'Requirements:\n'\
+$'- Return exactly '"${suggestion_count}"$' commit message candidates\n'\
+$'- Output raw commit subjects only, one per line\n'\
+$'- No numbering, bullets, quotes, markdown, or commentary\n'\
+$'- Follow Conventional Commits\n'\
+$'- Use a scope only when it is genuinely helpful\n'\
+$'- Prefer higher-level intent over low-level code narration\n'\
+$'- Keep each subject concise and under 72 characters when possible\n'\
+$'- Base every candidate on the STAGED diff, not unstaged changes\n\n'\
+$'Recent commit subjects:\n'\
+"${recent_commits:-"- none"}"\
+$'\n\nSTAGED DIFF:\n'\
+"$staged_diff"
 
-if [[ -n "${LG_AI_COMMIT_PROMPT:-}" ]]; then
-  aicommits_args+=(--prompt "${LG_AI_COMMIT_PROMPT}")
-fi
-
-if [[ -n "${LG_AI_COMMIT_EXCLUDE:-}" ]]; then
-  IFS=',' read -r -a exclude_paths <<< "${LG_AI_COMMIT_EXCLUDE}"
-  for path in "${exclude_paths[@]}"; do
-    [[ -n "${path}" ]] && aicommits_args+=(--exclude "${path}")
-  done
-fi
-
-aicommits "${aicommits_args[@]}"
+selected_message="$(
+  aichat "$prompt" \
+    | sed '/^[[:space:]]*$/d' \
+    | fzf --height 40% --border --ansi --preview 'printf "%s\n" {}' --preview-window=up:wrap
+)"
 
 __lg_ai_commit_tmp="$(mktemp "${TMPDIR:-/tmp}/lg-ai-commit.XXXXXX")"
-pbpaste > "${__lg_ai_commit_tmp}"
+printf '%s\n' "${selected_message}" > "${__lg_ai_commit_tmp}"
 
 if [[ ! -s "${__lg_ai_commit_tmp}" ]]; then
-  die "lg-ai-commit: aicommits did not put a commit message on the clipboard."
+  die "lg-ai-commit: no commit message selected."
 fi
 
 "${VISUAL:-${EDITOR:-vi}}" "${__lg_ai_commit_tmp}"
