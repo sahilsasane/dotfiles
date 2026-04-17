@@ -3,6 +3,19 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LAZYGIT_CONFIG_DIR=""
+
+if command -v lazygit >/dev/null 2>&1; then
+  LAZYGIT_CONFIG_DIR="$(lazygit --print-config-dir 2>/dev/null || true)"
+fi
+
+if [ -z "$LAZYGIT_CONFIG_DIR" ]; then
+  if [ -d "$HOME/Library/Application Support/lazygit" ]; then
+    LAZYGIT_CONFIG_DIR="$HOME/Library/Application Support/lazygit"
+  else
+    LAZYGIT_CONFIG_DIR="$HOME/.config/lazygit"
+  fi
+fi
 
 mkdir -p \
   "$ROOT_DIR/bin" \
@@ -12,6 +25,7 @@ mkdir -p \
   "$ROOT_DIR/git-config" \
   "$ROOT_DIR/htop" \
   "$ROOT_DIR/iterm2" \
+  "$ROOT_DIR/lazygit" \
   "$ROOT_DIR/nvim" \
   "$ROOT_DIR/tmux" \
   "$ROOT_DIR/yazi" \
@@ -31,6 +45,9 @@ fi
 rsync -a --delete --exclude '.DS_Store' "$HOME/.config/fish/" "$ROOT_DIR/fish/"
 rsync -a --delete --exclude '.DS_Store' "$HOME/.config/git/" "$ROOT_DIR/git/"
 rsync -a --delete --exclude '.DS_Store' "$HOME/.config/htop/" "$ROOT_DIR/htop/"
+if [ -d "$LAZYGIT_CONFIG_DIR" ]; then
+  rsync -a --delete --exclude '.DS_Store' "$LAZYGIT_CONFIG_DIR/" "$ROOT_DIR/lazygit/"
+fi
 if [ -d "$HOME/.config/yazi" ]; then
   rsync -a --delete --exclude '.DS_Store' "$HOME/.config/yazi/" "$ROOT_DIR/yazi/"
 fi

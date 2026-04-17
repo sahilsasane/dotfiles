@@ -55,6 +55,10 @@ link_path "$DOTFILES_ROOT/git-config/.gitignore_global" "$HOME/.gitignore_global
 
 link_path "$DOTFILES_ROOT/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
+link_path "$DOTFILES_ROOT/bin/lg-ai-commit" "$HOME/.local/bin/lg-ai-commit"
+
+link_path "$DOTFILES_ROOT/lazygit" "$HOME/Library/Application Support/lazygit"
+link_path "$DOTFILES_ROOT/lazygit" "$HOME/.config/lazygit"
 link_path "$DOTFILES_ROOT/nvim" "$HOME/.config/nvim"
 link_path "$DOTFILES_ROOT/eza" "$HOME/.config/eza"
 link_path "$DOTFILES_ROOT/fish" "$HOME/.config/fish"

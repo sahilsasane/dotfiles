@@ -22,6 +22,7 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `bin/install.sh`: link tracked files into `$HOME`
 - `bin/sync-dotfiles`: copy current machine config back into the repo and sanitize it
 - `nvim/`: Neovim config, keymaps, plugins, lockfile
+- `lazygit/`: Lazygit config and custom commands
 - `eza/`: eza theme config
 - `yazi/`: Yazi config and flavor assets
 - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
@@ -51,6 +52,17 @@ After bootstrap:
 - open Neovim once so `lazy.nvim` installs plugins
 - create `~/.zshrc.local` only if that machine needs local-only env vars
 - run a new login shell so the refactored zsh loaders pick up the linked repo files
+
+Optional AI commit flow for Lazygit:
+
+- install `aicommits`: `npm install -g aicommits`
+- run `aicommits setup` and choose your provider/model
+- rerun `./bin/install.sh` if needed so Lazygit's config dir and `~/.local/bin/lg-ai-commit` are linked
+- in Lazygit, stage changes and press `CtrlG` from the files view
+- edit the generated message in `$VISUAL` or `$EDITOR` before the commit is created
+
+To switch from a cloud model to Ollama later, update `aicommits` with `aicommits setup` or `aicommits model`. The Lazygit keybinding stays the same.
+On macOS, `lazygit --print-config-dir` commonly resolves to `~/Library/Application Support/lazygit` rather than `~/.config/lazygit`.
 
 ## Sync From Current Machine
 

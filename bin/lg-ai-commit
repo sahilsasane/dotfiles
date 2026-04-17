@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+die() {
+  printf '%s\n' "$*" >&2
+  exit 1
+}
+
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || die "lg-ai-commit: '$1' is required."
+}
+
+cleanup() {
+  local status=$?
+
+  if [[ -n "${__lg_ai_commit_tmp:-}" && -f "${__lg_ai_commit_tmp}" ]]; then
+    rm -f "${__lg_ai_commit_tmp}"
+  fi
+
+  if [[ -n "${__lg_ai_commit_restore_clipboard:-}" ]]; then
+    printf '%s' "${__lg_ai_commit_clipboard_backup:-}" | pbcopy
+  fi
+
+  exit "$status"
+}
+
+trap cleanup EXIT
+
+require_cmd git
+require_cmd mktemp
+require_cmd pbcopy
+require_cmd pbpaste
+
+if ! command -v aicommits >/dev/null 2>&1; then
+  die "lg-ai-commit: aicommits is not installed. Run 'npm install -g aicommits' and 'aicommits setup'."
+fi
+
+git rev-parse --git-dir >/dev/null 2>&1 || die "lg-ai-commit: not a git repository."
+git diff --staged --quiet && die "lg-ai-commit: no staged changes."
+
+__lg_ai_commit_clipboard_backup="$(pbpaste 2>/dev/null || true)"
+__lg_ai_commit_restore_clipboard=1
+
+aicommits_args=(--clipboard --type conventional)
+
+if [[ -n "${LG_AI_COMMIT_GENERATE:-}" ]]; then
+  aicommits_args+=(--generate "${LG_AI_COMMIT_GENERATE}")
+fi
+
+if [[ -n "${LG_AI_COMMIT_PROMPT:-}" ]]; then
+  aicommits_args+=(--prompt "${LG_AI_COMMIT_PROMPT}")
+fi
+
+if [[ -n "${LG_AI_COMMIT_EXCLUDE:-}" ]]; then
+  IFS=',' read -r -a exclude_paths <<< "${LG_AI_COMMIT_EXCLUDE}"
+  for path in "${exclude_paths[@]}"; do
+    [[ -n "${path}" ]] && aicommits_args+=(--exclude "${path}")
+  done
+fi
+
+aicommits "${aicommits_args[@]}"
+
+__lg_ai_commit_tmp="$(mktemp "${TMPDIR:-/tmp}/lg-ai-commit.XXXXXX")"
+pbpaste > "${__lg_ai_commit_tmp}"
+
+if [[ ! -s "${__lg_ai_commit_tmp}" ]]; then
+  die "lg-ai-commit: aicommits did not put a commit message on the clipboard."
+fi
+
+"${VISUAL:-${EDITOR:-vi}}" "${__lg_ai_commit_tmp}"
+
+if ! grep -q '[^[:space:]]' "${__lg_ai_commit_tmp}"; then
+  die "lg-ai-commit: empty commit message after edit."
+fi
+
+git commit -F "${__lg_ai_commit_tmp}" "$@"
