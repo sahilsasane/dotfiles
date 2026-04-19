@@ -38,8 +38,12 @@ suggestion_count="${LG_AI_COMMIT_SUGGESTIONS:-10}"
 diff_chars="${LG_AI_COMMIT_DIFF_CHARS:-120000}"
 recent_chars="${LG_AI_COMMIT_RECENT_CHARS:-4000}"
 
-staged_diff="$(git diff --staged --patch --minimal | head -c "${diff_chars}")"
-recent_commits="$(git log -n "${recent_count}" --pretty=format:%s 2>/dev/null | sed 's/^/- /' | head -c "${recent_chars}")"
+# Avoid SIGPIPE/141 under `set -o pipefail` by truncating in bash rather than `head -c`.
+staged_diff="$(git diff --staged --patch --minimal)"
+staged_diff="${staged_diff:0:${diff_chars}}"
+
+recent_commits="$(git log -n "${recent_count}" --pretty=format:%s 2>/dev/null | sed 's/^/- /')"
+recent_commits="${recent_commits:0:${recent_chars}}"
 
 prompt=$'You write git commit message candidates for the STAGED diff only.\n\n'\
 $'Use the recent commit subjects only to infer style and level of abstraction, not to copy content.\n\n'\

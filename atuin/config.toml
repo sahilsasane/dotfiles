@@ -1,0 +1,45 @@
+dialect = "uk"
+timezone = "local"
+
+search_mode = "fuzzy"
+filter_mode = "global"
+
+style = "compact"
+inline_height = 18
+show_preview = true
+max_preview_height = 6
+show_help = true
+show_tabs = true
+
+enter_accept = true
+exit_mode = "return-original"
+keymap_mode = "auto"
+secrets_filter = true
+
+history_filter = [
+  "--token",
+  "--password",
+  "--secret",
+  "gh auth login",
+]
+
+cwd_filter = [
+  "/private/",
+  "/secrets/",
+]
+
+[search]
+filters = ["directory", "session", "host", "global"]
+
+[ui]
+columns = ["duration", "time", { type = "directory", width = 28 }, "command"]
+
+[stats]
+common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
+common_prefix = ["sudo"]
+ignored_commands = ["cd", "ls", "ll", "pwd"]
+
+[tmux]
+enabled = true
+width = "80%"
+height = "60%"

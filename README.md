@@ -22,6 +22,7 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `bin/install.sh`: link tracked files into `$HOME`
 - `bin/sync-dotfiles`: copy current machine config back into the repo and sanitize it
 - `nvim/`: Neovim config, keymaps, plugins, lockfile
+- `atuin/`: Atuin history search config
 - `lazygit/`: Lazygit config and custom commands
 - `eza/`: eza theme config
 - `yazi/`: Yazi config and flavor assets

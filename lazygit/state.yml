@@ -1,9 +1,10 @@
 lastupdatecheck: 0
 recentrepos:
-    - /Users/sahilsasane/dotfiles
+    - /Users/sahilsasane/stuff/voice-hmo
     - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
+    - /Users/sahilsasane/dotfiles
 startuppopupversion: 5
-didshowhunkstaginghint: false
+didshowhunkstaginghint: true
 lastversion: 0.59.0
 customcommandshistory: []
 hidecommandlog: false
