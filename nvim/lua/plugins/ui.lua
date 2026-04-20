@@ -87,6 +87,7 @@ return {
           f = require('mini.ai').gen_spec.treesitter { a = '@function.outer', i = '@function.inner' },
         },
       }
+      require('mini.pairs').setup()
       require('mini.surround').setup()
 
       local statusline = require 'mini.statusline'

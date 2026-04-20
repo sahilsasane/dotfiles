@@ -72,10 +72,18 @@ return {
           },
         },
         ruff = {},
-        stylua = {},
         ts_ls = {},
         eslint = {},
-        prettierd = {},
+        taplo = {},
+        rust_analyzer = {
+          settings = {
+            ['rust-analyzer'] = {
+              check = {
+                command = 'clippy',
+              },
+            },
+          },
+        },
         lua_ls = {
           on_init = function(client)
             if client.workspace_folders then
@@ -103,8 +111,13 @@ return {
         },
       }
 
+      local tools = {
+        'stylua',
+        'prettierd',
+      }
+
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {})
+      vim.list_extend(ensure_installed, tools)
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -143,6 +156,8 @@ return {
         end
       end,
       formatters_by_ft = {
+        rust = { 'rustfmt' },
+        toml = { 'taplo' },
         lua = { 'stylua' },
         python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
         go = { 'goimports', 'gofmt' },
