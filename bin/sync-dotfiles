@@ -72,7 +72,7 @@ echo "Skipping zsh loader/module sync: dotfiles is the source of truth for zsh."
 install -m 0644 "$HOME/.tmux.conf" "$ROOT_DIR/tmux/.tmux.conf"
 perl -0pi -e '
   s#~/.config/tmux/tmux\.conf#~/.tmux.conf#g;
-  s#~/.config/tmux/plugins/catppuccin/tmux#~/.tmux/plugins/catppuccin/tmux#g;
+  s#~/.config/tmux/plugins/catppuccin/tmux#~/.tmux/plugins/catppuccin#g;
   s#~/.config/tmux/plugins/tmux-plugins/tmux-cpu/cpu\.tmux#~/.tmux/plugins/tmux-cpu/cpu.tmux#g;
   s#~/.config/tmux/plugins/tmux-plugins/tmux-battery/battery\.tmux#~/.tmux/plugins/tmux-battery/battery.tmux#g;
 ' "$ROOT_DIR/tmux/.tmux.conf"
