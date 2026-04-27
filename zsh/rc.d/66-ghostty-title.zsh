@@ -1,5 +1,5 @@
-if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" ]]; then
-  _dotfiles_ghostty_set_title() {
+if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" || "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then
+  _dotfiles_terminal_set_title() {
     emulate -L zsh
 
     local title
@@ -15,8 +15,8 @@ if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" ]]; th
   }
 
   typeset -ga precmd_functions chpwd_functions
-  precmd_functions=(${precmd_functions:#_dotfiles_ghostty_set_title} _dotfiles_ghostty_set_title)
-  chpwd_functions=(${chpwd_functions:#_dotfiles_ghostty_set_title} _dotfiles_ghostty_set_title)
+  precmd_functions=(${precmd_functions:#_dotfiles_terminal_set_title} _dotfiles_terminal_set_title)
+  chpwd_functions=(${chpwd_functions:#_dotfiles_terminal_set_title} _dotfiles_terminal_set_title)
 
-  _dotfiles_ghostty_set_title
+  _dotfiles_terminal_set_title
 fi

@@ -3,9 +3,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 DISABLE_AUTO_UPDATE=true
 ZSH_DISABLE_COMPFIX=true
 
-# Let Ghostty's shell integration own tab/window titles so OMZ doesn't force
-# long user@host:path labels over the top of it.
-if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" ]]; then
+# Let Ghostty and iTerm own tab/window titles so OMZ doesn't force
+# long user@host:path labels over the top of them.
+if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" || "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then
   DISABLE_AUTO_TITLE=true
 fi
 

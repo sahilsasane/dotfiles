@@ -93,8 +93,42 @@ return {
       local statusline = require 'mini.statusline'
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
+      local project_root_markers = {
+        '.git',
+        'pyproject.toml',
+        'package.json',
+        'Cargo.toml',
+        'go.mod',
+      }
+
+      local function escape_statusline_text(text)
+        return text:gsub('%%', '%%%%')
+      end
+
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_filename = function()
+        if vim.bo.buftype == 'terminal' then return '%t' end
+
+        local path = vim.api.nvim_buf_get_name(0)
+        if path == '' then return '[No Name]%m%r' end
+
+        local root = vim.fs.root(0, project_root_markers) or vim.uv.cwd()
+        local relative_path = root and vim.fs.relpath(root, path) or nil
+        local display_path = relative_path or vim.fn.fnamemodify(path, ':~:.')
+
+        return escape_statusline_text(display_path) .. '%m%r'
+      end
+
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function() return '%2l:%-2v' end
+
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.inactive = function()
+        return statusline.combine_groups {
+          { hl = 'MiniStatuslineInactive', strings = { statusline.section_filename() } },
+          '%=',
+        }
+      end
     end,
   },
 }

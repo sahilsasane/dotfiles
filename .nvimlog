@@ -1,2 +1,5 @@
 WRN 2026-04-20T01:23:19.076 ?.5157     server_start:199: Failed to start server: operation not permitted: /var/folders/d5/7012r_g97k3338vt2nfpd7cc0000gp/T/nvim.sahilsasane/f26l5g/nvim.5157.0
 WRN 2026-04-20T03:07:53.332 ?.33187    server_start:199: Failed to start server: operation not permitted: /var/folders/d5/7012r_g97k3338vt2nfpd7cc0000gp/T/nvim.sahilsasane/FGUjaZ/nvim.33187.0
+WRN 2026-04-24T12:40:00.808 ?.25218    server_start:199: Failed to start server: operation not permitted: /var/folders/d5/7012r_g97k3338vt2nfpd7cc0000gp/T/nvim.sahilsasane/TqXPNx/nvim.25218.0
+WRN 2026-04-24T12:40:15.181 ?.25595    server_start:199: Failed to start server: operation not permitted: /var/folders/d5/7012r_g97k3338vt2nfpd7cc0000gp/T/nvim.sahilsasane/2JsMRP/nvim.25595.0
+WRN 2026-04-24T12:46:33.606 ?.29838    server_start:199: Failed to start server: operation not permitted: /var/folders/d5/7012r_g97k3338vt2nfpd7cc0000gp/T/nvim.sahilsasane/yJtOi6/nvim.29838.0

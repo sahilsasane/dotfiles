@@ -12,12 +12,10 @@ minimum-contrast = 1.1
 window-colorspace = display-p3
 
 # Window layout
-window-width = 80
-window-height = 25
 window-new-tab-position = end
-window-padding-x = 0
-window-padding-y = 0
-window-padding-balance = false
+window-padding-x = 5
+window-padding-y = 5
+window-padding-balance = true
 window-padding-color = background
 window-step-resize = true
 window-inherit-working-directory = true
@@ -25,22 +23,27 @@ tab-inherit-working-directory = true
 split-inherit-working-directory = true
 window-inherit-font-size = true
 window-save-state = always
+macos-titlebar-proxy-icon = hidden
+# window-decoration = false
 
 # Appearance
 macos-titlebar-style = tabs
 
-background-opacity = 0.5963
+background-opacity = 0.65
 background-opacity-cells = true
 background-blur = 35
 unfocused-split-opacity = 0.97
+custom-shader = /Users/sahilsasane/dotfiles/ghostty/shaders/cursor_warp.glsl
+custom-shader-animation = true
 
 scrollbar = never
+mouse-reporting = false
 mouse-hide-while-typing = true
 mouse-scroll-multiplier = precision:1,discrete:4
 scroll-to-bottom = keystroke
 macos-window-shadow = false
 focus-follows-mouse = true
-macos-icon = custom-style
+macos-icon = glass
 macos-icon-frame = chrome
 macos-icon-ghost-color = #f5e0dc
 macos-icon-screen-color = #74c7ec,#89b4fa,#cba6f7
@@ -78,7 +81,6 @@ macos-auto-secure-input = true
 macos-secure-input-indication = true
 
 # Quality-of-life keybinds
-keybind = global:ctrl+backquote=toggle_quick_terminal
 keybind = super+shift+p=toggle_command_palette
 keybind = super+shift+j=jump_to_prompt:-1
 keybind = super+shift+k=jump_to_prompt:1
@@ -95,7 +97,7 @@ keybind = super+enter=toggle_split_zoom
 # Shell-style editing keybinds
 keybind = alt+left=esc:b
 keybind = alt+right=esc:f
-keybind = alt+backspace=esc:\x7f
+keybind = alt+backspace=text:\x1b\x7f
 keybind = alt+delete=esc:d
 keybind = super+left=text:\x01
 keybind = super+right=text:\x05

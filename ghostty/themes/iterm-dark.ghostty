@@ -1,11 +1,11 @@
 # Dark theme translated from the active iTerm profile.
 
-background = #0d0d0d
-foreground = #bbbbbb
-cursor-color = #bbbbbb
-cursor-text = #ffffff
-selection-background = #b5d5ff
-selection-foreground = #000000
+background = #020202
+foreground = #c2c2c2
+cursor-color = #c2c2c2
+cursor-text = #020202
+selection-background = #2a3f5f
+selection-foreground = #f5f7ff
 
 palette = 0=#000000
 palette = 1=#bb0000
