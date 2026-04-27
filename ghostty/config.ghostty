@@ -29,15 +29,15 @@ macos-titlebar-proxy-icon = hidden
 # Appearance
 macos-titlebar-style = tabs
 
-background-opacity = 0.65
+background-opacity = 0.70
 background-opacity-cells = true
-background-blur = 35
+background-blur = 20
 unfocused-split-opacity = 0.97
 custom-shader = /Users/sahilsasane/dotfiles/ghostty/shaders/cursor_warp.glsl
 custom-shader-animation = true
 
 scrollbar = never
-mouse-reporting = false
+mouse-reporting = true
 mouse-hide-while-typing = true
 mouse-scroll-multiplier = precision:1,discrete:4
 scroll-to-bottom = keystroke
@@ -64,7 +64,7 @@ quick-terminal-space-behavior = move
 
 # Clipboard and safety
 # Ghostty uses a byte limit instead of iTerm's line count.
-scrollback-limit = 524288
+scrollback-limit = 16777216
 
 copy-on-select = false
 clipboard-read = ask
