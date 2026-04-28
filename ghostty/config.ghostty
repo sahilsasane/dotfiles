@@ -75,10 +75,13 @@ confirm-close-surface = false
 quit-after-last-window-closed = true
 
 # macOS behavior
+cursor-style = bar
 cursor-style-blink = false
 macos-option-as-alt = left
 macos-auto-secure-input = true
 macos-secure-input-indication = true
+
+keybind = ctrl+k=clear_screen
 
 # Quality-of-life keybinds
 keybind = super+shift+p=toggle_command_palette
