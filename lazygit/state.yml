@@ -1,7 +1,8 @@
 lastupdatecheck: 0
 recentrepos:
-    - /Users/sahilsasane/dotfiles
     - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
+    - /Users/sahilsasane/stuff/temp-git
+    - /Users/sahilsasane/dotfiles
     - /Users/sahilsasane/TMDC/vulcan-exp/customer-usecases
     - /Users/sahilsasane/stuff/voice-hmo
 startuppopupversion: 5

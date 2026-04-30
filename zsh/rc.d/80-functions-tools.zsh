@@ -20,7 +20,7 @@ imcp() {
 
 vulcan() {
   __dotfiles_require_cmd docker || return 1
-  docker run --network=vulcan --rm -v .:/workspace tmdcio/vulcan-postgres:0.228.1.12 vulcan "$@"
+  docker run --network=vulcan --rm -v .:/workspace tmdcio/vulcan-snowflake:0.228.1.18 vulcan "$@"
 }
 
 ter3001() {
