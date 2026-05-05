@@ -207,6 +207,7 @@ nvim .
 | Trouble quickfix | `<leader>xq` |
 | Trouble location list | `<leader>xL` |
 | Toggle inlay hints | `<leader>th` |
+| Insert nearest inlay hint | `<leader>ti` |
 
 ### 6. Pin files with Harpoon
 

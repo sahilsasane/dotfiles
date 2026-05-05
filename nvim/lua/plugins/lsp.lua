@@ -52,6 +52,10 @@ return {
           end
 
           if client and client:supports_method('textDocument/inlayHint', event.buf) then
+            if client.name == 'basedpyright' then
+              vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+            end
+
             map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
           end
         end,
@@ -67,6 +71,13 @@ return {
                 typeCheckingMode = 'basic',
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
+                inlayHints = {
+                  variableTypes = true,
+                  callArgumentNames = true,
+                  callArgumentNamesMatching = false,
+                  functionReturnTypes = true,
+                  genericTypes = true,
+                },
               },
             },
           },

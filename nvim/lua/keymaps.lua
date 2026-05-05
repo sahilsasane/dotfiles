@@ -58,9 +58,67 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
+local function apply_nearest_inlay_hint()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  row = row - 1
+
+  local hints = vim.lsp.inlay_hint.get {
+    bufnr = bufnr,
+    range = {
+      start = { line = row, character = 0 },
+      ['end'] = { line = row, character = math.max(vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1]:len(), col + 1) },
+    },
+  }
+
+  local nearest = nil
+  local distance = math.huge
+
+  for _, hint in ipairs(hints) do
+    local hint_row = hint.inlay_hint.position.line
+    local hint_col = hint.inlay_hint.position.character
+    if hint_row == row then
+      local delta = math.abs(hint_col - col)
+      if delta < distance then
+        nearest = hint
+        distance = delta
+      end
+    end
+  end
+
+  if not nearest then
+    vim.notify('No inlay hint found on this line', vim.log.levels.INFO)
+    return
+  end
+
+  local client = vim.lsp.get_client_by_id(nearest.client_id)
+  if not client then
+    vim.notify('LSP client for inlay hint is no longer attached', vim.log.levels.WARN)
+    return
+  end
+
+  local resolved_hint = nearest.inlay_hint
+  if not resolved_hint.textEdits then
+    local response = client:request_sync('inlayHint/resolve', resolved_hint, 500, bufnr)
+    if response and response.result then
+      resolved_hint = response.result
+    end
+  end
+
+  if not resolved_hint.textEdits or vim.tbl_isempty(resolved_hint.textEdits) then
+    vim.notify('This inlay hint cannot be inserted', vim.log.levels.INFO)
+    return
+  end
+
+  vim.lsp.util.apply_text_edits(resolved_hint.textEdits, bufnr, client.offset_encoding)
+end
+
 vim.o.winborder = 'rounded'
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('kickstart-lsp-hover', { clear = true }),
-  callback = function(event) vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = event.buf, desc = 'LSP: Hover Documentation' }) end,
+  callback = function(event)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = event.buf, desc = 'LSP: Hover Documentation' })
+    vim.keymap.set('n', '<leader>ti', apply_nearest_inlay_hint, { buffer = event.buf, desc = 'LSP: Insert nearest [T]ype [I]nlay hint' })
+  end,
 })

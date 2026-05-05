@@ -31,6 +31,7 @@ return {
 
             ['@comment'] = { fg = colors.overlay1, style = { 'italic' } },
             CursorLine = { bg = colors.mantle, blend = 99 },
+            LspInlayHint = { fg = colors.overlay0, style = { 'italic' } },
 
             TelescopeNormal = { bg = colors.none },
             TelescopeBorder = { bg = colors.none, fg = colors.surface1 },
@@ -101,9 +102,7 @@ return {
         'go.mod',
       }
 
-      local function escape_statusline_text(text)
-        return text:gsub('%%', '%%%%')
-      end
+      local function escape_statusline_text(text) return text:gsub('%%', '%%%%') end
 
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
