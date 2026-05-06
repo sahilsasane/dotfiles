@@ -1,7 +1,7 @@
 dialect = "uk"
 timezone = "local"
 
-search_mode = "fuzzy"
+search_mode = "daemon-fuzzy"
 filter_mode = "global"
 
 style = "compact"
@@ -16,17 +16,13 @@ exit_mode = "return-original"
 keymap_mode = "auto"
 secrets_filter = true
 
-history_filter = [
-  "--token",
-  "--password",
-  "--secret",
-  "gh auth login",
-]
+invert = true
+auto_sync = true
+sync_frequency = "3h"
 
-cwd_filter = [
-  "/private/",
-  "/secrets/",
-]
+history_filter = ["--token", "--password", "--secret", "gh auth login"]
+
+cwd_filter = ["/private/", "/secrets/"]
 
 [search]
 filters = ["directory", "session", "host", "global"]
