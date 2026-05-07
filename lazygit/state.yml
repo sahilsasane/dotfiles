@@ -1,6 +1,7 @@
 lastupdatecheck: 0
 recentrepos:
     - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
+    - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged/external/vulcan-book
     - /Users/sahilsasane/dotfiles
     - /Users/sahilsasane/stuff/go-walk/self-made-eng/ride-sharing-micro
     - /Users/sahilsasane/stuff/go-walk/mcpgo
@@ -9,6 +10,7 @@ recentrepos:
     - /Users/sahilsasane/stuff/voice-hmo
 startuppopupversion: 5
 didshowhunkstaginghint: true
-lastversion: 0.59.0
+lastversion: 0.61.1
 customcommandshistory: []
 hidecommandlog: false
+githubPullRequests: {}
