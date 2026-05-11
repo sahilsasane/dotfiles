@@ -18,6 +18,4 @@ unset _dotfiles_rc
 
 if command -v atuin >/dev/null 2>&1; then
   bindkey '^R' atuin-search 2>/dev/null
-  bindkey '^[[A' up-line-or-history 2>/dev/null
-  bindkey '^[OA' up-line-or-history 2>/dev/null
 fi

@@ -1,0 +1,13 @@
+[theme]
+name = "sahil-slate"
+parent = "default"
+
+[colors]
+Title = "#f5f7ff"
+Guidance = "#8fb7ff"
+Important = "#ffd580"
+Annotation = "#7b8394"
+Muted = "#6c7383"
+AlertInfo = "#7bd88f"
+AlertWarn = "#ffd580"
+AlertError = "#ff8f9f"

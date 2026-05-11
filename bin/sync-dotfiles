@@ -19,6 +19,7 @@ fi
 
 mkdir -p \
   "$ROOT_DIR/atuin" \
+  "$ROOT_DIR/atuin/themes" \
   "$ROOT_DIR/bin" \
   "$ROOT_DIR/eza" \
   "$ROOT_DIR/fish" \
@@ -45,6 +46,9 @@ fi
 
 if [ -f "$HOME/.config/atuin/config.toml" ]; then
   install -m 0644 "$HOME/.config/atuin/config.toml" "$ROOT_DIR/atuin/config.toml"
+fi
+if [ -d "$HOME/.config/atuin/themes" ]; then
+  rsync -a --delete --exclude '.DS_Store' "$HOME/.config/atuin/themes/" "$ROOT_DIR/atuin/themes/"
 fi
 
 rsync -a --delete --exclude '.DS_Store' "$HOME/.config/fish/" "$ROOT_DIR/fish/"
