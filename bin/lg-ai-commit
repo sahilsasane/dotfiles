@@ -55,7 +55,11 @@ $'- Follow Conventional Commits\n'\
 $'- Use a scope only when it is genuinely helpful\n'\
 $'- Prefer higher-level intent over low-level code narration\n'\
 $'- Keep each subject concise and under 72 characters when possible\n'\
-$'- Base every candidate on the STAGED diff, not unstaged changes\n\n'\
+$'- Base every candidate on the STAGED diff, not unstaged changes\n'\
+$'- Every candidate must describe the full staged change set as one commit\n'\
+$'- Do not split the staged work into separate per-task or per-file subjects\n'\
+$'- Different candidates may vary in wording or abstraction, but they must all cover the same overall change\n'\
+$'- If the diff spans multiple related edits, summarize the shared outcome or primary intent in one subject\n\n'\
 $'Recent commit subjects:\n'\
 "${recent_commits:-"- none"}"\
 $'\n\nSTAGED DIFF:\n'\
