@@ -1,0 +1,95 @@
+% git, personal, vcs
+
+# Create and switch to a new branch
+git switch -c <branch_name>
+
+# Initialize and update Git submodules
+git submodule init && git submodule update
+
+# Stop tracking a committed file or folder
+git rm -r --cached <path>
+
+# Show a diff summary for a commit range
+git diff --stat <old_commit_hash>..<new_commit_hash>
+
+# Show changed directories for a commit range
+git diff --dirstat=files,0 <old_commit_hash>..<new_commit_hash>
+
+# List changed files with status codes for a commit range
+git diff --name-status <old_commit_hash>..<new_commit_hash>
+
+# Show commits in a Git range
+git log --oneline <old_commit_hash>..<new_commit_hash>
+
+# Inspect a commit with stats and summary
+git show --stat --summary <commit>
+
+# Inspect a commit while ignoring whitespace changes
+git show -w <commit>
+
+# Show a file from another branch or commit
+git show <ref>:<file_path>
+
+# Diff a specific file with function context
+git diff -W <old_commit_hash>..<new_commit_hash> -- <file_path>
+
+# Compare one file between two refs
+git diff <left_ref>..<right_ref> -- <file_path>
+
+# Compare local HEAD with the current remote branch tip
+git diff HEAD..origin/$(git branch --show-current)
+
+# Highlight moved code in a diff
+git diff --color-moved <old_commit_hash>..<new_commit_hash>
+
+# Search Git history for a symbol change
+git log -S '<symbol>' --oneline <old_commit_hash>..<new_commit_hash>
+
+# Search Git history for a regex change
+git log -G '<pattern>' --oneline -- <file_path>
+
+# Follow the history of a file across renames
+git log --follow -- <file_path>
+
+# Blame a specific line range
+git blame -L <start_line>,<end_line> <file_path>
+
+# Restore a file from another branch or commit
+git restore --source <ref> -- <file_path>
+
+# Restore only staged changes for a file
+git restore --staged <file_path>
+
+# Show which branches contain a commit
+git branch --contains <commit>
+
+# Show branches that do not contain a commit
+git branch --no-contains <commit>
+
+# Show branches not yet merged into the current branch
+git branch --no-merged
+
+# Show the merge base between two refs
+git merge-base <left_ref> <right_ref>
+
+# List files in a branch or commit
+git ls-tree -r --name-only <ref>
+
+# Show reflog entries
+git reflog
+
+# Stash only one file or path with a message
+git stash push -m "<message>" -- <path>
+
+# Show the patch stored in a stash entry
+git stash show -p stash@{<index>}
+
+# Cherry-pick a commit without creating a commit yet
+git cherry-pick -n <commit>
+
+# Checkout a detached worktree for another branch
+git worktree add ../<dir_name> <branch_name>
+
+# Show the root directory of the repository
+git rev-parse --show-toplevel
+

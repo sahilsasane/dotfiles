@@ -1,0 +1,160 @@
+% docker, personal, containers
+
+# List running Docker containers
+docker ps
+
+# List all Docker containers
+docker ps -a
+
+# Start a Docker container
+docker start <container_id>
+
+# Stop a Docker container
+docker stop <container_id>
+
+# Restart a Docker container
+docker restart <container_id>
+
+# Pause a Docker container
+docker pause <container_id>
+
+# Unpause a Docker container
+docker unpause <container_id>
+
+# Remove a Docker container
+docker rm <container_id>
+
+# Remove all stopped Docker containers
+docker container prune
+
+# Show Docker container logs
+docker logs <container_id>
+
+# Follow Docker container logs
+docker logs -f <container_id>
+
+# Show Docker container stats
+docker stats
+
+# Show processes running in a Docker container
+docker top <container_id>
+
+# Inspect a Docker container
+docker inspect <container_id>
+
+# Open a shell inside a running container with sh
+docker exec -it <container_id> sh
+
+# Open a shell inside a running container with bash
+docker exec -it <container_id> bash
+
+# Run a one-off command inside a running container
+docker exec -it <container_id> <command>
+
+# Copy a file from a container to the host
+docker cp <container_id>:<container_path> <host_path>
+
+# Copy a file from the host into a container
+docker cp <host_path> <container_id>:<container_path>
+
+# Show filesystem changes made inside a container
+docker diff <container_id>
+
+# Show container port mappings
+docker port <container_id>
+
+# Show a container IP address
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_id>
+
+# Show Docker disk usage
+docker system df
+
+% docker, personal, images
+
+# List Docker images
+docker images
+
+# Remove a Docker image
+docker rmi <image_id>
+
+# Remove unused Docker images
+docker image prune
+
+# Remove all Docker images
+docker rmi $(docker images -q)
+
+# Show the build history of an image
+docker history <image_name>
+
+# Save an image to a tar archive
+docker save -o <archive.tar> <image_name>
+
+# Load an image from a tar archive
+docker load -i <archive.tar>
+
+# Build an image with a tag
+docker build -t <image_name>:<tag> .
+
+# Build an image without using cache
+docker build --no-cache -t <image_name>:<tag> .
+
+% docker, personal, storage, network
+
+# List Docker volumes
+docker volume ls
+
+# Inspect a Docker volume
+docker volume inspect <volume_name>
+
+# Remove a Docker volume
+docker volume rm <volume_name>
+
+# List Docker networks
+docker network ls
+
+# Inspect a Docker network
+docker network inspect <network_name>
+
+# Remove a Docker network
+docker network rm <network_name>
+
+% docker, personal, cleanup
+
+# Prune stopped containers, unused networks, dangling images, and build cache
+docker system prune
+
+# Remove everything including unused images and volumes
+docker system prune -a --volumes
+
+# Remove exited containers only
+docker rm $(docker ps -aq -f status=exited)
+
+# Run PostgreSQL in Docker
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=<password> -d postgres
+
+# Run a container with the current directory mounted
+docker run --rm -it -v "$PWD":/workspace -w /workspace <image_name> sh
+
+% docker, personal, compose
+
+# Start Docker Compose services in the background
+docker compose up -d
+
+# Rebuild and restart Docker Compose services
+docker compose up -d --build
+
+# Stop and remove Docker Compose services
+docker compose down
+
+# Stop and remove Docker Compose services including volumes
+docker compose down -v
+
+# Show Docker Compose logs
+docker compose logs
+
+# Follow Docker Compose logs for one service
+docker compose logs -f <service_name>
+
+# Open a shell in a Docker Compose service
+docker compose exec <service_name> sh
+

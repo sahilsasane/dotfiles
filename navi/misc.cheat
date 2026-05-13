@@ -1,0 +1,18 @@
+% personal, security
+
+# Generate a random 32-byte base64 string
+openssl rand -base64 32
+
+% personal, process, ports
+
+# Show the process using port 5432
+sudo netstat -tulnp | grep :5432
+
+# Force kill a process
+sudo kill -9 <pid>
+
+% personal, env
+
+# Create .env.example from .env
+sed 's/=.*/=/' .env > .env.example
+
