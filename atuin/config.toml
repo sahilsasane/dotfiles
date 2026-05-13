@@ -31,10 +31,5 @@ common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
 common_prefix = ["sudo"]
 ignored_commands = ["cd", "ls", "ll", "pwd"]
 
-[tmux]
-enabled = true
-width = "80%"
-height = "60%"
-
 [theme]
 name = "sahil-slate"
