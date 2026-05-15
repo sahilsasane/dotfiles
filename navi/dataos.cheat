@@ -1,0 +1,204 @@
+% dataos, ds, resource, inspect
+
+# Get resource status by type and name
+ds rs get -t <type> -n <name>
+
+# Get resource status by identifier
+ds rs get -i "<name>|<version>|<type>"
+
+# Get detailed resource status by identifier
+ds rs get -i "<name>|<version>|<type>" -d
+
+# Watch resource status refresh every 5 seconds
+ds rs get -t <type> -n <name> -r
+
+# Get resources for all owners
+ds rs get -a
+
+# Get only runnable resources
+ds rs get --runnable
+
+# Filter resources by tags
+ds rs get --tags "<tag1>,<tag2>"
+
+# Include active properties in resource output
+ds rs get -t <type> -n <name> --activeProperties
+
+# Include workflow details in resource output
+ds rs get -t <type> -n <name> --workflowDetails
+
+# Include error details in resource output
+ds rs get -t <type> -n <name> --errorDetails
+
+% dataos, ds, runtime
+
+# Get runtime details for a resource
+ds rs runtime get -t <type> -n <name> -d
+
+# Get runtime details by identifier
+ds rs runtime get -i "<name>|<version>|<type>" -d
+
+# Watch runtime details refresh every 5 seconds
+ds rs runtime get -t <type> -n <name> -r
+
+# Get details for one container group
+ds rs runtime get -t <type> -n <name> --container-group <container_group> -d
+
+# Print one container group as YAML
+ds rs runtime get -t <type> -n <name> --container-group <container_group> -y
+
+# Run a runnable resource
+ds rs runtime run -t <type> -n <name>
+
+# Stop a runnable resource
+ds rs runtime stop -t <type> -n <name>
+
+# Pause a runnable resource
+ds rs runtime pause -t <type> -n <name>
+
+# Resume a runnable resource
+ds rs runtime resume -t <type> -n <name>
+
+# Suspend a runnable resource
+ds rs runtime suspend -t <type> -n <name>
+
+# Re-run a runnable resource
+ds rs runtime re-run -t <type> -n <name>
+
+% dataos, ds, logs
+
+# Get logs for all containers in a resource
+ds rs log -t <type> -n <name>
+
+# Follow logs for all containers in a resource
+ds rs log -t <type> -n <name> -f
+
+# Get logs for a specific container
+ds rs log -t <type> -n <name> -c <container_name>
+
+# Get logs for a specific container group
+ds rs log -t <type> -n <name> --container-group <container_group>
+
+# Tail the last N log lines
+ds rs log -t <type> -n <name> -l <tail_lines>
+
+# Follow logs for a specific container
+ds rs log -t <type> -n <name> -c <container_name> -f
+
+# Filter logs by container type
+ds rs log -t <type> -n <name> --containerType <container_type>
+
+% dataos, ds, apply
+
+# Apply a resource manifest
+ds rs apply -f <manifest_file>
+
+# Apply all manifests in a directory recursively
+ds rs apply -f <manifest_dir> -R
+
+# Apply a resource and re-run it
+ds rs apply -f <manifest_file> -r
+
+# Lint a manifest without applying it
+ds rs apply -f <manifest_file> -l
+
+# De-reference a manifest without applying it
+ds rs apply -f <manifest_file> -d
+
+# Apply a manifest without interpolation
+ds rs apply -f <manifest_file> --disable-interpolation
+
+# Apply a manifest from stdin
+cat <manifest_file> | ds rs apply --in
+
+# Update an existing manifest recursively
+ds rs update -f <manifest_dir> -R
+
+% dataos, ds, delete
+
+# Delete a resource by type and name
+ds rs delete -t <type> -n <name>
+
+# Delete a resource by identifier
+ds rs delete -i "<name>|<version>|<type>"
+
+# Force delete a resource
+ds rs delete -t <type> -n <name> --force
+
+# Cascade delete inbound dependencies
+ds rs delete -t <type> -n <name> --cascade
+
+% dataos, ds, network
+
+# Open a local TCP stream to a resource service
+ds rs tcp-stream -t <type> -n <name>
+
+# Open a TCP stream to a specific service port
+ds rs tcp-stream -t <type> -n <name> --servicePort <service_port>
+
+# Open a TCP stream on a custom local port
+ds rs tcp-stream -t <type> -n <name> --listenPort <listen_port>
+
+# Open a TCP stream for a specific container group
+ds rs tcp-stream -t <type> -n <name> --container-group <container_group>
+
+# Open a TCP stream with a custom service suffix
+ds rs tcp-stream -t <type> -n <name> --serviceSuffix <service_suffix>
+
+% dataos, ds, operate
+
+# List available dataplanes
+ds operate get-dataplanes
+
+# Get a container group directly by name, namespace, and dataplane
+ds operate container-group get -n <container_group> --namespace <namespace> --dataplane <dataplane> -d
+
+# Print a container group as YAML
+ds operate container-group get -n <container_group> --namespace <namespace> --dataplane <dataplane> -y
+
+# Get logs for a container group directly
+ds operate container-group log -n <container_group> --namespace <namespace> --dataplane <dataplane>
+
+# Follow logs for a container group directly
+ds operate container-group log -n <container_group> --namespace <namespace> --dataplane <dataplane> -f
+
+# Get logs for one container inside a container group
+ds operate container-group log -n <container_group> --namespace <namespace> --dataplane <dataplane> --container <container_name>
+
+# Get a workload directly by name, namespace, and dataplane
+ds operate workload get -n <workload_name> --namespace <namespace> --dataplane <dataplane> -d
+
+# Print a workload as YAML
+ds operate workload get -n <workload_name> --namespace <namespace> --dataplane <dataplane> -y
+
+# Get workload logs directly
+ds operate workload log -n <workload_name> --namespace <namespace> --dataplane <dataplane>
+
+# Stream logs directly from a target
+ds operate log-stream --name <target_name> --namespace <namespace> --dataplane <dataplane> --container <container_name>
+
+# Execute a shell command directly on a target
+ds operate exec-stream --name <target_name> --namespace <namespace> --dataplane <dataplane> --container <container_name> --command "<command>"
+
+# Open a raw TCP stream to an address through a dataplane
+ds operate tcp-stream --address <address> --dataplane <dataplane> --listenPort <listen_port>
+
+# Move quarantined resources back into general pop
+ds operate quarantine gen-pop --ids <type:version:name>
+
+# Create a Docker registry secret in Kubernetes
+ds operate create-docker-secret -n <namespace> -s <secret_name> -r <registry> -t <registry_type> -u <username> -p <password>
+
+% dataos, ds, help
+
+# Show help for resource get
+ds rs get --help
+
+# Show help for runtime get
+ds rs runtime get --help
+
+# Show help for log
+ds rs log --help
+
+# Show help for tcp-stream
+ds rs tcp-stream --help
