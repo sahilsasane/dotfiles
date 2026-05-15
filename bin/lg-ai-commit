@@ -51,15 +51,29 @@ $'Requirements:\n'\
 $'- Return exactly '"${suggestion_count}"$' commit message candidates\n'\
 $'- Output raw commit subjects only, one per line\n'\
 $'- No numbering, bullets, quotes, markdown, or commentary\n'\
-$'- Follow Conventional Commits\n'\
-$'- Use a scope only when it is genuinely helpful\n'\
+$'- Follow Conventional Commits exactly in the form <type>[optional scope][optional !]: <description>\n'\
+$'- Use lowercase Conventional Commit types such as feat, fix, docs, refactor, chore, test, build, ci, perf, style, or revert\n'\
+$'- Every candidate MUST start with a type, followed by the optional scope, optional !, and a required colon and space\n'\
+$'- Use feat when the full staged change set primarily adds a feature\n'\
+$'- Use fix when the full staged change set primarily fixes a bug\n'\
+$'- Types other than feat and fix may be used when they fit the full staged change set better\n'\
+$'- Use a scope only when it is genuinely helpful for the overall staged change set\n'\
+$'- If a scope is used, it must be a noun describing the main affected area and must appear in parentheses, for example feat(parser): ...\n'\
+$'- The description must immediately follow the colon and space and must be a short summary of the full staged change set\n'\
 $'- Prefer higher-level intent over low-level code narration\n'\
 $'- Keep each subject concise and under 72 characters when possible\n'\
+$'- Because this tool outputs subject lines only, do not output a body or footers\n'\
 $'- Base every candidate on the STAGED diff, not unstaged changes\n'\
+$'- This tool is generating candidates for exactly one git commit being made now\n'\
 $'- Every candidate must describe the full staged change set as one commit\n'\
-$'- Do not split the staged work into separate per-task or per-file subjects\n'\
+$'- Do not split the staged work into separate per-task, per-file, or per-concern subjects\n'\
+$'- Never suggest multiple commits, a commit plan, or subjects like "commit 1" / "commit 2"\n'\
+$'- Choose exactly one type and optional scope per candidate, based on the primary overall intent of the full staged diff\n'\
+$'- If the full staged change set is breaking, mark it with ! immediately before the colon\n'\
+$'- Do not output BREAKING CHANGE footers because this tool outputs subjects only\n'\
 $'- Different candidates may vary in wording or abstraction, but they must all cover the same overall change\n'\
-$'- If the diff spans multiple related edits, summarize the shared outcome or primary intent in one subject\n\n'\
+$'- If the diff spans multiple edits, still write one subject that summarizes the combined overall outcome being committed\n'\
+$'- If a scope is used, it must name the main area affected by the whole staged change set, not one subtask\n\n'\
 $'Recent commit subjects:\n'\
 "${recent_commits:-"- none"}"\
 $'\n\nSTAGED DIFF:\n'\

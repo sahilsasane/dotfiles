@@ -1,7 +1,8 @@
 lastupdatecheck: 0
 recentrepos:
-    - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
     - /Users/sahilsasane/dotfiles
+    - /Users/sahilsasane/TMDC/vulcan-exp/data-product-sandbox
+    - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
     - /Users/sahilsasane/TMDC/vulcan-exp/vulcan-examples
     - /Users/sahilsasane/TMDC/vulcan-exp/customer-usecases
     - /Users/sahilsasane/stuff/go-walk/self-made-eng/ride-sharing-micro

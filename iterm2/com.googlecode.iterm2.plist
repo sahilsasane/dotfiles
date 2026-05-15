@@ -1703,6 +1703,8 @@
 	<false/>
 	<key>WindowNumber</key>
 	<true/>
+	<key>WindowPlacement</key>
+	<integer>2</integer>
 	<key>WrapFocus</key>
 	<true/>
 	<key>com.apple.WebPrivacy.ResourceMonitorURLsVersion</key>
