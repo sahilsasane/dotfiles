@@ -15,6 +15,14 @@ return {
       'saghen/blink.cmp',
     },
     config = function()
+      local function buffer_supports_method(bufnr, method)
+        for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
+          if client:supports_method(method, bufnr) then return true end
+        end
+
+        return false
+      end
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -23,9 +31,19 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          local function goto_declaration()
+            if buffer_supports_method(event.buf, 'textDocument/declaration') then
+              vim.lsp.buf.declaration()
+              return
+            end
+
+            vim.notify('No attached LSP provides declarations here; jumping to definition instead', vim.log.levels.INFO)
+            vim.lsp.buf.definition()
+          end
+
           map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-          map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('grD', goto_declaration, '[G]oto [D]eclaration')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client:supports_method('textDocument/documentHighlight', event.buf) then
@@ -161,7 +179,7 @@ return {
           return nil
         else
           return {
-            timeout_ms = 500,
+            timeout_ms = 2000,
             lsp_format = 'fallback',
           }
         end
@@ -170,7 +188,7 @@ return {
         rust = { 'rustfmt' },
         toml = { 'taplo' },
         lua = { 'stylua' },
-        python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
+        python = { 'ruff_organize_imports', 'ruff_fix', 'ruff_format' },
         go = { 'goimports', 'gofmt' },
         javascript = { 'prettierd', stop_after_first = true },
         javascriptreact = { 'prettierd', stop_after_first = true },

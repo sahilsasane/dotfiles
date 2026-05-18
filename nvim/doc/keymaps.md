@@ -192,6 +192,8 @@ nvim .
 | Flash Treesitter jump | `S` |
 | Jump back after `grd` | `<C-o>` |
 
+> `grd` is definition. `grD` is declaration, and it falls back to definition if no attached LSP supports declarations for that buffer.
+
 ### 5. Diagnostics
 
 | What | Key |
