@@ -45,6 +45,8 @@ return {
 
             CursorLineNr = { fg = colors.yellow, style = { 'bold' } },
             WinSeparator = { fg = colors.surface2 },
+            MiniStatuslineGit = { fg = colors.green, bg = colors.none, style = { 'bold' } },
+            MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.none },
 
             OilDir = { fg = colors.lavender, style = { 'bold' } },
             OilFile = { fg = colors.text },
@@ -92,8 +94,6 @@ return {
       require('mini.surround').setup()
 
       local statusline = require 'mini.statusline'
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
       local project_root_markers = {
         '.git',
         'pyproject.toml',
@@ -103,6 +103,35 @@ return {
       }
 
       local function escape_statusline_text(text) return text:gsub('%%', '%%%%') end
+
+      local function active_statusline()
+        local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
+        local diff = statusline.section_diff { trunc_width = 75, icon = '' }
+        local diagnostics = statusline.section_diagnostics { trunc_width = 75 }
+        local lsp = statusline.section_lsp { trunc_width = 75 }
+        local filename = statusline.section_filename { trunc_width = 140 }
+        local fileinfo = statusline.section_fileinfo { trunc_width = 120 }
+        local location = statusline.section_location { trunc_width = 75 }
+        local search = statusline.section_searchcount { trunc_width = 75 }
+
+        return statusline.combine_groups {
+          { hl = mode_hl, strings = { mode } },
+          { hl = 'MiniStatuslineGit', strings = { diff } },
+          { hl = 'MiniStatuslineDevinfo', strings = { diagnostics, lsp } },
+          '%<',
+          { hl = 'MiniStatuslineFilename', strings = { filename } },
+          '%=',
+          { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+          { hl = mode_hl, strings = { search, location } },
+        }
+      end
+
+      statusline.setup {
+        use_icons = vim.g.have_nerd_font,
+        content = {
+          active = active_statusline,
+        },
+      }
 
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
