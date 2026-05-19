@@ -371,6 +371,8 @@
 	<string>A815B7CA-B0B3-4384-A18F-217D2F7B742F</string>
 	<key>Default Browser Profile Guid</key>
 	<string>8F8E533A-2270-4AB6-A460-492EA23F1B26</string>
+	<key>DisableFullscreenTransparency</key>
+	<false/>
 	<key>DismemberScrollView</key>
 	<true/>
 	<key>DoubleClickPerformsSmartSelection</key>
@@ -515,6 +517,8 @@
 	<false/>
 	<key>HotkeyMigratedFromSingleToMulti</key>
 	<true/>
+	<key>MaxVertically</key>
+	<false/>
 	<key>MoveLeftAfterClosingTab</key>
 	<false/>
 	<key>NeverBlockSystemShutdown</key>
@@ -1705,6 +1709,8 @@
 	<real>0.30000001192092896</real>
 	<key>UseBorder</key>
 	<false/>
+	<key>UseLionStyleFullscreen</key>
+	<true/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>WindowNumber</key>
