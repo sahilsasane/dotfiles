@@ -45,8 +45,13 @@ return {
 
             CursorLineNr = { fg = colors.yellow, style = { 'bold' } },
             WinSeparator = { fg = colors.surface2 },
+            StatusLine = { fg = colors.text, bg = colors.mantle },
+            StatusLineNC = { fg = colors.overlay1, bg = colors.mantle },
             MiniStatuslineGit = { fg = colors.green, bg = colors.none, style = { 'bold' } },
-            MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.none },
+            MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.mantle },
+            MiniStatuslineFileinfo = { fg = colors.overlay1, bg = colors.mantle },
+            MiniStatuslineFilename = { fg = colors.text, bg = colors.mantle },
+            MiniStatuslineInactive = { fg = colors.overlay1, bg = colors.mantle },
 
             OilDir = { fg = colors.lavender, style = { 'bold' } },
             OilFile = { fg = colors.text },
