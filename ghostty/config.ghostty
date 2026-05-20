@@ -4,7 +4,7 @@ theme = "light:/Users/sahilsasane/dotfiles/ghostty/themes/iterm-light.ghostty,da
 
 # Typography and color rendering
 font-family = "MesloLGS NF"
-font-size = 11
+font-size = 10.5
 window-title-font-family = "Avenir Next"
 font-thicken = true
 font-thicken-strength = 100
@@ -15,9 +15,9 @@ window-vsync = true
 
 # Window layout
 window-new-tab-position = end
-window-padding-x = 5
+window-padding-x = 2
 window-padding-y = 0
-window-padding-balance = false
+window-padding-balance = true
 window-padding-color = background
 window-step-resize = true
 window-inherit-working-directory = true
@@ -26,14 +26,15 @@ split-inherit-working-directory = true
 window-inherit-font-size = true
 window-save-state = always
 macos-titlebar-proxy-icon = hidden
-# window-decoration = false
+window-decoration = auto
 
 # Appearance
 macos-titlebar-style = tabs
+macos-window-buttons = visible
 
-background-opacity = 0.70
+background-opacity = 0.75
 background-opacity-cells = true
-background-blur = 20
+background-blur = 40
 unfocused-split-opacity = 0.97
 custom-shader = /Users/sahilsasane/dotfiles/ghostty/shaders/cursor_warp.glsl
 custom-shader-animation = true

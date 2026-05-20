@@ -1,4 +1,4 @@
-if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" || "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then
+if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || -n "${KITTY_PID:-}" || "${TERM_PROGRAM:-}" == "ghostty" || "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then
   _dotfiles_terminal_set_title() {
     emulate -L zsh
 
