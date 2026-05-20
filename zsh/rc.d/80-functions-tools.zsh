@@ -20,7 +20,7 @@ imcp() {
 
 vulcan() {
   __dotfiles_require_cmd docker || return 1
-  docker run --network=vulcan -p 8000:8000 --rm -v .:/workspace tmdcio/vulcan-snowflake:0.228.1.21-beta3 vulcan "$@"
+  docker run --network=vulcan -p 8000:8000 --rm -v .:/workspace tmdcio/vulcan-snowflake:0.228.1.21-beta4 vulcan "$@"
 }
 
 ter3001() {
