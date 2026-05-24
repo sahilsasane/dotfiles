@@ -52,6 +52,14 @@ return {
             MiniStatuslineFileinfo = { fg = colors.overlay1, bg = '#000000' },
             MiniStatuslineFilename = { fg = colors.text, bg = '#000000' },
             MiniStatuslineInactive = { fg = colors.overlay1, bg = '#000000' },
+            MiniStarterHeader = { fg = colors.lavender, style = { 'bold' } },
+            MiniStarterSection = { fg = colors.rosewater, style = { 'bold' } },
+            MiniStarterItem = { fg = colors.text },
+            MiniStarterItemBullet = { fg = colors.surface1 },
+            MiniStarterItemPrefix = { fg = colors.sky, style = { 'bold' } },
+            MiniStarterCurrent = { fg = colors.peach, style = { 'bold' } },
+            MiniStarterFooter = { fg = colors.overlay1, style = { 'italic' } },
+            MiniStarterQuery = { fg = colors.yellow, style = { 'bold' } },
 
             OilDir = { fg = colors.lavender, style = { 'bold' } },
             OilFile = { fg = colors.text },
@@ -89,6 +97,127 @@ return {
   {
     'nvim-mini/mini.nvim',
     config = function()
+      local starter = require 'mini.starter'
+      local uv = vim.uv or vim.loop
+
+      local function starter_recent_files()
+        local cwd = uv.cwd()
+        if not cwd then
+          return {
+            { name = 'No recent files available', action = '', section = 'RECENT' },
+          }
+        end
+
+        local sep = package.config:sub(1, 1)
+        local cwd_prefix = cwd:sub(-1) == sep and cwd or (cwd .. sep)
+        local items = {}
+
+        for _, path in ipairs(vim.v.oldfiles) do
+          if vim.fn.filereadable(path) == 1 and vim.startswith(path, cwd_prefix) then
+            local filename = vim.fn.fnamemodify(path, ':t')
+            local relative = vim.fs.relpath(cwd, path) or vim.fn.fnamemodify(path, ':.')
+
+            table.insert(items, {
+              action = function() vim.cmd.edit(vim.fn.fnameescape(path)) end,
+              name = string.format('%-24s %s', filename, relative),
+              section = 'RECENT',
+            })
+
+            if #items >= 6 then break end
+          end
+        end
+
+        if #items == 0 then
+          return {
+            { name = 'No recent files in this workspace yet', action = '', section = 'RECENT' },
+          }
+        end
+
+        return items
+      end
+
+      starter.setup {
+        evaluate_single = true,
+        header = table.concat({
+          ' ███╗   ██╗██╗   ██╗██╗███╗   ███╗',
+          ' ████╗  ██║██║   ██║██║████╗ ████║',
+          ' ██╔██╗ ██║██║   ██║██║██╔████╔██║',
+          ' ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║',
+          ' ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║',
+          ' ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝',
+          '',
+          ' open what matters',
+        }, '\n'),
+        footer = 'query to filter  •  <CR> open  •  <Esc> reset',
+        items = {
+          {
+            {
+              name = '  Restore session',
+              action = "lua require('persistence').load()",
+              section = 'SESSION',
+            },
+            {
+              name = '󰁯  Restore last session',
+              action = "lua require('persistence').load({ last = true })",
+              section = 'SESSION',
+            },
+            {
+              name = '󰍉  Select session',
+              action = "lua require('persistence').select()",
+              section = 'SESSION',
+            },
+          },
+          {
+            {
+              name = '  Find files',
+              action = 'Telescope find_files',
+              section = 'COMMAND',
+            },
+            {
+              name = '󰱼  Live grep',
+              action = "lua require('telescope').extensions.live_grep_args.live_grep_args()",
+              section = 'COMMAND',
+            },
+            {
+              name = '  Recent files',
+              action = 'Telescope oldfiles',
+              section = 'COMMAND',
+            },
+            {
+              name = '  Config files',
+              action = "lua require('telescope.builtin').find_files({ cwd = vim.fn.stdpath('config') })",
+              section = 'COMMAND',
+            },
+            {
+              name = '  File explorer',
+              action = 'Oil',
+              section = 'COMMAND',
+            },
+            {
+              name = '󰊢  LazyGit',
+              action = 'LazyGit',
+              section = 'COMMAND',
+            },
+            {
+              name = '󰒲  Plugin manager',
+              action = 'Lazy',
+              section = 'COMMAND',
+            },
+            {
+              name = '󰗼  Quit',
+              action = 'qa',
+              section = 'COMMAND',
+            },
+          },
+          starter_recent_files,
+        },
+        content_hooks = {
+          starter.gen_hook.indexing('all', { 'RECENT', 'SESSION' }),
+          starter.gen_hook.padding(0, 1),
+          starter.gen_hook.aligning('center', 'center'),
+        },
+      }
+
       require('mini.ai').setup {
         n_lines = 500,
         custom_textobjects = {

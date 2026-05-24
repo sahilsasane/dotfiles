@@ -1,5 +1,15 @@
 return {
   {
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
+    },
+  },
+
+  {
     'neovim/nvim-lspconfig',
     dependencies = {
       {
@@ -127,10 +137,6 @@ return {
               },
               workspace = {
                 checkThirdParty = false,
-                library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
-                  '${3rd}/luv/library',
-                  '${3rd}/busted/library',
-                }),
               },
             })
           end,

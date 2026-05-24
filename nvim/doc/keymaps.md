@@ -229,14 +229,62 @@ nvim .
 | What | Key |
 | --- | --- |
 | Open lazygit | `<leader>gg` |
+| Open Diffview | `<leader>gd` |
+| Close Diffview | `<leader>gD` |
+| Current file history | `<leader>gh` |
+| Repo history | `<leader>gH` |
 
 > Git hunk navigation (`]h`, `[h`) and hunk actions (`<leader>hp/hs/hb`) are not currently configured. Add an `on_attach` to gitsigns in `lua/plugins/git.lua` to enable them.
+>
+> `diffview.nvim` is controlled by `vim.g.enable_diffview = true` in `init.lua`.
+>
+> `git-conflict.nvim` is controlled by `vim.g.enable_git_conflict = true` in `init.lua`. Inside conflicted files it provides buffer-local defaults like `co`, `ct`, `cb`, `c0`, `[x`, and `]x`.
 
 ### 8. Formatting & LSP
 
 | What | Key |
 | --- | --- |
 | Format buffer | `<leader>f` |
+
+### 9. Sessions
+
+| What | Key |
+| --- | --- |
+| Restore session for current cwd | `<leader>rs` |
+| Select session to restore | `<leader>rS` |
+| Restore last session | `<leader>rl` |
+| Disable session saving for current run | `<leader>rd` |
+
+> The starter screen also exposes session restore actions. Sessions stay manual; plain `nvim` does not auto-restore anything.
+
+### 10. Search & Replace
+
+| What | Key |
+| --- | --- |
+| Open project search/replace | `<leader>sR` |
+| Search/replace using visual selection | `<leader>sR` in visual mode |
+| Search current Oil directory | `gs` inside Oil |
+
+> `grug-far` is the repo-wide search/replace surface. Use it when Telescope grep shows you the matches but you need to actually apply a controlled replacement across files.
+
+### 11. Structural Editing
+
+| What | Key |
+| --- | --- |
+| Toggle split/join under cursor | `<leader>m` |
+
+> `treesj` works on structured syntax nodes such as function arguments, objects, tables, lists, and similar Tree-sitter-backed blocks.
+
+### 12. Motions
+
+| What | Key |
+| --- | --- |
+| Subword forward | `w` |
+| Subword end | `e` |
+| Subword backward | `b` |
+| Subword backward end | `ge` |
+
+> When `vim.g.enable_spider_motions = true`, `w/e/b/ge` use `nvim-spider` subword motions. `W/E/B/gE` remain native Vim motions, so you still have the built-in fallback behavior available.
 
 ### Review mental flow
 

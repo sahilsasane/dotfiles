@@ -20,6 +20,7 @@ return {
     opts = {
       keymap = {
         preset = 'default',
+        ['<Tab>'] = { 'select_and_accept', 'snippet_forward', 'fallback' },
       },
       appearance = {
         nerd_font_variant = 'mono',
@@ -29,7 +30,14 @@ return {
         menu = { auto_show = true, auto_show_delay_ms = 0 },
       },
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          lazydev = {
+            name = 'LazyDev',
+            module = 'lazydev.integrations.blink',
+            score_offset = 100,
+          },
+        },
       },
       snippets = { preset = 'luasnip' },
       fuzzy = { implementation = 'lua' },

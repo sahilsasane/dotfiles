@@ -56,11 +56,32 @@ return {
     dependencies = { { 'nvim-mini/mini.icons', opts = {} } },
     config = function()
       local oil = require 'oil'
+      local function open_grug_far_from_oil()
+        local prefills = { paths = oil.get_current_dir() }
+        local grug_far = require 'grug-far'
+
+        if not grug_far.has_instance 'explorer' then
+          grug_far.open {
+            instanceName = 'explorer',
+            prefills = prefills,
+            staticTitle = 'Find and Replace from Explorer',
+          }
+        else
+          grug_far.get_instance('explorer'):open()
+          grug_far.get_instance('explorer'):update_input_values(prefills, false)
+        end
+      end
 
       oil.setup {
         default_file_explorer = true,
         delete_to_trash = true,
         skip_confirm_for_simple_edits = true,
+        keymaps = {
+          gs = {
+            callback = open_grug_far_from_oil,
+            desc = 'oil: Search in directory',
+          },
+        },
         view_options = {
           show_hidden = true,
         },
