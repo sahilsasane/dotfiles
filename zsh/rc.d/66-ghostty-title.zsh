@@ -17,10 +17,11 @@ if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || -n "${KITTY_PID:-}" || "${TERM_PROGRAM:
   _dotfiles_ghostty_reset_mouse_modes() {
     emulate -L zsh
 
-    [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" ]] || return 0
+    [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || -n "${KITTY_PID:-}" || "${TERM_PROGRAM:-}" == "ghostty" || "${TERM_PROGRAM:-}" == "iTerm.app" ]] || return 0
 
     # Some TUIs can leave mouse/alternate-scroll modes enabled, which makes
     # wheel events reach zsh as up/down keys instead of scrolling scrollback.
+    # Reset them before each prompt for terminals where native scrollback matters.
     print -Pn "\e[?1000l\e[?1002l\e[?1003l\e[?1005l\e[?1006l\e[?1015l\e[?1007l"
   }
 

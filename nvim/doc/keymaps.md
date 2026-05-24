@@ -169,7 +169,9 @@ nvim .
 | Search commands | `<leader>sc` |
 | Search keymaps | `<leader>sk` |
 | Search help tags | `<leader>sh` |
-| Browse Telescope pickers | `<leader>ss` |
+| Symbols in current file | `<leader>ss` |
+| Symbols in workspace | `<leader>sS` |
+| Browse Telescope pickers | `<leader>sp` |
 | Search nvim config files | `<leader>sn` |
 
 > Add `.ignore` file in project root to exclude folders like `.venv`, `vendor`, `node_modules` from grep.
