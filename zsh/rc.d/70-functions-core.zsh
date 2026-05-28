@@ -13,3 +13,7 @@ __dotfiles_require_cmd() {
     return 1
   }
 }
+
+chpwd() {
+  eza --icons --group-directories-first
+}

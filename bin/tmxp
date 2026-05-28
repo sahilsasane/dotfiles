@@ -11,7 +11,7 @@ fi
 
 # Window 1: code (full-screen Neovim)
 tmux new-session -d -s "$PROJECT" -n code -c "$PROJECT_DIR"
-tmux send-keys -t "$PROJECT:code" "nvim ." Enter
+tmux send-keys -t "$PROJECT:code" "nvim" Enter
 
 # Window 2: services (manual)
 tmux new-window -t "$PROJECT" -n services -c "$PROJECT_DIR"
