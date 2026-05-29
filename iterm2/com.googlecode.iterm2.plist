@@ -1332,7 +1332,7 @@
 			<key>Hide After Opening</key>
 			<false/>
 			<key>Horizontal Spacing</key>
-			<real>0.94999999999999996</real>
+			<real>0.84999999999999998</real>
 			<key>Icon</key>
 			<integer>0</integer>
 			<key>Idle Code</key>
@@ -1479,7 +1479,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>MesloLGS-NF-Regular 11</string>
+			<string>JetBrainsMono-Regular 11</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<false/>
 			<key>Open Toolbelt</key>
@@ -1613,7 +1613,7 @@
 			<key>Use Separate Colors for Light and Dark Mode</key>
 			<true/>
 			<key>Vertical Spacing</key>
-			<real>0.90000000000000002</real>
+			<real>0.75</real>
 			<key>Visual Bell</key>
 			<true/>
 			<key>Window Type</key>
