@@ -1,5 +1,45 @@
 return {
   {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    opts = {
+      indent = {
+        char = '│',
+        tab_char = '│',
+        highlight = 'IblIndent',
+      },
+      whitespace = {
+        highlight = 'IblWhitespace',
+        remove_blankline_trail = false,
+      },
+      scope = {
+        enabled = true,
+        char = '│',
+        highlight = 'IblScope',
+        show_start = false,
+        show_end = false,
+        include = {
+          node_type = {
+            python = {
+              'argument_list',
+              'call',
+              'try_statement',
+              'if_statement',
+              'for_statement',
+              'while_statement',
+              'with_statement',
+            },
+          },
+        },
+      },
+      exclude = {
+        buftypes = { 'nofile', 'prompt', 'quickfix', 'terminal' },
+        filetypes = { 'help', 'lazy', 'mason', 'oil', 'qf' },
+      },
+    },
+  },
+
+  {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },
     ---@module 'render-markdown'
@@ -32,6 +72,7 @@ return {
             ['@comment'] = { fg = colors.overlay1, style = { 'italic' } },
             CursorLine = { bg = colors.mantle, blend = 99 },
             LspInlayHint = { fg = colors.overlay0, style = { 'italic' } },
+            Whitespace = { fg = colors.surface0 },
 
             TelescopeNormal = { bg = colors.none },
             TelescopeBorder = { bg = colors.none, fg = colors.surface1 },
@@ -47,6 +88,11 @@ return {
             WinSeparator = { fg = colors.surface2 },
             StatusLine = { fg = colors.text, bg = colors.crust },
             StatusLineNC = { fg = colors.overlay1, bg = colors.crust },
+            BlinkCmpSignatureHelp = { fg = colors.text, bg = colors.crust },
+            BlinkCmpSignatureHelpBorder = { fg = colors.surface1, bg = colors.crust },
+            IblIndent = { fg = colors.surface1 },
+            IblWhitespace = { fg = colors.surface0 },
+            IblScope = { fg = colors.overlay1 },
             MiniStatuslineGit = { fg = colors.green, bg = colors.none, style = { 'bold' } },
             MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.crust },
             MiniStatuslineFileinfo = { fg = colors.overlay1, bg = colors.crust },

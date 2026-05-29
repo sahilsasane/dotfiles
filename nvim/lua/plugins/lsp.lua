@@ -25,6 +25,8 @@ return {
       'saghen/blink.cmp',
     },
     config = function()
+      local inlay_hints_enabled = true
+
       local function buffer_supports_method(bufnr, method)
         for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
           if client:supports_method(method, bufnr) then return true end
@@ -32,6 +34,32 @@ return {
 
         return false
       end
+
+      local function set_inlay_hints(enabled, bufnr)
+        if bufnr ~= nil then
+          if buffer_supports_method(bufnr, 'textDocument/inlayHint') then
+            vim.lsp.inlay_hint.enable(enabled, { bufnr = bufnr })
+          end
+          return
+        end
+
+        inlay_hints_enabled = enabled
+
+        for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
+          if vim.api.nvim_buf_is_loaded(buffer) and buffer_supports_method(buffer, 'textDocument/inlayHint') then
+            vim.lsp.inlay_hint.enable(enabled, { bufnr = buffer })
+          end
+        end
+      end
+
+      local function toggle_inlay_hints()
+        set_inlay_hints(not inlay_hints_enabled)
+        vim.notify(string.format('Inlay hints %s', inlay_hints_enabled and 'enabled' or 'disabled'), vim.log.levels.INFO)
+      end
+
+      vim.api.nvim_create_user_command('InlayHintsToggle', toggle_inlay_hints, { desc = 'Toggle inlay hints globally' })
+      vim.api.nvim_create_user_command('InlayHintsEnable', function() set_inlay_hints(true) end, { desc = 'Enable inlay hints globally' })
+      vim.api.nvim_create_user_command('InlayHintsDisable', function() set_inlay_hints(false) end, { desc = 'Disable inlay hints globally' })
 
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
@@ -80,11 +108,8 @@ return {
           end
 
           if client and client:supports_method('textDocument/inlayHint', event.buf) then
-            if client.name == 'basedpyright' then
-              vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
-            end
-
-            map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
+            set_inlay_hints(inlay_hints_enabled, event.buf)
+            map('<leader>th', toggle_inlay_hints, '[T]oggle Inlay [H]ints')
           end
         end,
       })

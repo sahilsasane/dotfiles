@@ -52,6 +52,28 @@ vim.keymap.set('n', '<leader>J', ':resize -2<CR>', { desc = 'Resize split up' })
 
 vim.keymap.set('n', '<leader>=', '<C-w>=', { desc = 'Equalize splits' })
 
+local function reload_config()
+  local config_dir = vim.fn.stdpath 'config'
+
+  assert(loadfile(config_dir .. '/lua/options.lua'))()
+  assert(loadfile(config_dir .. '/lua/keymaps.lua'))()
+
+  local ok, reloader = pcall(require, 'lazy.manage.reloader')
+  if ok then
+    reloader.reload {
+      { file = config_dir .. '/init.lua', what = 'changed' },
+    }
+  end
+
+  vim.schedule(function() vim.notify('Neovim config reloaded', vim.log.levels.INFO) end)
+end
+
+pcall(vim.api.nvim_del_user_command, 'ReloadConfig')
+pcall(vim.api.nvim_del_user_command, 'Rlc')
+vim.api.nvim_create_user_command('ReloadConfig', reload_config, { desc = 'Reload Neovim config' })
+vim.api.nvim_create_user_command('Rlc', reload_config, { desc = 'Reload Neovim config' })
+vim.keymap.set('n', '<leader>tr', reload_config, { desc = '[T]ools: [R]eload config' })
+
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
