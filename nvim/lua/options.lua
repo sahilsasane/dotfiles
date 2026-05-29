@@ -18,7 +18,7 @@ vim.o.signcolumn = 'yes'
 
 vim.o.updatetime = 100
 
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 250
 
 vim.o.splitright = true
 vim.o.splitbelow = true

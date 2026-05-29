@@ -43,7 +43,7 @@ vim.keymap.set('n', '<leader>k', '<C-w>k', { desc = 'Focus upper window' })
 vim.keymap.set('n', '<leader>c', '<C-w>c', { desc = 'Close current split' })
 
 vim.keymap.set('n', '<leader>v', ':vsp<CR>', { desc = 'Vertical split' })
-vim.keymap.set('n', '<leader>s', ':sp<CR>', { desc = 'Horizontal split' })
+vim.keymap.set('n', '<leader>sl', ':sp<CR>', { desc = 'Horizontal split' })
 
 vim.keymap.set('n', '<leader>L', ':vertical resize +2<CR>', { desc = 'Resize split right' })
 vim.keymap.set('n', '<leader>H', ':vertical resize -2<CR>', { desc = 'Resize split left' })
@@ -59,11 +59,9 @@ local function reload_config()
   assert(loadfile(config_dir .. '/lua/keymaps.lua'))()
 
   local ok, reloader = pcall(require, 'lazy.manage.reloader')
-  if ok then
-    reloader.reload {
-      { file = config_dir .. '/init.lua', what = 'changed' },
-    }
-  end
+  if ok then reloader.reload {
+    { file = config_dir .. '/init.lua', what = 'changed' },
+  } end
 
   vim.schedule(function() vim.notify('Neovim config reloaded', vim.log.levels.INFO) end)
 end
@@ -122,9 +120,7 @@ local function apply_nearest_inlay_hint()
   local resolved_hint = nearest.inlay_hint
   if not resolved_hint.textEdits then
     local response = client:request_sync('inlayHint/resolve', resolved_hint, 500, bufnr)
-    if response and response.result then
-      resolved_hint = response.result
-    end
+    if response and response.result then resolved_hint = response.result end
   end
 
   if not resolved_hint.textEdits or vim.tbl_isempty(resolved_hint.textEdits) then
