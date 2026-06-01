@@ -22,4 +22,4 @@ if [ -z "$branch" ]; then
   exit 0
 fi
 
-printf ' %s | ' "$branch"
+printf '#[fg=#cdd6f4] %s#[default] ' "$branch"
