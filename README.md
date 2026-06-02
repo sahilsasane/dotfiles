@@ -45,7 +45,7 @@ Run:
 That will:
 
 - install the Homebrew packages in `Brewfile`
-- clone `oh-my-zsh`, `powerlevel10k`, and tmux plugins that the config expects
+- clone `oh-my-zsh` and tmux plugins that the config expects
 - symlink tracked config into `$HOME`
 
 After bootstrap:

@@ -1,7 +1,1 @@
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+typeset -g OMP_CONFIG="${DOTFILES_ZSH_DIR}/oh-my-posh/theme.omp.json"

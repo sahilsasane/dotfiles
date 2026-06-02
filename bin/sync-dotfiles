@@ -67,10 +67,6 @@ perl -0pi -e '
   s#^(\s*excludesfile\s*=\s*).*$#$1~/.gitignore_global#mg;
 ' "$ROOT_DIR/git-config/.gitconfig"
 
-if [ -f "$HOME/.p10k.zsh" ]; then
-  install -m 0644 "$HOME/.p10k.zsh" "$ROOT_DIR/zsh/.p10k.zsh"
-fi
-
 echo "Skipping zsh loader/module sync: dotfiles is the source of truth for zsh."
 
 install -m 0644 "$HOME/.tmux.conf" "$ROOT_DIR/tmux/.tmux.conf"

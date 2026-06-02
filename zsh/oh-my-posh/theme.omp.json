@@ -1,0 +1,96 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 3,
+  "final_space": true,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "os",
+          "style": "plain",
+          "foreground": "#ffffff",
+          "template": " {{ if .WSL }}WSL{{ else }}{{ .Icon }}{{ end }} "
+        },
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "#f5e0dc",
+          "template": " {{ .Path }} ",
+          "properties": {
+            "style": "folder"
+          }
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "foreground": "#cba6f7",
+          "template": " {{ .HEAD }}{{ if gt .Behind 0 }} <#f9e2af>⇣{{ .Behind }}</>{{ end }}{{ if gt .Ahead 0 }} <#fab387>⇡{{ .Ahead }}</>{{ end }}{{ if gt .PushBehind 0 }} <#f2cdcd>⇠{{ .PushBehind }}</>{{ end }}{{ if gt .PushAhead 0 }} <#f5c2e7>⇢{{ .PushAhead }}</>{{ end }}{{ if .UpstreamGone }} <#f38ba8></>{{ end }}{{ if .Merge }} <#eba0ac></>{{ end }}{{ if .Rebase }} <#fab387>{{ .Rebase.Current }}/{{ .Rebase.Total }}</>{{ end }}{{ if .CherryPick }} <#f5c2e7></>{{ end }}{{ if .Revert }} <#f2cdcd>↶</>{{ end }}{{ if gt .StashCount 0 }} <#f5e0dc>{{ .StashCount }}</>{{ end }}{{ if .Working.Changed }} <#f38ba8> {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <#f9e2af> {{ .Staging.String }}</>{{ end }} ",
+          "properties": {
+            "branch_icon": "",
+            "fetch_status": true,
+            "fetch_push_status": true,
+            "status_formats": {
+              "Unmerged": "%d",
+              "Added": "+%d",
+              "Modified": "~%d",
+              "Deleted": "-%d",
+              "Untracked": "?%d"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "type": "executiontime",
+          "style": "plain",
+          "foreground": "#f9e2af",
+          "template": " {{ .FormattedMs }} ",
+          "properties": {
+            "threshold": 1000,
+            "style": "austin"
+          }
+        },
+        {
+          "type": "battery",
+          "style": "plain",
+          "foreground": "#f9e2af",
+          "template": "{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }} ",
+          "properties": {
+            "charging_icon": " ",
+            "discharging_icon": "󰁹 ",
+            "charged_icon": "󰂄 ",
+            "not_charging_icon": "󱟢 "
+          }
+        },
+        {
+          "type": "time",
+          "style": "plain",
+          "foreground": "#fab387",
+          "template": " {{ .CurrentDate | date .Format }} ",
+          "properties": {
+            "time_format": "15:04:05"
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#ffffff",
+          "template": "╰─❯ "
+        }
+      ]
+    }
+  ]
+}

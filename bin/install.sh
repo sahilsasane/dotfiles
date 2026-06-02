@@ -33,8 +33,6 @@ clone_or_update() {
 
 clone_or_update https://github.com/ohmyzsh/ohmyzsh.git \
   "$HOME/.oh-my-zsh"
-clone_or_update https://github.com/romkatv/powerlevel10k.git \
-  "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
 
 clone_or_update https://github.com/tmux-plugins/tpm \
   "$HOME/.tmux/plugins/tpm"
@@ -48,7 +46,6 @@ clone_or_update https://github.com/tmux-plugins/tmux-battery \
 link_path "$DOTFILES_ROOT/zsh/.zshrc" "$HOME/.zshrc"
 link_path "$DOTFILES_ROOT/zsh/.zshenv" "$HOME/.zshenv"
 link_path "$DOTFILES_ROOT/zsh/.zprofile" "$HOME/.zprofile"
-link_path "$DOTFILES_ROOT/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
 
 link_path "$DOTFILES_ROOT/git-config/.gitconfig" "$HOME/.gitconfig"
 link_path "$DOTFILES_ROOT/git-config/.gitignore_global" "$HOME/.gitignore_global"
