@@ -10,6 +10,12 @@ require_cmd() {
   command -v "$1" >/dev/null 2>&1 || die "lg-ai-commit: '$1' is required."
 }
 
+copy_to_clipboard() {
+  if command -v pbcopy >/dev/null 2>&1; then
+    printf '%s' "$1" | pbcopy
+  fi
+}
+
 cleanup() {
   local status=$?
 
@@ -33,8 +39,8 @@ fi
 git rev-parse --git-dir >/dev/null 2>&1 || die "lg-ai-commit: not a git repository."
 git diff --staged --quiet && die "lg-ai-commit: no staged changes."
 
-recent_count="${LG_AI_COMMIT_RECENT_COUNT:-15}"
-suggestion_count="${LG_AI_COMMIT_SUGGESTIONS:-10}"
+recent_count="${LG_AI_COMMIT_RECENT_COUNT:-5}"
+suggestion_count="${LG_AI_COMMIT_SUGGESTIONS:-5}"
 diff_chars="${LG_AI_COMMIT_DIFF_CHARS:-120000}"
 recent_chars="${LG_AI_COMMIT_RECENT_CHARS:-4000}"
 
@@ -65,15 +71,22 @@ $'- Keep each subject concise and under 72 characters when possible\n'\
 $'- Because this tool outputs subject lines only, do not output a body or footers\n'\
 $'- Base every candidate on the STAGED diff, not unstaged changes\n'\
 $'- This tool is generating candidates for exactly one git commit being made now\n'\
+$'- First infer one honest umbrella summary that covers ALL staged changes together\n'\
+$'- Then write every candidate as an alternative phrasing of that SAME umbrella summary\n'\
 $'- Every candidate must describe the full staged change set as one commit\n'\
+$'- All candidates must keep the same overall focus; vary wording, not which subset of changes is described\n'\
 $'- Do not split the staged work into separate per-task, per-file, or per-concern subjects\n'\
+$'- If the staged diff contains several related edits, prefer a broader umbrella subject that still truthfully covers all of them\n'\
+$'- Any candidate that mentions only one sub-change, one file, or one subset of the staged diff is invalid\n'\
 $'- Never suggest multiple commits, a commit plan, or subjects like "commit 1" / "commit 2"\n'\
 $'- Choose exactly one type and optional scope per candidate, based on the primary overall intent of the full staged diff\n'\
 $'- If the full staged change set is breaking, mark it with ! immediately before the colon\n'\
 $'- Do not output BREAKING CHANGE footers because this tool outputs subjects only\n'\
 $'- Different candidates may vary in wording or abstraction, but they must all cover the same overall change\n'\
 $'- If the diff spans multiple edits, still write one subject that summarizes the combined overall outcome being committed\n'\
-$'- If a scope is used, it must name the main area affected by the whole staged change set, not one subtask\n\n'\
+$'- If a scope is used, it must name the main area affected by the whole staged change set, not one subtask\n'\
+$'- Valid pattern for mixed tooling changes: a single umbrella subject like "chore: improve developer workflow helpers"\n'\
+$'- Invalid pattern: separate candidates that each only mention one detail like clipboard sync, alias updates, or repo ordering\n\n'\
 $'Recent commit subjects:\n'\
 "${recent_commits:-"- none"}"\
 $'\n\nSTAGED DIFF:\n'\
@@ -92,10 +105,14 @@ if [[ ! -s "${__lg_ai_commit_tmp}" ]]; then
   die "lg-ai-commit: no commit message selected."
 fi
 
+copy_to_clipboard "${selected_message}"
+
 "${VISUAL:-${EDITOR:-vi}}" "${__lg_ai_commit_tmp}"
 
 if ! grep -q '[^[:space:]]' "${__lg_ai_commit_tmp}"; then
   die "lg-ai-commit: empty commit message after edit."
 fi
+
+copy_to_clipboard "$(cat "${__lg_ai_commit_tmp}")"
 
 git commit -F "${__lg_ai_commit_tmp}" "$@"

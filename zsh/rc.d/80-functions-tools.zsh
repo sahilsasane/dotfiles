@@ -112,12 +112,22 @@ gcai() {
   diff="$(git diff --staged --patch --minimal | head -c 120000)"
   recent="$(git log -n 20 --pretty=format:%s 2>/dev/null | sed 's/^/- /' | head -c 4000)"
 
-  prompt=$'Write a git commit message for the STAGED diff.\n'\
+  prompt=$'Write a git commit message for the COMPLETE STAGED diff.\n'\
 $'Follow Conventional Commits strictly.\n\n'\
+$'Conventional Commits header format:\n'\
+$'<type>[optional scope][optional !]: <description>\n\n'\
 $'Allowed types: feat, fix, refactor, perf, docs, test, chore, build, ci, style, revert\n\n'\
-$'Output MUST be EXACTLY ONE LINE in this format:\n'\
-$'<type>: subject\n\n'\
+$'Output MUST be EXACTLY ONE LINE containing ONLY the header.\n\n'\
 $'Hard rules:\n'\
+$'- First infer one honest umbrella summary that covers ALL staged changes together\n'\
+$'- Then write the commit message as that single umbrella summary\n'\
+$'- Summarize EVERYTHING currently staged in one consolidated message\n'\
+$'- If the staged diff contains several related edits, prefer a broader umbrella subject that still truthfully covers all of them\n'\
+$'- Do NOT write separate messages for different parts of the staged work\n'\
+$'- A message that mentions only one sub-change, one file, or one subset of the staged diff is invalid\n'\
+$'- Use a scope only if the entire staged change is clearly about one area\n'\
+$'- If multiple staged changes span different areas, omit the scope and summarize the combined intent\n'\
+$'- Valid pattern for mixed tooling changes: a single umbrella subject like "chore: improve developer workflow helpers"\n'\
 $'- Output ONLY that single line (no blank lines)\n'\
 $'- Do NOT include a body, bullets, or any extra text\n'\
 $'- Imperative mood\n'\
