@@ -67,27 +67,6 @@
             "fetch_virtual_env": true,
             "display_default": false
           }
-        },
-        {
-          "type": "battery",
-          "style": "plain",
-          "foreground": "#f9e2af",
-          "template": "{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }} ",
-          "properties": {
-            "charging_icon": " ",
-            "discharging_icon": "󰁹 ",
-            "charged_icon": "󰂄 ",
-            "not_charging_icon": "󱟢 "
-          }
-        },
-        {
-          "type": "time",
-          "style": "plain",
-          "foreground": "#fab387",
-          "template": " {{ .CurrentDate | date .Format }} ",
-          "properties": {
-            "time_format": "15:04:05"
-          }
         }
       ]
     },
