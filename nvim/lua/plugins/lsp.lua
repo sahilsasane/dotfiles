@@ -1,5 +1,11 @@
 return {
   {
+    'smjonas/inc-rename.nvim',
+    cmd = 'IncRename',
+    opts = {},
+  },
+
+  {
     'folke/lazydev.nvim',
     ft = 'lua',
     opts = {
@@ -79,7 +85,9 @@ return {
             vim.lsp.buf.definition()
           end
 
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          vim.keymap.set('n', 'grn', function()
+            return ':IncRename ' .. vim.fn.expand '<cword>'
+          end, { buffer = event.buf, desc = 'LSP: [R]e[n]ame', expr = true })
           map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
           map('grD', goto_declaration, '[G]oto [D]eclaration')
 
