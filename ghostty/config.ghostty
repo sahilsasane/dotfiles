@@ -3,7 +3,7 @@
 theme = "light:/Users/sahilsasane/dotfiles/ghostty/themes/iterm-light.ghostty,dark:/Users/sahilsasane/dotfiles/ghostty/themes/iterm-dark.ghostty"
 
 # Typography and color rendering
-font-family = "MesloLGS NF"
+font-family = "JetBrains Mono"
 font-size = 10.5
 window-title-font-family = "Avenir Next"
 font-thicken = true

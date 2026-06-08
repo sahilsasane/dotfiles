@@ -283,6 +283,11 @@ return {
 
       local function escape_statusline_text(text) return text:gsub('%%', '%%%%') end
 
+      local function format_project_relative_path(path)
+        local root = vim.fs.root(path, project_root_markers) or vim.uv.cwd()
+        return (root and vim.fs.relpath(root, path)) or vim.fn.fnamemodify(path, ':~:.')
+      end
+
       local function active_statusline()
         local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
         local diff = statusline.section_diff { trunc_width = 75, icon = '' }
@@ -316,12 +321,19 @@ return {
       statusline.section_filename = function()
         if vim.bo.buftype == 'terminal' then return '%t' end
 
+        if vim.bo.filetype == 'oil' then
+          local oil = require 'oil'
+          local oil_dir = oil.get_current_dir(0)
+          if oil_dir then
+            local display_path = format_project_relative_path(vim.fs.normalize(oil_dir))
+            return escape_statusline_text('oil:' .. display_path) .. '%m%r'
+          end
+        end
+
         local path = vim.api.nvim_buf_get_name(0)
         if path == '' then return '[No Name]%m%r' end
 
-        local root = vim.fs.root(0, project_root_markers) or vim.uv.cwd()
-        local relative_path = root and vim.fs.relpath(root, path) or nil
-        local display_path = relative_path or vim.fn.fnamemodify(path, ':~:.')
+        local display_path = format_project_relative_path(path)
 
         return escape_statusline_text(display_path) .. '%m%r'
       end
