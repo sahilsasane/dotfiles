@@ -25,6 +25,16 @@ elif [[ -n "${ZSH_CUSTOM:-}" && -f "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-
   source "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
+if (( ${+widgets[autosuggest-accept]} )); then
+  bindkey -M emacs '^Y' autosuggest-accept
+  bindkey -M viins '^Y' autosuggest-accept
+fi
+
+if (( ${+widgets[autosuggest-clear]} )); then
+  bindkey -M emacs '^]' autosuggest-clear
+  bindkey -M viins '^]' autosuggest-clear
+fi
+
 if [[ -n "${BREW_PREFIX:-}" && -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
   source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 elif [[ -n "${ZSH_CUSTOM:-}" && -f "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
