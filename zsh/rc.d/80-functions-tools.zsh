@@ -18,10 +18,10 @@ imcp() {
   npx @modelcontextprotocol/inspector "$@"
 }
 
-vulcan() {
-  __dotfiles_require_cmd docker || return 1
-  docker run --network=vulcan -p 8000:8000 --rm -v .:/workspace tmdcio/vulcan-snowflake:0.228.1.23 vulcan "$@"
-}
+# vulcan() {
+#   __dotfiles_require_cmd docker || return 1
+#   docker run --network=vulcan -p 8000:8000 --rm -v .:/workspace tmdcio/vulcan-snowflake:0.228.1.23 vulcan "$@"
+# }
 
 ter3001() {
   __dotfiles_require_cmd text-embeddings-router || return 1
