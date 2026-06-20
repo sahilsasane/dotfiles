@@ -42,3 +42,4 @@
 	fpush = push --force-with-lease
 	l = log --oneline --decorate
 	last = log -1 --stat
+	c = checkout

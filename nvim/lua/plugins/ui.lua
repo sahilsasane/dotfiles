@@ -148,11 +148,9 @@ return {
 
       local function starter_recent_files()
         local cwd = uv.cwd()
-        if not cwd then
-          return {
-            { name = 'No recent files available', action = '', section = 'RECENT' },
-          }
-        end
+        if not cwd then return {
+          { name = 'No recent files available', action = '', section = 'RECENT' },
+        } end
 
         local sep = package.config:sub(1, 1)
         local cwd_prefix = cwd:sub(-1) == sep and cwd or (cwd .. sep)
@@ -173,26 +171,25 @@ return {
           end
         end
 
-        if #items == 0 then
-          return {
-            { name = 'No recent files in this workspace yet', action = '', section = 'RECENT' },
-          }
-        end
+        if #items == 0 then return {
+          { name = 'No recent files in this workspace yet', action = '', section = 'RECENT' },
+        } end
 
         return items
       end
 
       starter.setup {
         evaluate_single = true,
-        header = table.concat({
-          ' _   _                 _           ',
-          '| \\ | | _____   ___   (_)_ __ ___  ',
-          "|  \\| |/ _ \\ \\ / / | | | | '_ ` _ \\ ",
-          '| |\\  |  __/\\ V /| |_| | | | | | |',
-          '|_| \\_|\\___| \\_/  \\__,_|_| |_| |_|',
-          '',
-          ' open what matters',
-        }, '\n'),
+        header = [[
+██╗   ██╗██╗   ██╗██╗███╗   ███╗
+███╗  ██║██║   ██║██║████╗ ████║
+██╔██╗██║╚██╗ ██╔╝██║██╔████╔██║
+██║╚████║ ╚████╔╝ ██║██║╚██╔╝██║
+██║ ╚███║  ╚██╔╝  ██║██║ ╚═╝ ██║
+╚═╝  ╚══╝   ╚═╝   ╚═╝╚═╝     ╚═╝
+
+ enter quietly
+]],
         footer = 'query to filter  •  <CR> open  •  <Esc> reset',
         items = {
           {
