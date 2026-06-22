@@ -22,9 +22,13 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `bin/install.sh`: link tracked files into `$HOME`
 - `bin/sync-dotfiles`: copy current machine config back into the repo and sanitize it
 - `nvim/`: Neovim config, keymaps, plugins, lockfile
+- `kitty/`: Kitty config plus custom tab bar code
+- `ghostty/`: Ghostty config, themes, and shader experiments
 - `atuin/`: Atuin history search config
 - `lazygit/`: Lazygit config and custom commands
+- `navi/`: personal `navi` cheat sheets
 - `eza/`: eza theme config
+- `uv/`: local `uv` metadata snapshot
 - `yazi/`: Yazi config and flavor assets
 - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
 - `tmux/`: tmux config using `~/.tmux.conf` and `~/.tmux/plugins`
@@ -33,6 +37,7 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `fish/`: fish snippets
 - `htop/`: htop config
 - `iterm2/`: iTerm2 preferences plist
+- `raycast/`: placeholder for Raycast-tracked config
 
 ## Bootstrap A New Machine
 
@@ -53,6 +58,19 @@ After bootstrap:
 - open Neovim once so `lazy.nvim` installs plugins
 - create `~/.zshrc.local` only if that machine needs local-only env vars
 - run a new login shell so the refactored zsh loaders pick up the linked repo files
+
+What `bin/install.sh` currently links:
+
+- zsh, git, tmux, Neovim, Lazygit, Atuin, eza, fish, htop, yazi, iTerm2
+- `bin/lgai` into `~/.local/bin/lgai`
+
+What it does not currently link:
+
+- Kitty
+- Ghostty
+- Navi cheat sheets
+- Raycast
+- `uv/`
 
 Optional AI commit flow for Lazygit:
 
@@ -108,3 +126,4 @@ These are intentionally not tracked here:
 - zsh is organized as small ordered modules:
   `zsh/profile.d/*.zsh` for login-time env and runtimes, and
   `zsh/rc.d/*.zsh` for interactive shell behavior.
+- Reload Kitty config from inside a Kitty shell with `kitty @ load-config`.
