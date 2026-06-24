@@ -94,7 +94,7 @@ render() {
       icon=''
       accent_fg="$attached_fg"
       ;;
-    *charging*)
+    *charging*|*finishing\ charge*)
       icon='⚡'
       accent_fg="$charge_fg"
       ;;
@@ -133,6 +133,21 @@ self_check() {
   }
   printf '%s\n' "$output" | grep -q '▇' || {
     printf 'charging sample failed\n' >&2
+    exit 1
+  }
+
+  BATTERY_STATUS_SAMPLE=$'Now drawing from '\''AC Power'\''\n -InternalBattery-0 (id=1)\t100%; finishing charge; 0:09 remaining present: true'
+  output="$(render)"
+  printf '%s\n' "$output" | grep -q '⚡' || {
+    printf 'finishing charge sample failed\n' >&2
+    exit 1
+  }
+  printf '%s\n' "$output" | grep -q '100%' || {
+    printf 'finishing charge sample failed\n' >&2
+    exit 1
+  }
+  printf '%s\n' "$output" | grep -q '█' || {
+    printf 'finishing charge sample failed\n' >&2
     exit 1
   }
 

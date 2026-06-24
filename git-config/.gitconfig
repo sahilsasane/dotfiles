@@ -43,3 +43,7 @@
 	l = log --oneline --decorate
 	last = log -1 --stat
 	c = checkout
+[url "ssh://git@bitbucket.org/"]
+	insteadOf = https://bitbucket.org/
+[url "git@bitbucket.org:"]
+	insteadOf = https://bitbucket.org/
