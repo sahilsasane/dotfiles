@@ -78,89 +78,11 @@ terp() {
   text-embeddings-router --model-id "$TER_MODEL_ID" --port "$port" --prometheus-port "$prom_port" "$@"
 }
 
-gcai() {
-  __dotfiles_require_cmd git || return 1
-  __dotfiles_require_cmd jq || return 1
-  __dotfiles_require_cmd curl || return 1
-  __dotfiles_require_cmd pbcopy || return 1
-
-  git rev-parse --git-dir >/dev/null 2>&1 || { echo "Not a git repository."; return 1; }
-  if git diff --staged --quiet; then echo "No staged changes."; return 1; fi
-  if [ -z "$OPENAI_API_KEY" ]; then echo "OPENAI_API_KEY is not set."; return 1; fi
-
-  local diff recent prompt payload resp http_status body msg
-
-  diff="$(git diff --staged --patch --minimal | head -c 120000)"
-  recent="$(git log -n 20 --pretty=format:%s 2>/dev/null | sed 's/^/- /' | head -c 4000)"
-
-  prompt=$'Write a git commit message for the COMPLETE STAGED diff.\n'\
-    $'Follow Conventional Commits strictly.\n\n'\
-    $'Conventional Commits header format:\n'\
-    $'<type>[optional scope][optional !]: <description>\n\n'\
-    $'Allowed types: feat, fix, refactor, perf, docs, test, chore, build, ci, style, revert\n\n'\
-    $'Output MUST be EXACTLY ONE LINE containing ONLY the header.\n\n'\
-    $'Hard rules:\n'\
-    $'- First infer one honest umbrella summary that covers ALL staged changes together\n'\
-    $'- Then write the commit message as that single umbrella summary\n'\
-    $'- Summarize EVERYTHING currently staged in one consolidated message\n'\
-    $'- If the staged diff contains several related edits, prefer a broader umbrella subject that still truthfully covers all of them\n'\
-    $'- Do NOT write separate messages for different parts of the staged work\n'\
-    $'- A message that mentions only one sub-change, one file, or one subset of the staged diff is invalid\n'\
-    $'- Use a scope only if the entire staged change is clearly about one area\n'\
-    $'- If multiple staged changes span different areas, omit the scope and summarize the combined intent\n'\
-    $'- Valid pattern for mixed tooling changes: a single umbrella subject like "chore: improve developer workflow helpers"\n'\
-    $'- Output ONLY that single line (no blank lines)\n'\
-    $'- Do NOT include a body, bullets, or any extra text\n'\
-    $'- Imperative mood\n'\
-    $'- Subject <= 72 characters\n\n'\
-    $'Recent commit subjects:\n'\
-    "${recent:-"- none"}"\
-    $'\n\nSTAGED DIFF:\n'\
-    "$diff"
-
-  payload="$(jq -n \
-    --arg model "${OPENAI_MODEL:-gpt-5.2-mini}" \
-    --arg input "$prompt" \
-    '{model:$model, input:$input}')"
-
-  resp="$(curl -sS -w $'\n%{http_code}' https://api.openai.com/v1/responses \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d "$payload")"
-
-  http_status="${resp##*$'\n'}"
-  body="${resp%$'\n'*}"
-
-  if [[ "$http_status" != "200" ]]; then
-    printf '%s' "$body" | jq -r '.error.message // .message // .error // "OpenAI API error."'
-    return 1
-  fi
-
-  msg="$(printf '%s' "$body" | jq -r '
-    [.output[]? | select(.type=="message") | .content[]? | select(.type=="output_text") | .text] | join("")
-  ')"
-
-  if [[ -z "$msg" || "$msg" == "null" ]]; then echo "Could not extract commit message."; return 1; fi
-
-  printf '%s' "$msg" | pbcopy
-}
-
-gcaa() {
-  __dotfiles_require_cmd pbpaste || return 1
-
-  gcai || return 1
-
-  local tmp msg
-  tmp="$(mktemp)"
-  pbpaste > "$tmp"
-  ${EDITOR:-vi} "$tmp" || { rm -f "$tmp"; return 1; }
-  msg="$(cat "$tmp")"
-  rm -f "$tmp"
-
-  if [ -z "$msg" ]; then
-    echo "gca: empty commit message after edit"
-    return 1
-  fi
-
-  gcmsg "$msg"
+ 
+tmx() {
+  PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  PROJECT=$(basename "$PROJECT_DIR")
+  
+  tmux new-session -d -s "$PROJECT" -n code -c "$PROJECT_DIR"
+  tmux attach-session -t "$PROJECT"
 }
