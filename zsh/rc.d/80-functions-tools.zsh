@@ -34,6 +34,10 @@ ds() {
   "$dataos_ctl" "$@"
 }
 
+dsg()  { ds rs get -t "$1" -n "$2" "${@:3}"; }
+dsrt() { ds rs get runtime -t "$1" -n "$2" "${@:3}"; }
+dslg() { ds rs log -t "$1" -n "$2" "${@:3}"; }
+
 y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	command yazi "$@" --cwd-file="$tmp"

@@ -43,9 +43,7 @@ return {
 
       local function set_inlay_hints(enabled, bufnr)
         if bufnr ~= nil then
-          if buffer_supports_method(bufnr, 'textDocument/inlayHint') then
-            vim.lsp.inlay_hint.enable(enabled, { bufnr = bufnr })
-          end
+          if buffer_supports_method(bufnr, 'textDocument/inlayHint') then vim.lsp.inlay_hint.enable(enabled, { bufnr = bufnr }) end
           return
         end
 
@@ -85,9 +83,12 @@ return {
             vim.lsp.buf.definition()
           end
 
-          vim.keymap.set('n', 'grn', function()
-            return ':IncRename ' .. vim.fn.expand '<cword>'
-          end, { buffer = event.buf, desc = 'LSP: [R]e[n]ame', expr = true })
+          vim.keymap.set(
+            'n',
+            'grn',
+            function() return ':IncRename ' .. vim.fn.expand '<cword>' end,
+            { buffer = event.buf, desc = 'LSP: [R]e[n]ame', expr = true }
+          )
           map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
           map('grD', goto_declaration, '[G]oto [D]eclaration')
 
@@ -212,6 +213,12 @@ return {
     ---@type conform.setupOpts
     opts = {
       notify_on_error = false,
+      formatters = {
+        jq_jsonl = {
+          command = 'jq',
+          args = { '-M', '-c', '.' },
+        },
+      },
       format_on_save = function(bufnr)
         local disable_filetypes = { c = true, cpp = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
@@ -234,6 +241,7 @@ return {
         typescript = { 'prettierd', stop_after_first = true },
         typescriptreact = { 'prettierd', stop_after_first = true },
         json = { 'prettierd', stop_after_first = true },
+        jsonl = { 'jq_jsonl' },
         css = { 'prettierd', stop_after_first = true },
         scss = { 'prettierd', stop_after_first = true },
         html = { 'prettierd', stop_after_first = true },

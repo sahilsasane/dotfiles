@@ -1,5 +1,8 @@
 export CLICOLOR=1
 export TERM=xterm-256color
+export EDITOR="nvim"
+export VISUAL="$EDITOR"
+export FCEDIT="$EDITOR"
 export EZA_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/eza"
 unset LSCOLORS
 export LS_COLORS="$(vivid generate catppuccin-mocha)"
