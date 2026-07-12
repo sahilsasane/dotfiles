@@ -34,9 +34,31 @@ ds() {
   "$dataos_ctl" "$@"
 }
 
-dsg()  { ds rs get -t "$1" -n "$2" "${@:3}"; }
-dsrt() { ds rs get runtime -t "$1" -n "$2" "${@:3}"; }
-dslg() { ds rs log -t "$1" -n "$2" "${@:3}"; }
+dg()  { ds rs get -t "$1" -n "$2" "${@:3}"; }
+drt() { ds rs get runtime -t "$1" -n "$2" "${@:3}"; }
+dlg() {
+  local type="$1" name="$2"
+  shift 2 || return 1
+
+  local -a args=()
+  while (( $# )); do
+    case "$1" in
+      --cg|-g)
+        [[ -n "$2" ]] || { echo "dlg: missing value for $1" >&2; return 1; }
+        args+=(--container-group "$2")
+        shift 2
+        ;;
+      *)
+        args+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  ds rs log -t "$type" -n "$name" "${args[@]}"
+}
+dtl() { ds tt list;}
+dts() { ds tt select -n "$1"; }
 
 y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -80,13 +102,4 @@ terp() {
   fi
 
   text-embeddings-router --model-id "$TER_MODEL_ID" --port "$port" --prometheus-port "$prom_port" "$@"
-}
-
- 
-tmx() {
-  PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-  PROJECT=$(basename "$PROJECT_DIR")
-  
-  tmux new-session -d -s "$PROJECT" -n code -c "$PROJECT_DIR"
-  tmux attach-session -t "$PROJECT"
 }
