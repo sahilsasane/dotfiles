@@ -3,18 +3,7 @@
 set -eu
 
 reset_style='#[default]'
-muted_fg='#[fg=#6c7086]'
-divider_fg='#[fg=#9399b2]'
-charge_fg='#[fg=#f9e2af]'
-attached_fg='#[fg=#cdd6f4]'
-discharge_fg='#[fg=#89b4fa]'
-full_fg='#[fg=#a6e3a1]'
-high_fg='#[fg=#94e2d5]'
-mid_fg='#[fg=#89b4fa]'
-okay_fg='#[fg=#f9e2af]'
-warn_fg='#[fg=#fab387]'
-low_fg='#[fg=#f38ba8]'
-critical_fg='#[fg=#eba0ac]'
+source "$(dirname "$0")/theme.sh"
 
 pmset_output() {
   if [ -n "${BATTERY_STATUS_SAMPLE:-}" ]; then
@@ -79,7 +68,7 @@ render() {
   state="$(printf '%s\n' "$line" | awk -F'; *' 'NR==1 { print tolower($2) }')"
 
   if [ -z "${percent:-}" ]; then
-    printf '#[fg=#cdd6f4]?%s' "$reset_style"
+    printf '%s?%s' "$attached_fg" "$reset_style"
     return
   fi
 

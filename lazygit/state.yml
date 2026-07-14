@@ -1,9 +1,9 @@
 lastupdatecheck: 0
 recentrepos:
-    - /Users/sahilsasane/dotfiles
+    - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
     - /Users/sahilsasane/TMDC/argus
     - /Users/sahilsasane/TMDC/repos/dataos-component-install
-    - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
+    - /Users/sahilsasane/dotfiles
     - /Users/sahilsasane/TMDC/vulcan-exp/data-product-builder-skills
     - /Users/sahilsasane/TMDC/repos/vulcan
     - /Users/sahilsasane/TMDC/repos/hera2
@@ -20,6 +20,7 @@ recentrepos:
 startuppopupversion: 5
 didshowhunkstaginghint: true
 lastversion: 0.63.0
-customcommandshistory: []
+customcommandshistory:
+    - q
 hidecommandlog: false
 githubPullRequests: {}

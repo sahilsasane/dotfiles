@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+# Switch the runtime-selected visual configuration without modifying this repo.
+set -euo pipefail
+
+script="$0"
+while [[ -L "$script" ]]; do
+  directory="$(cd -P "$(dirname "$script")" && pwd)"
+  link="$(readlink "$script")"
+  [[ "$link" = /* ]] || link="$directory/$link"
+  script="$link"
+done
+ROOT="$(cd "$(dirname "$script")/.." && pwd)"
+CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+STATE_DIR="$CONFIG_HOME/dotfiles-theme"
+MODE_FILE="$STATE_DIR/mode"
+EFFECTIVE_FILE="$STATE_DIR/effective"
+
+usage() {
+  echo "usage: dotfiles-theme {light|dark|auto|toggle|status}"
+}
+
+write_file() {
+  local target="$1" value="$2" temporary
+  temporary="${target}.tmp.$$"
+  printf '%s\n' "$value" > "$temporary"
+  mv -f "$temporary" "$target"
+}
+
+link_file() {
+  local source="$1" target="$2" temporary
+  [[ -e "$source" ]] || { echo "missing theme file: $source" >&2; return 1; }
+  temporary="${target}.tmp.$$"
+  ln -s "$source" "$temporary"
+  mv -f "$temporary" "$target"
+}
+
+requested_mode() {
+  if [[ -r "$MODE_FILE" ]]; then
+    local mode
+    mode="$(<"$MODE_FILE")"
+    case "$mode" in light|dark|auto) printf '%s\n' "$mode"; return ;; esac
+  fi
+  printf 'dark\n'
+}
+
+macos_mode() {
+  if defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi dark; then
+    printf 'dark\n'
+  else
+    printf 'light\n'
+  fi
+}
+
+effective_mode() {
+  local mode="$1"
+  [[ "$mode" = auto ]] && macos_mode || printf '%s\n' "$mode"
+}
+
+reload_runtime() {
+  local reloaded=()
+  if [[ -n "${KITTY_PID:-}" ]] && command -v kitty >/dev/null 2>&1 && kitty @ load-config >/dev/null 2>&1; then
+    reloaded+=(kitty)
+  fi
+  if command -v tmux >/dev/null 2>&1 && tmux list-sessions >/dev/null 2>&1; then
+    tmux source-file "$HOME/.tmux.conf" && reloaded+=(tmux)
+  fi
+  if ((${#reloaded[@]})); then
+    printf 'reloaded: %s\n' "${reloaded[*]}"
+  else
+    printf 'reloaded: next launch (or no active supported app)\n'
+  fi
+}
+
+apply() {
+  local mode="$1" effective="$2" force_reload="${3:-0}" lazygit_source atuin_source gitk_source changed=1
+  mkdir -p "$STATE_DIR"
+
+  if [[ "$effective" = light ]]; then
+    lazygit_source="$ROOT/lazygit/config-latte.yml"
+    atuin_source="$ROOT/atuin/config-latte.toml"
+    gitk_source="$ROOT/git/gitk-latte"
+  else
+    lazygit_source="$ROOT/lazygit/config.yml"
+    atuin_source="$ROOT/atuin/config.toml"
+    gitk_source="$ROOT/git/gitk"
+  fi
+
+  # Validate every repo source before changing any runtime target.
+  local source
+  for source in \
+    "$ROOT/kitty/themes/$effective.conf" \
+    "$ROOT/ghostty/themes/iterm-dark.ghostty" \
+    "$ROOT/tmux/themes/$effective.conf" \
+    "$atuin_source" "$lazygit_source" "$gitk_source" \
+    "$ROOT/git-config/themes/$effective.gitconfig"; do
+    [[ -f "$source" ]] || { echo "missing theme file: $source" >&2; return 1; }
+  done
+  if [[ "$effective" = light && ! -f "$ROOT/ghostty/themes/catppuccin-latte.ghostty" ]]; then
+    echo "missing theme file: $ROOT/ghostty/themes/catppuccin-latte.ghostty" >&2
+    return 1
+  fi
+
+  [[ -r "$EFFECTIVE_FILE" && "$(<"$EFFECTIVE_FILE")" = "$effective" ]] && changed=0
+
+  write_file "$STATE_DIR/kitty.conf" "include $ROOT/kitty/themes/$effective.conf"
+  if [[ "$mode" = auto ]]; then
+    write_file "$STATE_DIR/ghostty.conf" "theme = light:$ROOT/ghostty/themes/catppuccin-latte.ghostty,dark:$ROOT/ghostty/themes/iterm-dark.ghostty"
+  else
+    write_file "$STATE_DIR/ghostty.conf" "theme = $ROOT/ghostty/themes/$( [[ "$effective" = light ]] && printf catppuccin-latte || printf iterm-dark ).ghostty"
+  fi
+  write_file "$STATE_DIR/tmux.conf" "source-file $ROOT/tmux/themes/$effective.conf"
+  link_file "$ROOT/git-config/themes/$effective.gitconfig" "$STATE_DIR/git-theme.gitconfig"
+  link_file "$lazygit_source" "$STATE_DIR/lazygit.yml"
+  link_file "$atuin_source" "$STATE_DIR/atuin.toml"
+  link_file "$gitk_source" "$STATE_DIR/gitk"
+  write_file "$MODE_FILE" "$mode"
+  write_file "$EFFECTIVE_FILE" "$effective"
+
+  if ((changed || force_reload)); then reload_runtime; else echo "already $effective"; fi
+}
+
+mode="$(requested_mode)"
+case "${1:-status}" in
+  light|dark)
+    mode="$1"; apply "$mode" "$mode" 1 ;;
+  auto)
+    mode=auto; apply "$mode" "$(macos_mode)" 1 ;;
+  apply-auto)
+    [[ "$mode" = auto ]] && apply auto "$(macos_mode)" || exit 0 ;;
+  apply)
+    apply "$mode" "$(effective_mode "$mode")" ;;
+  toggle)
+    current="$(effective_mode "$mode")"
+    [[ "$current" = light ]] && mode=dark || mode=light
+    apply "$mode" "$mode" 1 ;;
+  status)
+    printf 'requested: %s\neffective: %s\n' "$mode" "$(effective_mode "$mode")" ;;
+  *) usage >&2; exit 2 ;;
+esac

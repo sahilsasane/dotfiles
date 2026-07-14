@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -eu
+source "$(dirname "$0")/theme.sh"
 
 pane_path="${1:-}"
 
@@ -22,4 +23,4 @@ if [ -z "$branch" ]; then
   exit 0
 fi
 
-printf '#[fg=#cdd6f4] %s#[default] ' "$branch"
+printf '%s %s#[default] ' "$attached_fg" "$branch"

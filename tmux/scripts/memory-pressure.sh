@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 set -eu
+source "$(dirname "$0")/theme.sh"
 
-empty_style='#[fg=#585b70]'
+empty_style="$muted_fg"
 reset_style='#[default]'
 
 percent_free="$(
@@ -17,18 +18,18 @@ fi
 
 pressure=$((100 - percent_free))
 
-filled_style='#[fg=#a6e3a1]'
+filled_style="$full_fg"
 if [ "$pressure" -gt 20 ]; then
-  filled_style='#[fg=#94e2d5]'
+  filled_style="$high_fg"
 fi
 if [ "$pressure" -gt 40 ]; then
-  filled_style='#[fg=#89b4fa]'
+  filled_style="$mid_fg"
 fi
 if [ "$pressure" -gt 60 ]; then
-  filled_style='#[fg=#fab387]'
+  filled_style="$warn_fg"
 fi
 if [ "$pressure" -gt 80 ]; then
-  filled_style='#[fg=#f38ba8]'
+  filled_style="$low_fg"
 fi
 
 bars=0

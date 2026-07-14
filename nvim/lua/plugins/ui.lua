@@ -52,9 +52,11 @@ return {
     name = 'catppuccin',
     priority = 1000,
     config = function()
-      require('catppuccin').setup {
-        flavour = 'mocha',
-        transparent_background = true,
+      local theme = require 'dotfiles_theme'
+      local catppuccin_options = {
+        flavour = 'auto',
+        background = { light = 'latte', dark = 'mocha' },
+        transparent_background = theme.effective() == 'dark',
         no_italic = false,
         no_bold = false,
         no_underline = false,
@@ -136,7 +138,15 @@ return {
           },
         },
       }
-      vim.cmd.colorscheme 'catppuccin'
+      theme.configure = function(mode)
+        catppuccin_options.transparent_background = mode == 'dark'
+        vim.o.background = mode
+        require('catppuccin').setup(catppuccin_options)
+        vim.cmd.colorscheme 'catppuccin'
+      end
+      theme.apply()
+      theme.watch()
+      theme.command()
     end,
   },
 

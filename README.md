@@ -59,15 +59,13 @@ After bootstrap:
 - create `~/.zshrc.local` only if that machine needs local-only env vars
 - run a new login shell so the refactored zsh loaders pick up the linked repo files
 
-What `bin/install.sh` currently links:
+What `bin/install.sh` links:
 
-- zsh, git, tmux, Neovim, Lazygit, Atuin, eza, fish, htop, yazi, iTerm2
-- `bin/lgai` into `~/.local/bin/lgai`
+- zsh, git, tmux, Neovim, Lazygit, Atuin, eza, fish, htop, yazi, Kitty, Ghostty, iTerm2
+- `bin/lgai` and `bin/dotfiles-theme` into `~/.local/bin`
 
 What it does not currently link:
 
-- Kitty
-- Ghostty
 - Navi cheat sheets
 - Raycast
 - `uv/`
@@ -82,6 +80,34 @@ Optional AI commit flow for Lazygit:
 
 To switch from a cloud model to Ollama later, update your `aichat` model config. The Lazygit keybinding stays the same.
 On macOS, `lazygit --print-config-dir` commonly resolves to `~/Library/Application Support/lazygit` rather than `~/.config/lazygit`.
+
+## Theme
+
+Dark mode preserves the existing appearance. Light mode uses Catppuccin Latte
+for every visual tool in this repository except iTerm2, which is intentionally
+left unchanged. In an interactive zsh shell, use:
+
+```sh
+theme light
+theme dark
+theme auto
+theme toggle
+theme status
+```
+
+`light` and `dark` are manual overrides. `auto` follows macOS appearance every
+30 seconds via `com.sahilsasane.dotfiles-theme`; it reads macOS but never changes
+the system appearance. The same controller is available outside zsh as
+`dotfiles-theme`. Kitty and tmux reload on switch when active; Neovim instances
+watch the effective-mode file, while Ghostty, LazyGit, Atuin, eza, Yazi, gitk,
+delta, bat, and htop use the new settings on their next supported reload or
+launch.
+
+The controller writes only `~/.config/dotfiles-theme/`. The installer converts
+Lazygit, Atuin, eza, and git to real config directories with linked child files,
+backs up pre-existing real directories, and preserves `lazygit/state.yml`.
+`bin/sync-dotfiles` deliberately skips these runtime selections and the
+LaunchAgent-generated state.
 
 ## Sync From Current Machine
 

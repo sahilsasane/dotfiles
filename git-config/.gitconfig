@@ -12,6 +12,8 @@
 	navigate = true
 	line-numbers = true
 	side-by-side = true
+[include]
+	path = ~/.config/dotfiles-theme/git-theme.gitconfig
 [diff]
 	colorMoved = zebra
 	colorMovedWS = allow-indentation-change

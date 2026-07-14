@@ -13,12 +13,7 @@ if command -v fzf >/dev/null 2>&1; then
     --pointer='▶'
     --marker='✓'
     --bind=ctrl-j:down,ctrl-k:up,ctrl-d:half-page-down,ctrl-u:half-page-up
-    --color=fg:#d7dae0,bg:-1,hl:#8fb7ff
-    --color=fg+:#f5f7ff,bg+:-1,hl+:#ffd580
-    --color=info:#8b93a6,prompt:#8fb7ff,pointer:#ffd580,marker:#7bd88f
-    --color=border:#6c7086,header:#8b93a6,spinner:#8fb7ff
-    --color=gutter:-1,preview-bg:-1,preview-border:#6c7086
-    --color=separator:#45475a,scrollbar:#6c7086
+    ${DOTFILES_FZF_THEME_OPTS}
   "
 
   export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"

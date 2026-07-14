@@ -3,11 +3,8 @@ export TERM=xterm-256color
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 export FCEDIT="$EDITOR"
-export EZA_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/eza"
 unset LSCOLORS
-export LS_COLORS="$(vivid generate catppuccin-mocha)"
 export CLAUDE_CODE_NO_FLICKER=1
-export BAT_THEME="Catppuccin Mocha"
 
 if command -v security >/dev/null 2>&1; then
   # export OPENAI_API_KEY="$(security find-generic-password -a "$USER" -s openai_api_key -w 2>/dev/null)"
