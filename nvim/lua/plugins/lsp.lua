@@ -31,7 +31,7 @@ return {
       'saghen/blink.cmp',
     },
     config = function()
-      local inlay_hints_enabled = true
+      local inlay_hints_enabled = false
 
       local function buffer_supports_method(bufnr, method)
         for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do

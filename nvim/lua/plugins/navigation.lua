@@ -28,28 +28,6 @@ return {
       vim.g.NERDTreeQuitOnOpen = 1
     end,
   },
-
-  -- {
-  --   'karb94/neoscroll.nvim',
-  --   config = function()
-  --     local neoscroll = require 'neoscroll'
-  --
-  --     neoscroll.setup {
-  --       mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>' },
-  --       post_hook = function() vim.cmd 'normal! zz' end,
-  --     }
-  --
-  --     local t = {
-  --       ['<C-u>'] = { 'scroll', { '-vim.wo.scroll', 'true', '250' } },
-  --       ['<C-d>'] = { 'scroll', { 'vim.wo.scroll', 'true', '250' } },
-  --       ['<C-b>'] = { 'scroll', { '-vim.api.nvim_win_get_height(0)', 'true', '450' } },
-  --       ['<C-f>'] = { 'scroll', { 'vim.api.nvim_win_get_height(0)', 'true', '450' } },
-  --     }
-  --
-  --     require('neoscroll.config').set_mappings(t)
-  --   end,
-  -- },
-
   {
     'stevearc/oil.nvim',
     lazy = false,

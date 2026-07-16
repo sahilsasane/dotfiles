@@ -20,6 +20,9 @@ vim.keymap.set('n', '<C-k>', '<C-y>', { desc = 'Scroll up by one line' })
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
 
+vim.keymap.set('n', '<C-o>', '<C-o>zz', { desc = 'Jump backward in the list and center' })
+vim.keymap.set('n', '<C-i>', '<C-i>zz', { desc = 'Jump forwared in the list and center' })
+
 vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
 vim.keymap.set('v', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
 
