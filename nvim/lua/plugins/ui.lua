@@ -48,6 +48,15 @@ return {
   },
 
   {
+    '3rd/image.nvim',
+    build = false,
+    opts = {
+      backend = 'kitty',
+      processor = 'magick_cli',
+    },
+  },
+
+  {
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
