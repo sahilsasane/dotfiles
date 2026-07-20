@@ -12,6 +12,8 @@
 	navigate = true
 	line-numbers = true
 	side-by-side = true
+[include]
+	path = ~/.config/dotfiles-theme/git-theme.gitconfig
 [diff]
 	colorMoved = zebra
 	colorMovedWS = allow-indentation-change
@@ -42,3 +44,8 @@
 	fpush = push --force-with-lease
 	l = log --oneline --decorate
 	last = log -1 --stat
+	c = checkout
+[url "ssh://git@bitbucket.org/"]
+	insteadOf = https://bitbucket.org/
+[url "git@bitbucket.org:"]
+	insteadOf = https://bitbucket.org/

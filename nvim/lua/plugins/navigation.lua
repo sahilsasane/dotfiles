@@ -28,28 +28,6 @@ return {
       vim.g.NERDTreeQuitOnOpen = 1
     end,
   },
-
-  -- {
-  --   'karb94/neoscroll.nvim',
-  --   config = function()
-  --     local neoscroll = require 'neoscroll'
-  --
-  --     neoscroll.setup {
-  --       mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>' },
-  --       post_hook = function() vim.cmd 'normal! zz' end,
-  --     }
-  --
-  --     local t = {
-  --       ['<C-u>'] = { 'scroll', { '-vim.wo.scroll', 'true', '250' } },
-  --       ['<C-d>'] = { 'scroll', { 'vim.wo.scroll', 'true', '250' } },
-  --       ['<C-b>'] = { 'scroll', { '-vim.api.nvim_win_get_height(0)', 'true', '450' } },
-  --       ['<C-f>'] = { 'scroll', { 'vim.api.nvim_win_get_height(0)', 'true', '450' } },
-  --     }
-  --
-  --     require('neoscroll.config').set_mappings(t)
-  --   end,
-  -- },
-
   {
     'stevearc/oil.nvim',
     lazy = false,
@@ -118,5 +96,39 @@ return {
       vim.keymap.set('n', '<C-n>', function() harpoon:list():select(3) end)
       vim.keymap.set('n', '<C-s>', function() harpoon:list():select(4) end)
     end,
+  },
+
+  {
+    'stevearc/aerial.nvim',
+    cmd = {
+      'AerialToggle',
+      'AerialOpen',
+      'AerialClose',
+      'AerialNavToggle',
+      'AerialNavOpen',
+      'AerialNavClose',
+      'AerialNext',
+      'AerialPrev',
+    },
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
+    },
+    keys = {
+      { '<leader>o', '<cmd>AerialToggle! right<CR>', desc = 'Toggle code outline' },
+      { ']a', '<cmd>AerialNext<CR>', desc = 'Next symbol' },
+      { '[a', '<cmd>AerialPrev<CR>', desc = 'Previous symbol' },
+    },
+    opts = {
+      backends = { 'treesitter', 'lsp', 'markdown', 'asciidoc', 'man' },
+      layout = {
+        default_direction = 'right',
+        max_width = { 40, 0.2 },
+        min_width = 20,
+      },
+      highlight_on_jump = 300,
+      close_on_select = true,
+      show_guides = true,
+    },
   },
 }

@@ -1,9 +1,11 @@
 # Managed from dotfiles. The App Support config should only load this file.
 
-theme = "light:/Users/sahilsasane/dotfiles/ghostty/themes/iterm-light.ghostty,dark:/Users/sahilsasane/dotfiles/ghostty/themes/iterm-dark.ghostty"
+# Runtime-selected by `theme`; it overrides this dark default when installed.
+theme = /Users/sahilsasane/dotfiles/ghostty/themes/iterm-dark.ghostty
+config-file = ?~/.config/dotfiles-theme/ghostty.conf
 
 # Typography and color rendering
-font-family = "MesloLGS NF"
+font-family = "JetBrains Mono"
 font-size = 10.5
 window-title-font-family = "Avenir Next"
 font-thicken = true

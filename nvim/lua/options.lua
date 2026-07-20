@@ -25,7 +25,7 @@ vim.o.splitbelow = true
 
 vim.o.list = true
 vim.opt.listchars = {
-  tab = '» ',
+  tab = '··',
   lead = '·',
   leadmultispace = '····',
   trail = '·',

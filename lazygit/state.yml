@@ -1,22 +1,26 @@
 lastupdatecheck: 0
 recentrepos:
+    - /Users/sahilsasane/TMDC/vulcan-exp/data-product-builder-skills
+    - /Users/sahilsasane/TMDC/argus
     - /Users/sahilsasane/dotfiles
     - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged
-    - /Users/sahilsasane/TMDC/vulcan-exp/vulcan-examples
     - /Users/sahilsasane/TMDC/repos/dataos-component-install
+    - /Users/sahilsasane/TMDC/repos/vulcan
+    - /Users/sahilsasane/TMDC/repos/hera2
+    - /Users/sahilsasane/TMDC/repos/poros-service
+    - /Users/sahilsasane/TMDC/vulcan-exp/vulcan-examples
+    - /Users/sahilsasane/stuff/pageindex
+    - /Users/sahilsasane/stuff/go-walk/self-made-eng/ride-sharing
     - /Users/sahilsasane/stuff/serious
-    - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged/external/vulcan-examples
     - /Users/sahilsasane/TMDC/vulcan-exp/data-product-sandbox
     - /Users/sahilsasane/TMDC/vulcan-exp/customer-usecases
-    - /Users/sahilsasane/stuff/go-walk/self-made-eng/ride-sharing-micro
-    - /Users/sahilsasane/stuff/go-walk/ride-sharing
-    - /Users/sahilsasane/TMDC/vulcan-exp/mcp-merged/external/vulcan-book
     - /Users/sahilsasane/stuff/go-walk/mcpgo
     - /Users/sahilsasane/stuff/temp-git
     - /Users/sahilsasane/stuff/voice-hmo
 startuppopupversion: 5
 didshowhunkstaginghint: true
-lastversion: 0.62.1
-customcommandshistory: []
+lastversion: 0.63.0
+customcommandshistory:
+    - q
 hidecommandlog: false
 githubPullRequests: {}

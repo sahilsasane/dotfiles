@@ -22,9 +22,13 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `bin/install.sh`: link tracked files into `$HOME`
 - `bin/sync-dotfiles`: copy current machine config back into the repo and sanitize it
 - `nvim/`: Neovim config, keymaps, plugins, lockfile
+- `kitty/`: Kitty config plus custom tab bar code
+- `ghostty/`: Ghostty config, themes, and shader experiments
 - `atuin/`: Atuin history search config
 - `lazygit/`: Lazygit config and custom commands
+- `navi/`: personal `navi` cheat sheets
 - `eza/`: eza theme config
+- `uv/`: local `uv` metadata snapshot
 - `yazi/`: Yazi config and flavor assets
 - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
 - `tmux/`: tmux config using `~/.tmux.conf` and `~/.tmux/plugins`
@@ -33,6 +37,7 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `fish/`: fish snippets
 - `htop/`: htop config
 - `iterm2/`: iTerm2 preferences plist
+- `raycast/`: placeholder for Raycast-tracked config
 
 ## Bootstrap A New Machine
 
@@ -45,7 +50,7 @@ Run:
 That will:
 
 - install the Homebrew packages in `Brewfile`
-- clone `oh-my-zsh`, `powerlevel10k`, and tmux plugins that the config expects
+- clone `oh-my-zsh` and tmux plugins that the config expects
 - symlink tracked config into `$HOME`
 
 After bootstrap:
@@ -53,6 +58,17 @@ After bootstrap:
 - open Neovim once so `lazy.nvim` installs plugins
 - create `~/.zshrc.local` only if that machine needs local-only env vars
 - run a new login shell so the refactored zsh loaders pick up the linked repo files
+
+What `bin/install.sh` links:
+
+- zsh, git, tmux, Neovim, Lazygit, Atuin, eza, fish, htop, yazi, Kitty, Ghostty, iTerm2
+- `bin/lgai` and `bin/dotfiles-theme` into `~/.local/bin`
+
+What it does not currently link:
+
+- Navi cheat sheets
+- Raycast
+- `uv/`
 
 Optional AI commit flow for Lazygit:
 
@@ -64,6 +80,34 @@ Optional AI commit flow for Lazygit:
 
 To switch from a cloud model to Ollama later, update your `aichat` model config. The Lazygit keybinding stays the same.
 On macOS, `lazygit --print-config-dir` commonly resolves to `~/Library/Application Support/lazygit` rather than `~/.config/lazygit`.
+
+## Theme
+
+Dark mode preserves the existing appearance. Light mode uses Catppuccin Latte
+for every visual tool in this repository except iTerm2, which is intentionally
+left unchanged. In an interactive zsh shell, use:
+
+```sh
+theme light
+theme dark
+theme auto
+theme toggle
+theme status
+```
+
+`light` and `dark` are manual overrides. `auto` follows macOS appearance every
+30 seconds via `com.sahilsasane.dotfiles-theme`; it reads macOS but never changes
+the system appearance. The same controller is available outside zsh as
+`dotfiles-theme`. Kitty and tmux reload on switch when active; Neovim instances
+watch the effective-mode file, while Ghostty, LazyGit, Atuin, eza, Yazi, gitk,
+delta, bat, and htop use the new settings on their next supported reload or
+launch.
+
+The controller writes only `~/.config/dotfiles-theme/`. The installer converts
+Lazygit, Atuin, eza, and git to real config directories with linked child files,
+backs up pre-existing real directories, and preserves `lazygit/state.yml`.
+`bin/sync-dotfiles` deliberately skips these runtime selections and the
+LaunchAgent-generated state.
 
 ## Sync From Current Machine
 
@@ -108,3 +152,4 @@ These are intentionally not tracked here:
 - zsh is organized as small ordered modules:
   `zsh/profile.d/*.zsh` for login-time env and runtimes, and
   `zsh/rc.d/*.zsh` for interactive shell behavior.
+- Reload Kitty config from inside a Kitty shell with `kitty @ load-config`.

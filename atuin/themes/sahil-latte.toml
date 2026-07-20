@@ -1,0 +1,8 @@
+[colors]
+AlertInfo = "#1e66f5"
+AlertWarn = "#df8e1d"
+AlertError = "#d20f39"
+Guidance = "#6c6f85"
+Input = "#4c4f69"
+Selection = "#8839ef"
+Title = "#4c4f69"

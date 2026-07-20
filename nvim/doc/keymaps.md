@@ -92,6 +92,7 @@
 - `:w` / `:q` / `:wq` — Write, Quit, Save & Quit
 - `:q!` — Force quit without saving
 - `:Ex` — Open NetRW file explorer
+- `<leader>wp` — Save and open the current HTML file in the default browser (HTML buffers only)
 - `Ctrl + o` — Jump **back** to previous location (jump list) ← use this, not `<C-t>`
 - `Ctrl + i` — Jump **forward** in location history
 - `:%s/foo/bar/gc` — Search and Replace globally with **c**onfirmation

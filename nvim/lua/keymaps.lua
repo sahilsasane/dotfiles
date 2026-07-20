@@ -20,6 +20,9 @@ vim.keymap.set('n', '<C-k>', '<C-y>', { desc = 'Scroll up by one line' })
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
 
+vim.keymap.set('n', '<C-o>', '<C-o>zz', { desc = 'Jump backward in the list and center' })
+vim.keymap.set('n', '<C-i>', '<C-i>zz', { desc = 'Jump forwared in the list and center' })
+
 vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
 vim.keymap.set('v', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
 
@@ -51,6 +54,38 @@ vim.keymap.set('n', '<leader>K', ':resize +2<CR>', { desc = 'Resize split down' 
 vim.keymap.set('n', '<leader>J', ':resize -2<CR>', { desc = 'Resize split up' })
 
 vim.keymap.set('n', '<leader>=', '<C-w>=', { desc = 'Equalize splits' })
+
+local function open_html_preview()
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == '' then
+    vim.notify('Save the HTML file before previewing it', vim.log.levels.WARN)
+    return
+  end
+
+  if vim.bo.modified then
+    local saved, save_error = pcall(vim.cmd.write)
+    if not saved then
+      vim.notify('Could not save HTML file: ' .. save_error, vim.log.levels.ERROR)
+      return
+    end
+  end
+
+  local _, open_error = vim.ui.open(path)
+  if open_error then vim.notify('Could not open HTML preview: ' .. open_error, vim.log.levels.ERROR) end
+end
+
+local function set_html_preview_mapping(bufnr)
+  vim.keymap.set('n', '<leader>wp', open_html_preview, { buffer = bufnr, desc = '[W]eb [P]review' })
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Add HTML preview mapping',
+  group = vim.api.nvim_create_augroup('html-preview', { clear = true }),
+  pattern = 'html',
+  callback = function(event) set_html_preview_mapping(event.buf) end,
+})
+
+if vim.bo.filetype == 'html' then set_html_preview_mapping(0) end
 
 local function reload_config()
   local config_dir = vim.fn.stdpath 'config'

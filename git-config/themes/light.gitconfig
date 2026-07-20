@@ -1,0 +1,4 @@
+[delta]
+	plus-style = syntax "#dce0e8"
+	minus-style = syntax "#f8d9d9"
+	zero-style = syntax "#e6e9ef"
