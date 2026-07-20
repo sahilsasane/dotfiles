@@ -1,5 +1,4 @@
 export CLICOLOR=1
-export TERM=xterm-256color
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 export FCEDIT="$EDITOR"
