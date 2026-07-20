@@ -48,13 +48,24 @@ return {
   },
 
   {
+    '3rd/image.nvim',
+    build = false,
+    opts = {
+      backend = 'kitty',
+      processor = 'magick_cli',
+    },
+  },
+
+  {
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
     config = function()
-      require('catppuccin').setup {
-        flavour = 'mocha',
-        transparent_background = true,
+      local theme = require 'dotfiles_theme'
+      local catppuccin_options = {
+        flavour = 'auto',
+        background = { light = 'latte', dark = 'mocha' },
+        transparent_background = theme.effective() == 'dark',
         no_italic = false,
         no_bold = false,
         no_underline = false,
@@ -85,19 +96,19 @@ return {
             TelescopeSelection = { bg = colors.surface0 },
 
             CursorLineNr = { fg = colors.yellow, style = { 'bold' } },
-            WinSeparator = { fg = colors.surface2 },
-            StatusLine = { fg = colors.text, bg = colors.crust },
-            StatusLineNC = { fg = colors.overlay1, bg = colors.crust },
+            WinSeparator = { fg = colors.overlay0 },
+            StatusLine = { fg = colors.text, bg = colors.surface0 },
+            StatusLineNC = { fg = colors.overlay1, bg = colors.mantle },
             BlinkCmpSignatureHelp = { fg = colors.text, bg = colors.crust },
             BlinkCmpSignatureHelpBorder = { fg = colors.surface1, bg = colors.crust },
             IblIndent = { fg = colors.surface1 },
             IblWhitespace = { fg = colors.surface0 },
             IblScope = { fg = colors.overlay1 },
-            MiniStatuslineGit = { fg = colors.green, bg = colors.none, style = { 'bold' } },
-            MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.crust },
-            MiniStatuslineFileinfo = { fg = colors.overlay1, bg = colors.crust },
-            MiniStatuslineFilename = { fg = colors.text, bg = colors.crust },
-            MiniStatuslineInactive = { fg = colors.overlay1, bg = colors.crust },
+            MiniStatuslineGit = { fg = colors.green, bg = colors.surface0, style = { 'bold' } },
+            MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.surface0 },
+            MiniStatuslineFileinfo = { fg = colors.overlay1, bg = colors.surface0 },
+            MiniStatuslineFilename = { fg = colors.text, bg = colors.surface0 },
+            MiniStatuslineInactive = { fg = colors.overlay1, bg = colors.mantle },
             MiniStarterHeader = { fg = colors.lavender, style = { 'bold' } },
             MiniStarterSection = { fg = colors.rosewater, style = { 'bold' } },
             MiniStarterItem = { fg = colors.text },
@@ -136,7 +147,15 @@ return {
           },
         },
       }
-      vim.cmd.colorscheme 'catppuccin'
+      theme.configure = function(mode)
+        catppuccin_options.transparent_background = mode == 'dark'
+        vim.o.background = mode
+        require('catppuccin').setup(catppuccin_options)
+        vim.cmd.colorscheme 'catppuccin'
+      end
+      theme.apply()
+      theme.watch()
+      theme.command()
     end,
   },
 
@@ -148,11 +167,9 @@ return {
 
       local function starter_recent_files()
         local cwd = uv.cwd()
-        if not cwd then
-          return {
-            { name = 'No recent files available', action = '', section = 'RECENT' },
-          }
-        end
+        if not cwd then return {
+          { name = 'No recent files available', action = '', section = 'RECENT' },
+        } end
 
         local sep = package.config:sub(1, 1)
         local cwd_prefix = cwd:sub(-1) == sep and cwd or (cwd .. sep)
@@ -173,26 +190,25 @@ return {
           end
         end
 
-        if #items == 0 then
-          return {
-            { name = 'No recent files in this workspace yet', action = '', section = 'RECENT' },
-          }
-        end
+        if #items == 0 then return {
+          { name = 'No recent files in this workspace yet', action = '', section = 'RECENT' },
+        } end
 
         return items
       end
 
       starter.setup {
         evaluate_single = true,
-        header = table.concat({
-          ' _   _                 _           ',
-          '| \\ | | _____   ___   (_)_ __ ___  ',
-          "|  \\| |/ _ \\ \\ / / | | | | '_ ` _ \\ ",
-          '| |\\  |  __/\\ V /| |_| | | | | | |',
-          '|_| \\_|\\___| \\_/  \\__,_|_| |_| |_|',
-          '',
-          ' open what matters',
-        }, '\n'),
+        header = [[
+██╗   ██╗██╗   ██╗██╗███╗   ███╗
+███╗  ██║██║   ██║██║████╗ ████║
+██╔██╗██║╚██╗ ██╔╝██║██╔████╔██║
+██║╚████║ ╚████╔╝ ██║██║╚██╔╝██║
+██║ ╚███║  ╚██╔╝  ██║██║ ╚═╝ ██║
+╚═╝  ╚══╝   ╚═╝   ╚═╝╚═╝     ╚═╝
+
+ enter quietly
+]],
         footer = 'query to filter  •  <CR> open  •  <Esc> reset',
         items = {
           {
@@ -283,6 +299,11 @@ return {
 
       local function escape_statusline_text(text) return text:gsub('%%', '%%%%') end
 
+      local function format_project_relative_path(path)
+        local root = vim.fs.root(path, project_root_markers) or vim.uv.cwd()
+        return (root and vim.fs.relpath(root, path)) or vim.fn.fnamemodify(path, ':~:.')
+      end
+
       local function active_statusline()
         local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
         local diff = statusline.section_diff { trunc_width = 75, icon = '' }
@@ -316,12 +337,19 @@ return {
       statusline.section_filename = function()
         if vim.bo.buftype == 'terminal' then return '%t' end
 
+        if vim.bo.filetype == 'oil' then
+          local oil = require 'oil'
+          local oil_dir = oil.get_current_dir(0)
+          if oil_dir then
+            local display_path = format_project_relative_path(vim.fs.normalize(oil_dir))
+            return escape_statusline_text('oil:' .. display_path) .. '%m%r'
+          end
+        end
+
         local path = vim.api.nvim_buf_get_name(0)
         if path == '' then return '[No Name]%m%r' end
 
-        local root = vim.fs.root(0, project_root_markers) or vim.uv.cwd()
-        local relative_path = root and vim.fs.relpath(root, path) or nil
-        local display_path = relative_path or vim.fn.fnamemodify(path, ':~:.')
+        local display_path = format_project_relative_path(path)
 
         return escape_statusline_text(display_path) .. '%m%r'
       end

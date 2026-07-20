@@ -3,7 +3,7 @@
 set -eu
 
 batt_line="$(pmset -g batt 2>/dev/null | tail -n 1)"
-percent="$(printf '%s\n' "$batt_line" | sed -n 's/.*[[:space:]]\([0-9]\{1,3\}\)%.*/\1/p')"
+percent="$(printf '%s\n' "$batt_line" | grep -Eo '[0-9]+%' | head -n 1 | tr -d '%')"
 
 if [ -z "${percent:-}" ]; then
   printf '?'

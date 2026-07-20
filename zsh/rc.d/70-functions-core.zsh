@@ -15,5 +15,5 @@ __dotfiles_require_cmd() {
 }
 
 chpwd() {
-  eza --icons --group-directories-first
+  eza --group-directories-first
 }

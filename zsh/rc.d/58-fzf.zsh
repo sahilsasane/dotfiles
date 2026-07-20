@@ -13,31 +13,41 @@ if command -v fzf >/dev/null 2>&1; then
     --pointer='▶'
     --marker='✓'
     --bind=ctrl-j:down,ctrl-k:up,ctrl-d:half-page-down,ctrl-u:half-page-up
-    --color=fg:#d7dae0,bg:-1,hl:#8fb7ff
-    --color=fg+:#f5f7ff,bg+:-1,hl+:#ffd580
-    --color=info:#8b93a6,prompt:#8fb7ff,pointer:#ffd580,marker:#7bd88f
-    --color=border:#6c7086,header:#8b93a6,spinner:#8fb7ff
-    --color=gutter:-1,preview-bg:-1,preview-border:#6c7086
-    --color=separator:#45475a,scrollbar:#6c7086
+    ${DOTFILES_FZF_THEME_OPTS}
   "
 
   export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range=:500 {} 2>/dev/null || cat {}'"
+  export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range=:1500 {} 2>/dev/null || cat {}'"
   export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
   export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -100'"
   # export FZF_COMPLETION_TRIGGER=''
 
-  # In `git diff`, press Ctrl-G to insert one commit hash, or build `A..B`
-  # incrementally by invoking the picker again after the first selection.
+  __dotfiles_git_commit_range() {
+    emulate -L zsh
+
+    local left=$1 right=$2
+    [[ -n "$left" && -n "$right" ]] || return 1
+
+    if git merge-base --is-ancestor "$left" "$right" >/dev/null 2>&1; then
+      printf '%s..%s' "$left" "$right"
+    elif git merge-base --is-ancestor "$right" "$left" >/dev/null 2>&1; then
+      printf '%s..%s' "$right" "$left"
+    else
+      printf '%s..%s' "$left" "$right"
+    fi
+  }
+
+  # In `git diff` or `gd`, press Ctrl-G to insert one commit hash, or mark up
+  # to two commits with Tab and insert the resulting `A..B` range on Enter.
   __dotfiles_fzf_git_diff_commit_widget() {
     emulate -L zsh
 
     __dotfiles_require_cmd git || return 0
     __dotfiles_require_cmd fzf || return 0
 
-    if [[ "$BUFFER" != git\ diff(|\ *) ]]; then
-      zle -M 'Use Ctrl-G after typing: git diff '
+    if [[ "$BUFFER" != git\ diff(|\ *) && "$BUFFER" != gd(|\ *) ]]; then
+      zle -M 'Use Ctrl-G after typing: git diff or gd '
       return 0
     fi
 
@@ -46,7 +56,8 @@ if command -v fzf >/dev/null 2>&1; then
       return 0
     }
 
-    local selection hash suffix
+    local -a selections hashes
+    local selection hash range suffix
     selection="$(
       git log \
         --color=always \
@@ -55,21 +66,51 @@ if command -v fzf >/dev/null 2>&1; then
         --pretty=format:$'%h\t%C(green)%ad%C(reset) %C(yellow)%h%C(reset) %s %C(auto)%d%C(reset)' \
         --all |
         fzf \
+          --multi=2 \
           --ansi \
           --delimiter=$'\t' \
           --with-nth=2.. \
           --no-sort \
           --tiebreak=index \
           --prompt='Hashes > ' \
-          --header='ENTER inserts hash, Ctrl-S toggles sort' \
-          --preview 'git show --color=always --stat --patch --format=fuller {1}' \
-          --preview-window='right,65%,border-none'
+          --header='TAB marks up to 2 commits, ENTER inserts hash/range, Ctrl-S toggles sort' \
+          --preview "sh -c 'if [ \"\$#\" -ge 2 ]; then if git merge-base --is-ancestor \"\$1\" \"\$2\" >/dev/null 2>&1; then left=\$1 right=\$2; elif git merge-base --is-ancestor \"\$2\" \"\$1\" >/dev/null 2>&1; then left=\$2 right=\$1; else left=\$1 right=\$2; fi; git diff --color=always --stat --patch \"\$left..\$right\"; else git show --color=always --stat --patch --format=fuller \"\$1\"; fi' sh {+1}" \
+          --preview-window='right,55%,border-none'
     )" || return 0
 
-    hash="${selection%%$'\t'*}"
-    [[ -n "$hash" ]] || return 0
+    selections=("${(@f)selection}")
+    [[ ${#selections[@]} -gt 0 ]] || return 0
+
+    local entry
+    for entry in "${selections[@]}"; do
+      hash="${entry%%$'\t'*}"
+      [[ -n "$hash" ]] && hashes+=("$hash")
+    done
+
+    [[ ${#hashes[@]} -gt 0 ]] || return 0
+
+    if (( ${#hashes[@]} >= 2 )); then
+      range="$(__dotfiles_git_commit_range "${hashes[1]}" "${hashes[2]}")" || return 0
+
+      if [[ "$LBUFFER" == (#b)(*git\ diff\ )([^[:space:]]##) && "${match[2]}" != *..* ]]; then
+        LBUFFER="${match[1]}${range}"
+      elif [[ "$LBUFFER" == (#b)(*gd\ )([^[:space:]]##) && "${match[2]}" != *..* ]]; then
+        LBUFFER="${match[1]}${range}"
+      else
+        suffix=""
+        [[ -n "$LBUFFER" && "$LBUFFER" != *[[:space:]] ]] && suffix=" "
+        LBUFFER+="${suffix}${range}"
+      fi
+
+      zle redisplay
+      return 0
+    fi
+
+    hash="${hashes[1]}"
 
     if [[ "$LBUFFER" == (#b)(*git\ diff\ )([^[:space:]]##) && "${match[2]}" != *..* ]]; then
+      LBUFFER="${match[1]}${match[2]}..${hash}"
+    elif [[ "$LBUFFER" == (#b)(*gd\ )([^[:space:]]##) && "${match[2]}" != *..* ]]; then
       LBUFFER="${match[1]}${match[2]}..${hash}"
     else
       suffix=""

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 3,
+  "final_space": true,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "os",
+          "style": "plain",
+          "foreground": "#4c4f69",
+          "template": " {{ if .WSL }}WSL{{ else }}{{ .Icon }}{{ end }} "
+        },
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "#fe640b",
+          "template": " {{ .Path }} ",
+          "properties": {
+            "style": "folder"
+          }
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "foreground": "#8839ef",
+          "template": "  {{ .HEAD }}{{ if gt .Behind 0 }} <#df8e1d>⇣{{ .Behind }}</>{{ end }}{{ if gt .Ahead 0 }} <#fe640b>⇡{{ .Ahead }}</>{{ end }}{{ if gt .PushBehind 0 }} <#dd7878>⇠{{ .PushBehind }}</>{{ end }}{{ if gt .PushAhead 0 }} <#ea76cb>⇢{{ .PushAhead }}</>{{ end }}{{ if .UpstreamGone }} <#d20f39></>{{ end }}{{ if .Merge }} <#e64553></>{{ end }}{{ if .Rebase }} <#fe640b>{{ .Rebase.Current }}/{{ .Rebase.Total }}</>{{ end }}{{ if .CherryPick }} <#ea76cb></>{{ end }}{{ if .Revert }} <#dd7878>↶</>{{ end }}{{ if gt .StashCount 0 }} <#dc8a78>{{ .StashCount }}</>{{ end }}{{ if .Working.Changed }} <#d20f39> {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <#df8e1d> {{ .Staging.String }}</>{{ end }} ",
+          "properties": {
+            "branch_icon": "",
+            "fetch_status": true,
+            "fetch_push_status": true,
+            "status_formats": {
+              "Unmerged": "%d",
+              "Added": "+%d",
+              "Modified": "~%d",
+              "Deleted": "-%d",
+              "Untracked": "?%d"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "type": "executiontime",
+          "style": "plain",
+          "foreground": "#df8e1d",
+          "template": " {{ .FormattedMs }} ",
+          "properties": {
+            "threshold": 1000,
+            "style": "austin"
+          }
+        },
+        {
+          "type": "python",
+          "style": "plain",
+          "foreground": "#1e66f5",
+          "template": " {{ .Venv }} ",
+          "properties": {
+            "display_mode": "environment",
+            "fetch_version": false,
+            "fetch_virtual_env": true,
+            "display_default": false
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#4c4f69",
+          "template": "╰─❯ "
+        }
+      ]
+    }
+  ]
+}

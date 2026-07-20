@@ -1,0 +1,101 @@
+colourful: true
+
+filekinds:
+  normal: { foreground: "#" }
+  directory: { foreground: "#" }
+  symlink: { foreground: "#" }
+  pipe: { foreground: "#" }
+  block_device: { foreground: "#" }
+  char_device: { foreground: "#" }
+  socket: { foreground: "#" }
+  special: { foreground: "#" }
+  executable: { foreground: "#" }
+  mount_point: { foreground: "#" }
+
+perms:
+  user_read: { foreground: "#" }
+  user_write: { foreground: "#" }
+  user_execute_file: { foreground: "#" }
+  user_execute_other: { foreground: "#" }
+  group_read: { foreground: "#" }
+  group_write: { foreground: "#" }
+  group_execute: { foreground: "#" }
+  other_read: { foreground: "#" }
+  other_write: { foreground: "#" }
+  other_execute: { foreground: "#" }
+  special_user_file: { foreground: "#" }
+  special_other: { foreground: "#" }
+  attribute: { foreground: "#" }
+
+size:
+  major: { foreground: "#" }
+  minor: { foreground: "#" }
+  number_byte: { foreground: "#" }
+  number_kilo: { foreground: "#" }
+  number_mega: { foreground: "#" }
+  number_giga: { foreground: "#" }
+  number_huge: { foreground: "#" }
+  unit_byte: { foreground: "#" }
+  unit_kilo: { foreground: "#" }
+  unit_mega: { foreground: "#" }
+  unit_giga: { foreground: "#" }
+  unit_huge: { foreground: "#" }
+
+users:
+  user_you: { foreground: "#" }
+  user_root: { foreground: "#" }
+  user_other: { foreground: "#" }
+  group_yours: { foreground: "#" }
+  group_other: { foreground: "#" }
+  group_root: { foreground: "#" }
+
+links:
+  normal: { foreground: "#" }
+  multi_link_file: { foreground: "#" }
+
+git:
+  new: { foreground: "#" }
+  modified: { foreground: "#" }
+  deleted: { foreground: "#" }
+  renamed: { foreground: "#" }
+  typechange: { foreground: "#" }
+  ignored: { foreground: "#" }
+  conflicted: { foreground: "#" }
+
+git_repo:
+  branch_main: { foreground: "#" }
+  branch_other: { foreground: "#" }
+  git_clean: { foreground: "#" }
+  git_dirty: { foreground: "#" }
+
+security_context:
+  colon: { foreground: "#" }
+  user: { foreground: "#" }
+  role: { foreground: "#" }
+  typ: { foreground: "#" }
+  range: { foreground: "#" }
+
+file_type:
+  image: { foreground: "#" }
+  video: { foreground: "#" }
+  music: { foreground: "#" }
+  lossless: { foreground: "#" }
+  crypto: { foreground: "#" }
+  document: { foreground: "#" }
+  compressed: { foreground: "#" }
+  temp: { foreground: "#" }
+  compiled: { foreground: "#" }
+  build: { foreground: "#" }
+  source: { foreground: "#" }
+
+punctuation: { foreground: "#" }
+date: { foreground: "#" }
+inode: { foreground: "#" }
+blocks: { foreground: "#" }
+header: { foreground: "#" }
+octal: { foreground: "#" }
+flags: { foreground: "#" }
+symlink_path: { foreground: "#" }
+control_char: { foreground: "#" }
+broken_symlink: { foreground: "#" }
+broken_path_overlay: { foreground: "#" }

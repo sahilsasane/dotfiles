@@ -1,0 +1,5 @@
+export PRIME_APIKEY=d2lkZ2V0c19yX3VzX3dydTEyMzQ1Nl9tdmIuZDQzMjNjYzMtNGJhYy00MWVlLThiZmMtOWMxMDgwMGRlZTcz
+export PRIME_URL=prime.tmdata.io/plutus/api/v1
+curl --silent --output /tmp/download-dataos-ctl.sh --location --request GET "https://prime.tmdata.io/plutus/api/v1/files/download?name=download-dataos-ctl.sh&dir=cli-dev-v2&apikey=$PRIME_APIKEY"
+chmod +x /tmp/download-dataos-ctl.sh
+/tmp/download-dataos-ctl.sh

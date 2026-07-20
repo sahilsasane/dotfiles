@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+PROJECT=$(basename "$PROJECT_DIR")
+
+if tmux has-session -t "$PROJECT" 2>/dev/null; then
+  tmux attach-session -t "$PROJECT"
+  exit 0
+fi
+
+tmux new-session -d -s "$PROJECT" -n code -c "$PROJECT_DIR"
+tmux send-keys -t "$PROJECT:code" "vim" Enter
+tmux attach-session -t "$PROJECT"
