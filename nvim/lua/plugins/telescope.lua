@@ -19,7 +19,67 @@ return {
     },
     config = function()
       local actions = require 'telescope.actions'
+      local preview_utils = require 'telescope.previewers.utils'
       local grep_memory = ''
+      local telescope_image
+      local image_extensions = {
+        avif = true,
+        gif = true,
+        jpeg = true,
+        jpg = true,
+        png = true,
+        webp = true,
+      }
+
+      local function clear_telescope_image()
+        if not telescope_image then return end
+        pcall(telescope_image.clear, telescope_image)
+        telescope_image = nil
+      end
+
+      local function is_image_file(filepath)
+        if type(filepath) ~= 'string' then return false end
+        local extension = vim.fn.fnamemodify(filepath, ':e'):lower()
+        return image_extensions[extension] == true
+      end
+
+      local function render_telescope_image(filepath, bufnr, opts)
+        clear_telescope_image()
+
+        if not is_image_file(filepath) then return false end
+
+        if vim.api.nvim_buf_is_valid(bufnr) then
+          vim.bo[bufnr].modifiable = true
+          vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { '' })
+        end
+
+        local created, image = pcall(require('image').from_file, filepath, {
+          buffer = bufnr,
+          window = opts.winid,
+          max_width_window_percentage = 90,
+          max_height_window_percentage = 90,
+          namespace = 'telescope',
+        })
+
+        if created and image then
+          telescope_image = image
+          local rendered = pcall(image.render, image)
+          if rendered then return true end
+          clear_telescope_image()
+        end
+
+        preview_utils.set_preview_message(bufnr, opts.winid, 'Image preview failed')
+        return true
+      end
+
+      local function telescope_filetype_hook(filepath, bufnr, opts)
+        return not render_telescope_image(filepath, bufnr, opts)
+      end
+
+      local function telescope_mime_hook(filepath, bufnr, opts)
+        if render_telescope_image(filepath, bufnr, opts) then return end
+        preview_utils.set_preview_message(bufnr, opts.winid, 'Binary cannot be previewed')
+      end
 
       local function with_grep_memory(opts)
         opts = opts or {}
@@ -41,6 +101,10 @@ return {
               return require('telescope.picker_history').new()
             end,
           },
+          preview = {
+            filetype_hook = telescope_filetype_hook,
+            mime_hook = telescope_mime_hook,
+          },
           mappings = {
             i = {
               ['<C-y>'] = actions.cycle_history_prev,
@@ -57,6 +121,36 @@ return {
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
       pcall(telescope.load_extension, 'live_grep_args')
+
+      vim.api.nvim_create_autocmd('User', {
+        group = vim.api.nvim_create_augroup('telescope-image-preview', { clear = true }),
+        pattern = 'TelescopePreviewerLoaded',
+        callback = function(event)
+          if not vim.api.nvim_buf_is_valid(event.buf) then return end
+
+          local window = vim.fn.bufwinid(event.buf)
+          if window == -1 then return end
+
+          local filepath = event.data and event.data.bufname
+          if not is_image_file(filepath) then
+            clear_telescope_image()
+            return
+          end
+
+          local absolute_path = vim.fn.fnamemodify(filepath, ':p')
+          if
+            telescope_image
+            and telescope_image.is_rendered
+            and telescope_image.buffer == event.buf
+            and telescope_image.window == window
+            and telescope_image.original_path == absolute_path
+          then
+            return
+          end
+
+          render_telescope_image(filepath, event.buf, { winid = window })
+        end,
+      })
 
       local builtin = require 'telescope.builtin'
       local live_grep_args = telescope.extensions.live_grep_args.live_grep_args
