@@ -279,6 +279,15 @@ return {
         },
       }
 
+      vim.api.nvim_create_autocmd('User', {
+        group = vim.api.nvim_create_augroup('mini-starter-navigation', { clear = true }),
+        pattern = 'MiniStarterOpened',
+        callback = function(event)
+          vim.keymap.set('n', 'j', function() starter.update_current_item 'next' end, { buffer = event.buf, silent = true })
+          vim.keymap.set('n', 'k', function() starter.update_current_item 'prev' end, { buffer = event.buf, silent = true })
+        end,
+      })
+
       require('mini.ai').setup {
         n_lines = 500,
         custom_textobjects = {
