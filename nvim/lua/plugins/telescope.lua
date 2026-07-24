@@ -18,6 +18,13 @@ return {
       },
     },
     config = function()
+      require('nvim-web-devicons').setup {
+        override_by_extension = {
+          yaml = { icon = '', color = '#D70000', name = 'Yaml' },
+          yml = { icon = '', color = '#D70000', name = 'Yml' },
+        },
+      }
+
       local actions = require 'telescope.actions'
       local preview_utils = require 'telescope.previewers.utils'
       local grep_memory = ''
