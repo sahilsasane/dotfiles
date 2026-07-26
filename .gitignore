@@ -8,6 +8,7 @@ Thumbs.db
 # Logs
 # ========================
 *.log
+.nvimlog
 
 # ========================
 # Neovim
@@ -56,8 +57,12 @@ node_modules/
 # ========================
 iterm2/AppSupport
 iterm2/sockets/
+lazygit/state.yml
 raycast/ai/
 cagent/
+
+# Generated shell state
+zsh/.zcompdump*
 
 # ========================
 # Backup configs (your case)
@@ -67,6 +72,7 @@ nvim-backupl/
 # ========================
 # Misc
 # ========================
+bin/update-ds
 *.lock
 *.out
 *.pid
