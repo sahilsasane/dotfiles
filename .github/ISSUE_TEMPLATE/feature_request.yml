@@ -1,0 +1,49 @@
+name: Feature request
+description: Suggest a focused improvement to the dotfiles workflow.
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or workflow
+      description: What is difficult today, and when does it occur?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the smallest change that would improve the workflow.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Note existing mappings, native features, or simpler approaches you tried.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Shell / Zsh
+        - Neovim
+        - tmux
+        - Terminal
+        - Git / Lazygit
+        - Installer / bootstrap
+        - Theme switching
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and documentation.
+          required: true
+        - label: This proposal does not require committing secrets or machine-specific state.
+          required: true

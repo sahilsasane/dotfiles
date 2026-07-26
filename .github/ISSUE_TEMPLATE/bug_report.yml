@@ -1,0 +1,70 @@
+name: Bug report
+description: Report reproducible behavior in this dotfiles setup.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Remove secrets and other personal data from logs before submitting.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Shell / Zsh
+        - Neovim
+        - tmux
+        - Kitty
+        - Ghostty
+        - Git / Lazygit
+        - Yazi
+        - Installer / bootstrap
+        - Theme switching
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Run …
+        2. Press …
+        3. Observe …
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include relevant macOS, application, and shell versions.
+      placeholder: |
+        macOS:
+        Terminal:
+        Shell:
+        Relevant tool version:
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add sanitized logs, screenshots, or configuration details.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues for this problem.
+          required: true
+        - label: I removed credentials, tokens, and personal information.
+          required: true
