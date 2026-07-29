@@ -4,8 +4,8 @@ PROJECT_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 PROJECT=$(basename "$PROJECT_DIR")
 
 # If session already exists, attach to it
-if tmux has-session -t "$PROJECT" 2>/dev/null; then
-  tmux attach-session -t "$PROJECT"
+if tmux has-session -t "=$PROJECT" 2>/dev/null; then
+  tmux attach-session -t "=$PROJECT"
   exit 0
 fi
 

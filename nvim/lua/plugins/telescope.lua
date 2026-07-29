@@ -27,7 +27,6 @@ return {
 
       local actions = require 'telescope.actions'
       local preview_utils = require 'telescope.previewers.utils'
-      local grep_memory = ''
       local telescope_image
       local image_extensions = {
         avif = true,
@@ -86,19 +85,6 @@ return {
       local function telescope_mime_hook(filepath, bufnr, opts)
         if render_telescope_image(filepath, bufnr, opts) then return end
         preview_utils.set_preview_message(bufnr, opts.winid, 'Binary cannot be previewed')
-      end
-
-      local function with_grep_memory(opts)
-        opts = opts or {}
-
-        local user_input_filter = opts.on_input_filter_cb
-        opts.default_text = opts.default_text or grep_memory
-        opts.on_input_filter_cb = function(prompt)
-          grep_memory = prompt
-          if user_input_filter then return user_input_filter(prompt) end
-        end
-
-        return opts
       end
 
       require('telescope').setup {
@@ -184,7 +170,7 @@ return {
       vim.keymap.set(
         'n',
         '<leader>sg',
-        function() live_grep_args(with_grep_memory()) end,
+        live_grep_args,
         { desc = '[S]earch by [G]rep with [A]rgs' }
       )
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
@@ -222,10 +208,10 @@ return {
         'n',
         '<leader>s/',
         function()
-          builtin.live_grep(with_grep_memory {
+          builtin.live_grep {
             grep_open_files = true,
             prompt_title = 'Live Grep in Open Files',
-          })
+          }
         end,
         { desc = '[S]earch [/] in Open Files' }
       )

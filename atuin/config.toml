@@ -2,7 +2,7 @@ dialect = "uk"
 timezone = "local"
 
 search_mode = "fuzzy"
-filter_mode = "global"
+filter_mode = "session"
 
 style = "compact"
 inline_height = 10
@@ -29,7 +29,7 @@ columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
 [stats]
 common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
 common_prefix = ["sudo"]
-ignored_commands = ["cd", "ls", "ll", "pwd"]
+ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "ds"]
 
 [theme]
 name = "sahil-slate"

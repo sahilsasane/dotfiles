@@ -14,9 +14,6 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-vim.keymap.set('n', '<C-j>', '<C-e>', { desc = 'Scroll down by one line' })
-vim.keymap.set('n', '<C-k>', '<C-y>', { desc = 'Scroll up by one line' })
-
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
 
@@ -74,9 +71,7 @@ local function open_html_preview()
   if open_error then vim.notify('Could not open HTML preview: ' .. open_error, vim.log.levels.ERROR) end
 end
 
-local function set_html_preview_mapping(bufnr)
-  vim.keymap.set('n', '<leader>wp', open_html_preview, { buffer = bufnr, desc = '[W]eb [P]review' })
-end
+local function set_html_preview_mapping(bufnr) vim.keymap.set('n', '<leader>wp', open_html_preview, { buffer = bufnr, desc = '[W]eb [P]review' }) end
 
 vim.api.nvim_create_autocmd('FileType', {
   desc = 'Add HTML preview mapping',
