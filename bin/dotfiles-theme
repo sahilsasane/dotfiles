@@ -72,17 +72,19 @@ reload_runtime() {
 }
 
 apply() {
-  local mode="$1" effective="$2" force_reload="${3:-0}" lazygit_source atuin_source gitk_source changed=1
+  local mode="$1" effective="$2" force_reload="${3:-0}" lazygit_source atuin_source gitk_source tlrc_source changed=1
   mkdir -p "$STATE_DIR"
 
   if [[ "$effective" = light ]]; then
     lazygit_source="$ROOT/lazygit/config-latte.yml"
     atuin_source="$ROOT/atuin/config-latte.toml"
     gitk_source="$ROOT/git/gitk-latte"
+    tlrc_source="$ROOT/tldr/config-latte.toml"
   else
     lazygit_source="$ROOT/lazygit/config.yml"
     atuin_source="$ROOT/atuin/config.toml"
     gitk_source="$ROOT/git/gitk"
+    tlrc_source="$ROOT/tldr/config-mocha.toml"
   fi
 
   # Validate every repo source before changing any runtime target.
@@ -91,7 +93,7 @@ apply() {
     "$ROOT/kitty/themes/$effective.conf" \
     "$ROOT/ghostty/themes/iterm-dark.ghostty" \
     "$ROOT/tmux/themes/$effective.conf" \
-    "$atuin_source" "$lazygit_source" "$gitk_source" \
+    "$atuin_source" "$lazygit_source" "$gitk_source" "$tlrc_source" \
     "$ROOT/git-config/themes/$effective.gitconfig"; do
     [[ -f "$source" ]] || { echo "missing theme file: $source" >&2; return 1; }
   done
@@ -113,6 +115,7 @@ apply() {
   link_file "$lazygit_source" "$STATE_DIR/lazygit.yml"
   link_file "$atuin_source" "$STATE_DIR/atuin.toml"
   link_file "$gitk_source" "$STATE_DIR/gitk"
+  link_file "$tlrc_source" "$STATE_DIR/tlrc.toml"
   write_file "$MODE_FILE" "$mode"
   write_file "$EFFECTIVE_FILE" "$effective"
 

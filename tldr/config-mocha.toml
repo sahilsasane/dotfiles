@@ -1,0 +1,51 @@
+[cache]
+auto_update = true
+
+[output]
+show_title = true
+platform_title = false
+show_hyphens = false
+edit_link = false
+example_prefix = "- "
+line_length = 0
+compact = false
+option_style = "long"
+raw_markdown = false
+
+[indent]
+title = 2
+description = 2
+bullet = 2
+example = 4
+
+[style.title]
+color = { hex = "#cba6f7" }
+background = "default"
+bold = true
+
+[style.description]
+color = { hex = "#a6adc8" }
+background = "default"
+
+[style.bullet]
+color = { hex = "#a6e3a1" }
+background = "default"
+
+[style.example]
+color = { hex = "#94e2d5" }
+background = "default"
+
+[style.url]
+color = { hex = "#89b4fa" }
+background = "default"
+italic = true
+
+[style.inline_code]
+color = { hex = "#f9e2af" }
+background = "default"
+italic = true
+
+[style.placeholder]
+color = { hex = "#f38ba8" }
+background = "default"
+italic = true

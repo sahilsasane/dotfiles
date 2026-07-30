@@ -43,3 +43,38 @@ alias -g L='| less -R'
 alias -g H='--help | bat --style=plain --language=help --color=always'
 alias -g HL='--help 2>&1 | bat --style=plain --language=help --color=always | less -R'
 alias -g V='--version'
+
+__dotfiles_doc_command() {
+  local name="$1" alias_value
+  local -a alias_words
+
+  alias_value="${aliases[$name]-}"
+  if [[ -z "$alias_value" ]]; then
+    print -r -- "$name"
+    return 0
+  fi
+
+  alias_words=("${(z)alias_value}")
+  if (( ${#alias_words[@]} == 0 )) || [[ "${alias_words[1]}" == -* ]]; then
+    print -r -- "$name"
+    return 0
+  fi
+
+  print -r -- "${alias_words[1]}"
+}
+
+tldr() {
+  local -a args=("$@")
+  if (( $# > 0 )) && [[ "$1" != -* ]]; then
+    args[1]="$(__dotfiles_doc_command "$1")"
+  fi
+  command tldr "${args[@]}"
+}
+
+man() {
+  local -a args=("$@")
+  if (( $# > 0 )) && [[ "$1" != -* ]]; then
+    args[1]="$(__dotfiles_doc_command "$1")"
+  fi
+  MANPAGER="${MANPAGER:-bat --style=plain --language=man}" command man "${args[@]}"
+}

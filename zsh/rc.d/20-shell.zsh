@@ -4,6 +4,8 @@ export VISUAL="$EDITOR"
 export FCEDIT="$EDITOR"
 unset LSCOLORS
 export CLAUDE_CODE_NO_FLICKER=1
+unalias man 2>/dev/null
+export MANPAGER='col -b | bat --style=plain --language=man --color=always'
 
 if command -v security >/dev/null 2>&1; then
   # export OPENAI_API_KEY="$(security find-generic-password -a "$USER" -s openai_api_key -w 2>/dev/null)"

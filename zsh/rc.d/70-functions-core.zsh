@@ -17,3 +17,9 @@ __dotfiles_require_cmd() {
 chpwd() {
   eza --group-directories-first
 }
+
+
+tlb() {
+  command tldr --raw "$@" |
+    bat --style=plain --language=markdown --color=always --paging=always
+}

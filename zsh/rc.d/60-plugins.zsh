@@ -9,7 +9,7 @@ if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" || "${
   DISABLE_AUTO_TITLE=true
 fi
 
-plugins=(git colored-man-pages)
+plugins=(git)
 
 if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
   source "$ZSH/oh-my-zsh.sh"

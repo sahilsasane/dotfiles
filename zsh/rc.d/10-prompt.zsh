@@ -3,6 +3,7 @@ __dotfiles_theme_apply_shell() {
   local theme_dir="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles-theme"
   local effective=dark
   [[ -r "$state" && "$(<"$state")" == light ]] && effective=light
+  export TLRC_CONFIG="${theme_dir}/tlrc.toml"
 
   if [[ "$effective" == light ]]; then
     typeset -g OMP_CONFIG="${DOTFILES_ZSH_DIR}/oh-my-posh/theme-latte.omp.json"
