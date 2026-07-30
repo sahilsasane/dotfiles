@@ -24,11 +24,12 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `nvim/`: Neovim config, keymaps, plugins, lockfile
 - `kitty/`: Kitty config plus custom tab bar code
 - `ghostty/`: Ghostty config, themes, and shader experiments
+- `fastfetch/`: Fastfetch configuration
+- `launchd/`: launchd template for automatic theme application
 - `atuin/`: Atuin history search config
 - `lazygit/`: Lazygit config and custom commands
-- `navi/`: personal `navi` cheat sheets
+- `tldr/`: Catppuccin Latte and Mocha configurations for `tldr`
 - `eza/`: eza theme config
-- `uv/`: local `uv` metadata snapshot
 - `yazi/`: Yazi config and flavor assets
 - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
 - `tmux/`: tmux config using `~/.tmux.conf` and `~/.tmux/plugins`
@@ -37,7 +38,6 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `fish/`: fish snippets
 - `htop/`: htop config
 - `iterm2/`: iTerm2 preferences plist
-- `raycast/`: placeholder for Raycast-tracked config
 
 ## Bootstrap A New Machine
 
@@ -62,21 +62,21 @@ After bootstrap:
 What `bin/install.sh` links:
 
 - zsh, git, tmux, Neovim, Lazygit, Atuin, eza, fish, htop, yazi, Kitty, Ghostty, iTerm2
-- `bin/lgai` and `bin/dotfiles-theme` into `~/.local/bin`
+- `bin/lgai`, `bin/tmx`, and `bin/dotfiles-theme` into `~/.local/bin`
 
 What it does not currently link:
 
-- Navi cheat sheets
-- Raycast
-- `uv/`
+- `bin/tmxp` is tracked but remains repo-local unless linked manually
+- Navi cheat sheets; the `navi` binary itself is installed through `Brewfile`
+- local `uv/` metadata, which is intentionally ignored
 
 Optional AI commit flow for Lazygit:
 
 - install `aichat`: `brew install aichat`
 - run `aichat` once and choose/configure your provider and model
-- rerun `./bin/install.sh` if needed so Lazygit's config dir and `~/.local/bin/lg-ai-commit` are linked
+- rerun `./bin/install.sh` if needed so Lazygit's config dir and `~/.local/bin/lgai` are linked
 - in Lazygit, stage changes and press `CtrlG` from the files view
-- `lg-ai-commit` sends the staged diff plus recent commit subjects to `aichat`, lets you pick a suggestion in `fzf`, then opens the selected message in `$VISUAL` or `$EDITOR` before committing
+- `lgai` sends the staged diff plus recent commit subjects to `aichat`, lets you pick a suggestion in `fzf`, then opens the selected message in `$VISUAL` or `$EDITOR` before committing
 
 To switch from a cloud model to Ollama later, update your `aichat` model config. The Lazygit keybinding stays the same.
 On macOS, `lazygit --print-config-dir` commonly resolves to `~/Library/Application Support/lazygit` rather than `~/.config/lazygit`.
@@ -100,14 +100,41 @@ theme status
 the system appearance. The same controller is available outside zsh as
 `dotfiles-theme`. Kitty and tmux reload on switch when active; Neovim instances
 watch the effective-mode file, while Ghostty, LazyGit, Atuin, eza, Yazi, gitk,
-delta, bat, and htop use the new settings on their next supported reload or
-launch.
+delta, bat, tldr, and htop use the new settings on their next supported reload
+or launch.
 
 The controller writes only `~/.config/dotfiles-theme/`. The installer converts
 Lazygit, Atuin, eza, and git to real config directories with linked child files,
 backs up pre-existing real directories, and preserves `lazygit/state.yml`.
 `bin/sync-dotfiles` deliberately skips these runtime selections and the
 LaunchAgent-generated state.
+
+## Colored Help, Man Pages, and tldr
+
+Help output can be highlighted through the existing global aliases:
+
+```sh
+kubectl H
+kubectl HL
+```
+
+`HL` combines `--help`, stderr capture, Bat's `help` syntax, and the existing
+`less` pager. Manual pages use Bat's `man` syntax through `MANPAGER`; `col -b`
+removes macOS manpage overstrike control characters before highlighting.
+
+The shell resolves normal command aliases when looking up documentation, so
+these refer to the underlying command rather than the alias name:
+
+```sh
+tldr k       # tldr kubectl
+man k        # man kubectl
+tldr k get   # tldr kubectl get
+tlb bat      # raw tldr Markdown rendered through Bat
+```
+
+The `tldr` client follows the active Catppuccin theme. The source configs are
+`tldr/config-latte.toml` and `tldr/config-mocha.toml`; the theme controller
+selects the active one at `~/.config/dotfiles-theme/tlrc.toml`.
 
 ## Sync From Current Machine
 
