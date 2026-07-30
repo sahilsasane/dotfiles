@@ -1,0 +1,178 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "builtin",
+    "source": "Apple",
+    "color": {
+      "1": "#cba6f7",
+      "2": "#cba6f7",
+      "3": "#cba6f7",
+      "4": "#cba6f7",
+      "5": "#cba6f7",
+      "6": "#cba6f7",
+      "7": "#cba6f7",
+      "8": "#cba6f7",
+      "9": "#cba6f7"
+    },
+    "padding": {
+      "right": 3
+    },
+    "printRemaining": true
+  },
+  "display": {
+    "separator": "",
+    "showErrors": false
+  },
+  "modules": [
+    {
+      "type": "os",
+      "format": "lua:osv = ...; esc = string.char(27); border = esc .. '[38;2;108;112;134m'; keyc = esc .. '[38;2;203;166;247m'; textc = esc .. '[38;2;205;214;244m'; reset = esc .. '[0m'; function plain(v) return (tostring(v):gsub(esc .. '%[[0-9;]*m', '')) end; function g(o, k, d) if type(o) == 'table' and o[k] ~= nil and o[k] ~= '' then return plain(o[k]) end return d or 'n/a' end; function n2(o, k) local n = tonumber(g(o, k, '')); return n and string.format('%.2f', n) or 'n/a' end; function battery_state() local s = g(batteryv, 'status'); if s:find('Charging') then return 'Charging' end; if s:find('AC Connected') then return 'AC' end; return s end; function ulen(s) local n = 0; for i = 1, #s do local c = s:byte(i); if c < 128 or c >= 192 then n = n + 1 end end; return n end; function first(s, n) local p = 1; local count = 0; while p <= #s and count < n do local c = s:byte(p); p = p + (c < 128 and 1 or c < 224 and 2 or c < 240 and 3 or 4); count = count + 1 end; return s:sub(1, p - 1) end; function clip(v, n) local s = plain(v or 'n/a'); if ulen(s) <= n then return s end; return first(s, n - 1) .. '…' end; function pad(v, n) local s = clip(v, n); return s .. string.rep(' ', n - ulen(s)) end; function row(k, v) return border .. '│ ' .. keyc .. pad(k, 12) .. ' ' .. textc .. pad(v, 29) .. border .. ' │' .. reset end; function top(t) return border .. '╭─ ' .. keyc .. t .. border .. ' ' .. string.rep('─', 41 - ulen(t)) .. '╮' .. reset end; function bottom() return border .. '╰' .. string.rep('─', 44) .. '╯' .. reset end; function pair(a, b) return a .. '  ' .. b end"
+    },
+    {
+      "type": "host",
+      "format": "lua:hostv = ..."
+    },
+    {
+      "type": "uptime",
+      "format": "lua:uptimev = ..."
+    },
+    {
+      "type": "packages",
+      "format": "lua:packagesv = ..."
+    },
+    {
+      "type": "cpu",
+      "format": "lua:cpuv = ..."
+    },
+    {
+      "type": "cpuusage",
+      "format": "lua:cpuusagev = ..."
+    },
+    {
+      "type": "gpu",
+      "format": "lua:if not gpuv then gpuv = ... end"
+    },
+    {
+      "type": "display",
+      "format": "lua:local a = ...; if not displayv or a.isPrimary == true then displayv = a end"
+    },
+    {
+      "type": "memory",
+      "format": "lua:memoryv = ..."
+    },
+    {
+      "type": "disk",
+      "folders": "/",
+      "format": "lua:diskv = ..."
+    },
+    {
+      "type": "battery",
+      "format": "lua:if not batteryv then batteryv = ... end"
+    },
+    {
+      "type": "poweradapter",
+      "format": "lua:if not adapterv then adapterv = ... end"
+    },
+    {
+      "type": "processes",
+      "format": "lua:processesv = ..."
+    },
+    {
+      "type": "loadavg",
+      "compact": false,
+      "format": "lua:loadv = ..."
+    },
+    {
+      "type": "shell",
+      "format": "lua:shellv = ..."
+    },
+    {
+      "type": "editor",
+      "format": "lua:editorv = ..."
+    },
+    {
+      "type": "terminal",
+      "format": "lua:terminalv = ..."
+    },
+    {
+      "type": "terminalfont",
+      "format": "lua:fontv = ..."
+    },
+    {
+      "type": "localip",
+      "defaultRouteOnly": true,
+      "showIpv6": false,
+      "showMac": false,
+      "format": "lua:local a = ...; if not ipv then ipv = a end"
+    },
+    {
+      "type": "wifi",
+      "format": "lua:local a = ...; if not wifiv or a.status == 'Connected' then wifiv = a end"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(top('MACHINE'), top('STATUS'))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('  OS', g(osv, 'name') .. ' ' .. g(osv, 'version') .. ' · ' .. g(osv, 'arch')), row('󰓅  CPU', g(cpuusagev, 'avg') .. ' avg · ' .. g(cpuusagev, 'max') .. ' peak'))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('󰌢  HOST', g(hostv, 'name')), row('󰾲  GPU', g(gpuv, 'coreUsageNum') .. ' core · ' .. g(gpuv, 'sharedPercentageNum') .. ' shared'))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('󰘧  MODEL', g(hostv, 'family') .. ' · build ' .. g(osv, 'buildId')), row('  MEMORY', g(memoryv, 'used') .. ' / ' .. g(memoryv, 'total') .. ' · ' .. g(memoryv, 'percentage')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('  KERNEL', g(osv, 'sysname') .. ' ' .. g(osv, 'kernelRelease')), row('  DISK', g(diskv, 'sizeUsed') .. ' / ' .. g(diskv, 'sizeTotal') .. ' · ' .. g(diskv, 'sizePercentage')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('󰅐  UPTIME', g(uptimev, 'formatted')), row('  BATTERY', g(batteryv, 'capacity') .. ' · ' .. g(batteryv, 'cycleCount') .. ' cycles · ' .. battery_state()))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('󰏖  PACKAGES', g(packagesv, 'brew') .. ' brew · ' .. g(packagesv, 'brewCask') .. ' casks'), row('󰊚  LOAD', n2(loadv, 'loadavg1') .. ' / ' .. n2(loadv, 'loadavg2') .. ' / ' .. n2(loadv, 'loadavg3') .. ' · ' .. g(processesv, 'result') .. ' proc'))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(bottom(), bottom())"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "lua:return pair(top('HARDWARE'), top('ENVIRONMENT'))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('  CPU', g(cpuv, 'name') .. ' · ' .. g(cpuv, 'coreTypes') .. ' · ' .. g(cpuv, 'freqMax')), row('  SHELL', g(shellv, 'prettyName') .. ' ' .. g(shellv, 'version')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('󰾲  GPU', g(gpuv, 'name'):gsub('Apple ', '') .. ' · ' .. g(gpuv, 'coreCount') .. 'c · ' .. g(gpuv, 'frequency'):gsub(' ', '') .. ' · ' .. (g(gpuv, 'type') == 'Integrated' and 'iGPU' or g(gpuv, 'type'))), row('󱞎  EDITOR', g(editorv, 'name') .. ' ' .. g(editorv, 'version')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('󰍹  DISPLAY', g(displayv, 'width') .. 'x' .. g(displayv, 'height') .. '@' .. g(displayv, 'refreshRate') .. ' · ' .. g(displayv, 'inch') .. 'in ' .. g(displayv, 'type')), row('  TERMINAL', g(terminalv, 'prettyName') .. ' ' .. g(terminalv, 'version')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('  RAM', g(memoryv, 'total') .. ' unified'), row('  FONT', g(fontv, 'combined')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('  STORAGE', g(diskv, 'sizeAvailable') .. ' free · ' .. g(diskv, 'filesystem')), row('󰩟  LOCAL IP', g(ipv, 'ipv4') .. ' · ' .. g(ipv, 'ifname')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(row('󰚥  POWER', g(adapterv, 'name')), row('  WI-FI', g(wifiv, 'ssid') .. ' · ' .. g(wifiv, 'protocol') .. ' · ' .. g(wifiv, 'signalQuality')))"
+    },
+    {
+      "type": "custom",
+      "format": "lua:return pair(bottom(), bottom())"
+    }
+  ]
+}
