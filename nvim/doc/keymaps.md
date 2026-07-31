@@ -160,8 +160,7 @@ nvim .
 | --- | --- |
 | Find file by name | `<leader>sf` |
 | Find ALL files (hidden + gitignored) | `<leader>sF` |
-| Live grep across project | `<leader>sg` |
-| Live grep with rg args | `<leader>sG` |
+| Live grep with rg args | `<leader>sg` |
 | Search word under cursor | `<leader>sw` |
 | Search inside current buffer | `<leader>/` |
 | Live grep in open buffers | `<leader>s/` |
@@ -232,14 +231,10 @@ nvim .
 | What | Key |
 | --- | --- |
 | Open lazygit | `<leader>gg` |
-| Open Diffview | `<leader>gd` |
-| Close Diffview | `<leader>gD` |
-| Current file history | `<leader>gh` |
-| Repo history | `<leader>gH` |
+| Preview current hunk | `<leader>hp` |
+| Preview deleted lines | `<leader>tD` |
 
-> Git hunk navigation (`]h`, `[h`) and hunk actions (`<leader>hp/hs/hb`) are not currently configured. Add an `on_attach` to gitsigns in `lua/plugins/git.lua` to enable them.
->
-> `diffview.nvim` is controlled by `vim.g.enable_diffview = true` in `init.lua`.
+> Gitsigns hunk navigation, staging, reset, and blame mappings are not configured.
 >
 > `git-conflict.nvim` is controlled by `vim.g.enable_git_conflict = true` in `init.lua`. Inside conflicted files it provides buffer-local defaults like `co`, `ct`, `cb`, `c0`, `[x`, and `]x`.
 

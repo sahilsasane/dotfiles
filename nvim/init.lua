@@ -3,7 +3,6 @@ vim.g.maplocalleader = ' '
 
 vim.g.have_nerd_font = true
 vim.g.enable_spider_motions = true
-vim.g.enable_diffview = true
 vim.g.enable_git_conflict = true
 
 require 'options'

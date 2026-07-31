@@ -104,7 +104,7 @@ vim.keymap.set('n', '<leader>tr', reload_config, { desc = '[T]ools: [R]eload con
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  group = vim.api.nvim_create_augroup('dotfiles-highlight-yank', { clear = true }),
   callback = function() vim.hl.on_yank() end,
 })
 
@@ -164,7 +164,7 @@ end
 vim.o.winborder = 'rounded'
 
 vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('kickstart-lsp-hover', { clear = true }),
+  group = vim.api.nvim_create_augroup('dotfiles-lsp-hover', { clear = true }),
   callback = function(event)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = event.buf, desc = 'LSP: Hover Documentation' })
     vim.keymap.set('n', '<leader>ti', apply_nearest_inlay_hint, { buffer = event.buf, desc = 'LSP: Insert nearest [T]ype [I]nlay hint' })
