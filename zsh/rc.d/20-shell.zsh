@@ -1,4 +1,5 @@
 export CLICOLOR=1
+unset NO_COLOR
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 export FCEDIT="$EDITOR"
@@ -14,5 +15,5 @@ if command -v security >/dev/null 2>&1; then
   export WIZ_CLIENT_SECRET="$(security find-generic-password -a "$USER" -s wiz_client_secret -w 2>/dev/null)"
   # export GITHUB_TOKEN="$(security find-generic-password -a "$USER" -s github_pat_token -w 2>/dev/null)"
 fi
-export OPENAI_MODEL="${OPENAI_MODEL:-gpt-5-nano-2025-08-07}"
+export OPENAI_MODEL="${OPENAI_MODEL:-gpt-5.6-luna}"
 export TER_MODEL_ID="BAAI/bge-small-en-v1.5"

@@ -30,6 +30,8 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `lazygit/`: Lazygit config and custom commands
 - `tldr/`: Catppuccin Latte and Mocha configurations for `tldr`
 - `eza/`: eza theme config
+- `rg/`: ripgrep color configuration
+- `procs/`: process-list color and column configuration
 - `yazi/`: Yazi config and flavor assets
 - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
 - `tmux/`: tmux config using `~/.tmux.conf` and `~/.tmux/plugins`
@@ -108,6 +110,30 @@ Lazygit, Atuin, eza, and git to real config directories with linked child files,
 backs up pre-existing real directories, and preserves `lazygit/state.yml`.
 `bin/sync-dotfiles` deliberately skips these runtime selections and the
 LaunchAgent-generated state.
+
+## Colored Shell Commands
+
+Interactive zsh applies the active Catppuccin palette to common command output:
+
+- `rg` uses `rg/ripgrep.conf` through `RIPGREP_CONFIG_PATH`; the command remains
+  `rg` rather than a `batgrep` wrapper.
+- `pwd`, `history`, `jobs`, and `du` use shell wrappers for readable interactive
+  output. `pwd`, `jobs`, and `du` only add colors when stdout is a terminal;
+  `history` can also color piped output.
+- `procs` loads `procs/config.toml` automatically. `lsof` remains native and is
+  not wrapped.
+- Command-position highlighting uses bold Catppuccin blue for commands and
+  mauve for aliases/builtins, while paths remain teal.
+
+Set `NO_COLOR=1` for a plain invocation, for example:
+
+```sh
+NO_COLOR=1 history > history.txt
+NO_COLOR=1 du -sh .
+```
+
+After changing the linked configuration, reload the shell with `rl` or start a
+new login shell.
 
 ## Colored Help, Man Pages, and tldr
 
