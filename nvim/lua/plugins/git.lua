@@ -10,6 +10,18 @@ return {
         delay = 0,
         virt_text_pos = 'eol',
       },
+      on_attach = function(bufnr)
+        local gitsigns = require 'gitsigns'
+
+        vim.keymap.set('n', '<leader>tD', gitsigns.preview_hunk_inline, {
+          buffer = bufnr,
+          desc = '[T]oggle show deleted lines',
+        })
+        vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, {
+          buffer = bufnr,
+          desc = 'Git [p]review hunk',
+        })
+      end,
       signs = {
         add = { text = '+' }, ---@diagnostic disable-line: missing-fields
         change = { text = '~' }, ---@diagnostic disable-line: missing-fields

@@ -147,15 +147,95 @@ return {
 
       local builtin = require 'telescope.builtin'
       local live_grep_args = telescope.extensions.live_grep_args.live_grep_args
+      local make_entry = require 'telescope.make_entry'
+
+      vim.api.nvim_set_hl(0, 'TelescopeGitStatusModified', { fg = '#E5C07B' })
+      vim.api.nvim_set_hl(0, 'TelescopeGitStatusAdded', { fg = '#98C379' })
+      vim.api.nvim_set_hl(0, 'TelescopeGitStatusDeleted', { fg = '#E06C75' })
+      vim.api.nvim_set_hl(0, 'TelescopeGitStatusRenamed', { fg = '#C678DD' })
+      vim.api.nvim_set_hl(0, 'TelescopeGitStatusUntracked', { fg = '#56B6C2' })
+
+      local function git_statuses(cwd)
+        if vim.fn.executable 'git' ~= 1 then return {} end
+
+        local output = vim.fn.systemlist {
+          'git',
+          '-C',
+          cwd,
+          'status',
+          '--porcelain=v1',
+          '--untracked-files=all',
+        }
+        if vim.v.shell_error ~= 0 then return {} end
+
+        local statuses = {}
+        for _, line in ipairs(output) do
+          local code = line:sub(1, 2)
+          local path = line:sub(4)
+          if code:find 'R' or code:find 'C' then
+            path = path:match '.* -> (.*)' or path
+          end
+          path = vim.fs.normalize(path)
+
+          local status = code == '??' and '??' or code:gsub('%s', '')
+          statuses[path] = status
+        end
+        return statuses
+      end
+
+      local function find_files_with_git_status(opts)
+        opts = opts or {}
+        local cwd = vim.fn.fnamemodify(opts.cwd or vim.uv.cwd(), ':p')
+        local statuses = git_statuses(cwd)
+        local base_entry_maker = make_entry.gen_from_file(opts)
+
+        opts.entry_maker = function(line)
+          local entry = base_entry_maker(line)
+          if not entry then return end
+
+          entry.git_status = statuses[vim.fs.normalize(entry.value)] or ''
+          local base_display = entry.display
+          entry.display = function(item)
+            local path, path_highlights = base_display(item)
+            local status_highlight = item.git_status == '' and nil
+              or item.git_status == '??' and 'TelescopeGitStatusUntracked'
+              or item.git_status:find 'D' and 'TelescopeGitStatusDeleted'
+              or item.git_status:find 'A' and 'TelescopeGitStatusAdded'
+              or item.git_status:find '[RC]' and 'TelescopeGitStatusRenamed'
+              or 'TelescopeGitStatusModified'
+            local prefix = string.format('%-2s ', item.git_status)
+
+            if path_highlights then
+              local shifted_highlights = {}
+              for _, highlight in ipairs(path_highlights) do
+                shifted_highlights[#shifted_highlights + 1] = {
+                  { highlight[1][1] + #prefix, highlight[1][2] + #prefix },
+                  highlight[2],
+                }
+              end
+              path_highlights = shifted_highlights
+            end
+
+            if status_highlight then
+              table.insert(path_highlights or {}, 1, { { 0, 2 }, status_highlight })
+            end
+
+            return prefix .. path, path_highlights
+          end
+          return entry
+        end
+
+        builtin.find_files(opts)
+      end
 
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sf', find_files_with_git_status, { desc = '[S]earch [F]iles' })
       vim.keymap.set(
         'n',
         '<leader>sF',
         function()
-          builtin.find_files {
+          find_files_with_git_status {
             no_ignore = true,
             hidden = true,
           }
@@ -174,6 +254,7 @@ return {
         { desc = '[S]earch by [G]rep with [A]rgs' }
       )
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+      vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
