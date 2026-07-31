@@ -82,7 +82,7 @@ quit-after-last-window-closed = true
 # macOS behavior
 cursor-style = bar
 cursor-style-blink = false
-macos-option-as-alt = left
+macos-option-as-alt = both
 macos-auto-secure-input = true
 macos-secure-input-indication = true
 
