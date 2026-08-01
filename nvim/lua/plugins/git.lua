@@ -40,6 +40,40 @@ return {
       { '<leader>gg', '<cmd>LazyGit<CR>', desc = 'Open Lazy[G]it' },
     },
   },
+
+  {
+    'sindrets/diffview.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    cmd = {
+      'DiffviewOpen',
+      'DiffviewClose',
+      'DiffviewFileHistory',
+      'DiffviewToggleFiles',
+      'DiffviewFocusFiles',
+      'DiffviewRefresh',
+    },
+    keys = {
+      { '<leader>gd', '<cmd>DiffviewOpen<CR>', desc = 'Open [G]it [D]iffview' },
+      { '<leader>gD', '<cmd>DiffviewClose<CR>', desc = 'Close [G]it [D]iffview' },
+      { '<leader>gh', '<cmd>DiffviewFileHistory %<CR>', desc = 'Current file [G]it [H]istory' },
+      { '<leader>gH', '<cmd>DiffviewFileHistory<CR>', desc = '[G]it Repo [H]istory' },
+    },
+    opts = {
+      enhanced_diff_hl = true,
+      use_icons = vim.g.have_nerd_font,
+      view = {
+        default = { layout = 'diff2_horizontal' },
+        file_history = { layout = 'diff2_horizontal' },
+      },
+      file_panel = {
+        win_config = {
+          position = 'left',
+          width = 36,
+        },
+      },
+    },
+  },
+
   {
     'akinsho/git-conflict.nvim',
     version = '*',
