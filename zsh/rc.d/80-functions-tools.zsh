@@ -35,30 +35,23 @@ ds() {
 }
 
 dg()  { ds rs get -t "$1" -n "$2" "${@:3}"; }
-drt() { ds rs get runtime -t "$1" -n "$2" "${@:3}"; }
-dlg() {
-  local type="$1" name="$2"
-  shift 2 || return 1
 
-  local -a args=()
-  while (( $# )); do
-    case "$1" in
-      --cg|-g)
-        [[ -n "$2" ]] || { echo "dlg: missing value for $1" >&2; return 1; }
-        args+=(--container-group "$2")
-        shift 2
-        ;;
-      *)
-        args+=("$1")
-        shift
-        ;;
-    esac
-  done
+v() {
+  local venv="${1:-.venv}"
+  local activate_file="$venv/bin/activate"
 
-  ds rs log -t "$type" -n "$name" "${args[@]}"
+  if [[ ! -d "$venv" ]]; then
+    echo "Directory does not exist: $venv" >&2
+    return 1
+  fi
+
+  if [[ ! -f "$activate_file" ]]; then
+    echo "Not a valid virtual environment: $venv" >&2
+    return 1
+  fi
+
+  source "$activate_file"
 }
-dtl() { ds tt list;}
-dts() { ds tt select -n "$1"; }
 
 y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

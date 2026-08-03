@@ -1,4 +1,9 @@
-alias v='source .venv/bin/activate'
+unset bat
+unset git
+
+alias bat='bat --color=always'
+alias git='git -c color.ui=always'
+alias git='git -c color.ui=always'
 alias vd='deactivate 2>/dev/null || true'
 alias size='du -sh -- *(DN) 2>/dev/null | sort -rh'
 alias c='clear'
@@ -15,12 +20,13 @@ alias lzd='lazydocker'
 alias tk='tmux kill-session -t'
 alias t='tmux attach -t'
 alias k='kubectl'
-alias rg='rg --color=auto'
+alias rg='rg --color=always'
 alias f='fzf --preview="bat --color=always {}"'
 alias vim='nvim'
 alias gal='git add --all'
 alias ff='fastfetch --config "$DOTFILES_ZSH_DIR/../fastfetch/config.jsonc"'
 alias cat='bat --style=plain'
+alias watch='watch '
 
 alias -s md='bat'
 alias -s yaml='bat'
