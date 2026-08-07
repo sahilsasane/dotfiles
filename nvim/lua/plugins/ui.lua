@@ -270,7 +270,7 @@ return {
               section = 'COMMAND',
             },
           },
-          starter_recent_files,
+          -- starter_recent_files,
         },
         content_hooks = {
           starter.gen_hook.indexing('all', { 'RECENT', 'SESSION' }),

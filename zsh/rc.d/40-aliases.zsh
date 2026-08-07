@@ -25,7 +25,7 @@ alias f='fzf --preview="bat --color=always {}"'
 alias vim='nvim'
 alias gal='git add --all'
 alias ff='fastfetch --config "$DOTFILES_ZSH_DIR/../fastfetch/config.jsonc"'
-alias cat='bat --style=plain'
+alias bcat='bat --style=plain'
 alias watch='watch '
 
 alias -s md='bat'

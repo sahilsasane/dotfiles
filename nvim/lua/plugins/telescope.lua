@@ -78,9 +78,7 @@ return {
         return true
       end
 
-      local function telescope_filetype_hook(filepath, bufnr, opts)
-        return not render_telescope_image(filepath, bufnr, opts)
-      end
+      local function telescope_filetype_hook(filepath, bufnr, opts) return not render_telescope_image(filepath, bufnr, opts) end
 
       local function telescope_mime_hook(filepath, bufnr, opts)
         if render_telescope_image(filepath, bufnr, opts) then return end
@@ -90,9 +88,7 @@ return {
       require('telescope').setup {
         defaults = {
           history = {
-            handler = function()
-              return require('telescope.picker_history').new()
-            end,
+            handler = function() return require('telescope.picker_history').new() end,
           },
           preview = {
             filetype_hook = telescope_filetype_hook,
@@ -155,6 +151,19 @@ return {
       vim.api.nvim_set_hl(0, 'TelescopeGitStatusRenamed', { fg = '#C678DD' })
       vim.api.nvim_set_hl(0, 'TelescopeGitStatusUntracked', { fg = '#56B6C2' })
 
+      -- Keep generated/dependency directories out even when `no_ignore = true`.
+      -- Match directory boundaries so files such as `.env.example` remain searchable.
+      local always_ignore_directory_patterns = {
+        '^%.venv/',
+        '/%.venv/',
+        '^%.env/',
+        '/%.env/',
+        '^%.env/',
+        '/%.env/',
+        '^node_modules/',
+        '/node_modules/',
+      }
+
       local function git_statuses(cwd)
         if vim.fn.executable 'git' ~= 1 then return {} end
 
@@ -172,9 +181,7 @@ return {
         for _, line in ipairs(output) do
           local code = line:sub(1, 2)
           local path = line:sub(4)
-          if code:find 'R' or code:find 'C' then
-            path = path:match '.* -> (.*)' or path
-          end
+          if code:find 'R' or code:find 'C' then path = path:match '.* -> (.*)' or path end
           path = vim.fs.normalize(path)
 
           local status = code == '??' and '??' or code:gsub('%s', '')
@@ -185,6 +192,7 @@ return {
 
       local function find_files_with_git_status(opts)
         opts = opts or {}
+        opts.file_ignore_patterns = vim.list_extend(vim.list_extend({}, opts.file_ignore_patterns or {}), always_ignore_directory_patterns)
         local cwd = vim.fn.fnamemodify(opts.cwd or vim.uv.cwd(), ':p')
         local statuses = git_statuses(cwd)
         local base_entry_maker = make_entry.gen_from_file(opts)
@@ -216,9 +224,7 @@ return {
               path_highlights = shifted_highlights
             end
 
-            if status_highlight then
-              table.insert(path_highlights or {}, 1, { { 0, 2 }, status_highlight })
-            end
+            if status_highlight then table.insert(path_highlights or {}, 1, { { 0, 2 }, status_highlight }) end
 
             return prefix .. path, path_highlights
           end
@@ -246,12 +252,7 @@ return {
       vim.keymap.set('n', '<leader>sS', builtin.lsp_dynamic_workspace_symbols, { desc = '[S]earch workspace [S]ymbols' })
       vim.keymap.set('n', '<leader>sp', builtin.builtin, { desc = '[S]earch Telescope [P]ickers' })
       vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set(
-        'n',
-        '<leader>sg',
-        live_grep_args,
-        { desc = '[S]earch by [G]rep with [A]rgs' }
-      )
+      vim.keymap.set('n', '<leader>sg', live_grep_args, { desc = '[S]earch by [G]rep with [A]rgs' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = '[G]it [S]tatus' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })

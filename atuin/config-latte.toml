@@ -21,7 +21,8 @@ sync_frequency = "3h"
 cwd_filter = ["/private/", "/secrets/"]
 
 [search]
-filters = ["directory", "session", "host", "global"]
+filters = ["directory", "global"]
+filter_mode_shell_up_key_binding = "session"
 
 [ui]
 columns = ["duration", "time", { type = "directory", width = 25 }, "command"]

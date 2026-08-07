@@ -17,10 +17,10 @@ return {
           buffer = bufnr,
           desc = '[T]oggle show deleted lines',
         })
-        vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, {
-          buffer = bufnr,
-          desc = 'Git [p]review hunk',
-        })
+        -- vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, {
+        --   buffer = bufnr,
+        --   desc = 'Git [p]review hunk',
+        -- })
       end,
       signs = {
         add = { text = '+' }, ---@diagnostic disable-line: missing-fields
