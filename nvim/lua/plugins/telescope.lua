@@ -34,6 +34,7 @@ return {
         jpeg = true,
         jpg = true,
         png = true,
+        svg = true,
         webp = true,
       }
 
@@ -144,6 +145,62 @@ return {
       local builtin = require 'telescope.builtin'
       local live_grep_args = telescope.extensions.live_grep_args.live_grep_args
       local make_entry = require 'telescope.make_entry'
+      local project_root_markers = { '.git', 'pyproject.toml', 'package.json', 'Cargo.toml', 'go.mod' }
+
+      local default_mark_entry = make_entry.gen_from_marks {}
+      local function absolute_mark_path(path)
+        if not path or path == '' then return end
+        return vim.fs.normalize(vim.fn.fnamemodify(path, ':p'))
+      end
+
+      local function mark_project_root(path)
+        local absolute = absolute_mark_path(path)
+        if not absolute then return end
+
+        local directory = vim.fn.isdirectory(absolute) == 1 and absolute or vim.fs.dirname(absolute)
+        local marker = vim.fs.find(project_root_markers, { path = directory, upward = true })[1]
+        return marker and vim.fs.dirname(marker)
+      end
+
+      local function relative_mark_path(path, root)
+        local absolute = absolute_mark_path(path)
+        if not absolute then return end
+
+        local relative = vim.fs.relpath(root, absolute)
+        if relative and relative ~= '..' and not vim.startswith(relative, '../') then return relative end
+      end
+
+      local function project_relative_mark_entry(item, filter_root)
+        local entry = default_mark_entry(item)
+        local filename = absolute_mark_path(item.filename)
+
+        if filename then
+          if filter_root and not relative_mark_path(filename, filter_root) then return end
+
+          local root = mark_project_root(filename)
+          local display_path = (root and relative_mark_path(filename, root)) or vim.fn.fnamemodify(filename, ':~:.')
+          local display = item.line
+          for _, raw_path in ipairs { item.filename, filename, vim.fn.fnamemodify(filename, ':~') } do
+            if raw_path and raw_path ~= '' then
+              local replaced, count = display:gsub(vim.pesc(raw_path), function() return display_path end, 1)
+              if count > 0 then
+                display = replaced
+                break
+              end
+            end
+          end
+
+          entry.display = display
+          entry.ordinal = entry.display
+        end
+
+        return entry
+      end
+
+      local function current_project_root()
+        local current = vim.api.nvim_buf_get_name(0)
+        return mark_project_root(current) or vim.uv.cwd()
+      end
 
       vim.api.nvim_set_hl(0, 'TelescopeGitStatusModified', { fg = '#E5C07B' })
       vim.api.nvim_set_hl(0, 'TelescopeGitStatusAdded', { fg = '#98C379' })
@@ -250,6 +307,16 @@ return {
       )
       vim.keymap.set('n', '<leader>ss', builtin.lsp_document_symbols, { desc = '[S]earch document [S]ymbols' })
       vim.keymap.set('n', '<leader>sS', builtin.lsp_dynamic_workspace_symbols, { desc = '[S]earch workspace [S]ymbols' })
+      vim.keymap.set(
+        'n',
+        '<leader>sm',
+        function()
+          local root = current_project_root()
+          builtin.marks { entry_maker = function(item) return project_relative_mark_entry(item, root) end }
+        end,
+        { desc = '[S]earch project [M]arks' }
+      )
+      vim.keymap.set('n', '<leader>sM', function() builtin.marks { entry_maker = project_relative_mark_entry } end, { desc = '[S]earch all [M]arks' })
       vim.keymap.set('n', '<leader>sp', builtin.builtin, { desc = '[S]earch Telescope [P]ickers' })
       vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', live_grep_args, { desc = '[S]earch by [G]rep with [A]rgs' })

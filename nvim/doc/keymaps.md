@@ -162,6 +162,8 @@ nvim .
 | Find ALL files (hidden + gitignored) | `<leader>sF` |
 | Live grep with rg args | `<leader>sg` |
 | Search word under cursor | `<leader>sw` |
+| Browse project marks | `<leader>sm` |
+| Browse all marks | `<leader>sM` |
 | Search inside current buffer | `<leader>/` |
 | Live grep in open buffers | `<leader>s/` |
 | Recent files | `<leader>s.` |
@@ -211,6 +213,7 @@ nvim .
 | Trouble quickfix | `<leader>xq` |
 | Trouble location list | `<leader>xL` |
 | Toggle inlay hints | `<leader>th` |
+| Toggle Python LSP warnings | `<leader>tw` |
 | Insert nearest inlay hint | `<leader>ti` |
 
 ### 6. Pin files with Harpoon
@@ -249,6 +252,7 @@ nvim .
 | What | Key |
 | --- | --- |
 | Format buffer | `<leader>f` |
+| Save without formatting | `:W` or `:WriteNoFormat` |
 
 ### 9. Sessions
 
@@ -270,8 +274,19 @@ nvim .
 | Search current Oil directory | `gs` inside Oil |
 
 > `grug-far` is the repo-wide search/replace surface. Use it when Telescope grep shows you the matches but you need to actually apply a controlled replacement across files.
+> Normal `<leader>sR` starts with the word under the cursor; visual `<leader>sR` starts with the selected text.
 
-### 11. Structural Editing
+### 11. Marks
+
+| What | Key |
+| --- | --- |
+| Set a local mark | `m{a-z}` |
+| Set a global file mark | `m{A-Z}` |
+| Jump to an exact mark position | `` `{mark}` `` |
+| Browse project marks | `<leader>sm` |
+| Browse all marks | `<leader>sM` |
+
+### 12. Structural Editing
 
 | What | Key |
 | --- | --- |
@@ -279,7 +294,7 @@ nvim .
 
 > `treesj` works on structured syntax nodes such as function arguments, objects, tables, lists, and similar Tree-sitter-backed blocks.
 
-### 12. Motions
+### 13. Motions
 
 | What | Key |
 | --- | --- |

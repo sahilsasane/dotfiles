@@ -34,7 +34,7 @@ return {
     keys = {
       {
         '<leader>sR',
-        function() require('grug-far').open() end,
+        function() require('grug-far').open { prefills = { search = vim.fn.expand '<cword>' } } end,
         mode = 'n',
         desc = '[S]earch and [R]eplace',
       },
@@ -112,6 +112,17 @@ return {
     opts = {
       focus = false,
       win = { type = 'split', position = 'right' },
+      modes = {
+        diagnostics = {
+          filter = function(items)
+            return vim.tbl_filter(function(item)
+              local diagnostic = item.item
+              return diagnostic
+                and vim.diagnostic.is_enabled { bufnr = diagnostic.bufnr, ns_id = diagnostic.namespace }
+            end, items)
+          end,
+        },
+      },
     },
   },
 

@@ -46,5 +46,8 @@ vim.o.autoread = true
 
 vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
   pattern = '*',
-  command = 'checktime',
+  callback = function(event)
+    if vim.fn.getcmdwintype() ~= '' or vim.bo[event.buf].buftype ~= '' then return end
+    vim.cmd 'checktime'
+  end,
 })

@@ -12,6 +12,17 @@ vim.diagnostic.config {
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+local function write_without_format(opts)
+  vim.b.conform_skip_format_once = true
+  local ok, error_message = pcall(vim.cmd.write, { bang = opts.bang })
+  vim.b.conform_skip_format_once = nil
+
+  if not ok then error(error_message) end
+end
+
+vim.api.nvim_create_user_command('W', write_without_format, { bang = true, desc = 'Write without formatting' })
+vim.api.nvim_create_user_command('WriteNoFormat', write_without_format, { bang = true, desc = 'Write without formatting' })
+
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })

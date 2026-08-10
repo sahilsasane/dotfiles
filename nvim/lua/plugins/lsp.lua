@@ -32,6 +32,61 @@ return {
     },
     config = function()
       local inlay_hints_enabled = false
+      local python_diagnostics_enabled = true
+
+      local function is_python_diagnostics_client(client)
+        return client.name == 'basedpyright' or client.name == 'ruff'
+      end
+
+      local function is_python_diagnostic(diagnostic)
+        local source = string.lower(diagnostic.source or '')
+        return source == 'basedpyright' or source == 'ruff'
+      end
+
+      local function set_python_diagnostics(enabled, bufnr)
+        local namespaces = {}
+        local sources = {}
+
+        for _, diagnostic in ipairs(vim.diagnostic.get(bufnr)) do
+          if is_python_diagnostic(diagnostic) then
+            namespaces[diagnostic.namespace] = true
+            sources[string.lower(diagnostic.source)] = true
+          end
+        end
+
+        for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
+          if is_python_diagnostics_client(client) and not sources[client.name] then namespaces[vim.lsp.diagnostic.get_namespace(client.id)] = true end
+        end
+
+        for ns_id in pairs(namespaces) do
+          vim.diagnostic.enable(enabled, { bufnr = bufnr, ns_id = ns_id })
+        end
+      end
+
+      local function toggle_python_diagnostics()
+        python_diagnostics_enabled = not python_diagnostics_enabled
+
+        for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+          if vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].filetype == 'python' then set_python_diagnostics(python_diagnostics_enabled, bufnr) end
+        end
+
+        if package.loaded['trouble'] then require('trouble').refresh('diagnostics') end
+
+        vim.notify(string.format('Python LSP diagnostics %s', python_diagnostics_enabled and 'enabled' or 'disabled'), vim.log.levels.INFO)
+      end
+
+      vim.api.nvim_create_autocmd('DiagnosticChanged', {
+        group = vim.api.nvim_create_augroup('dotfiles-python-diagnostics', { clear = true }),
+        callback = function(event)
+          if python_diagnostics_enabled or vim.bo[event.buf].filetype ~= 'python' then return end
+
+          for _, diagnostic in ipairs(event.data.diagnostics or {}) do
+            if is_python_diagnostic(diagnostic) then
+              vim.diagnostic.enable(false, { bufnr = event.buf, ns_id = diagnostic.namespace })
+            end
+          end
+        end,
+      })
 
       local function buffer_supports_method(bufnr, method)
         for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
@@ -119,6 +174,11 @@ return {
           if client and client:supports_method('textDocument/inlayHint', event.buf) then
             set_inlay_hints(inlay_hints_enabled, event.buf)
             map('<leader>th', toggle_inlay_hints, '[T]oggle Inlay [H]ints')
+          end
+
+          if client and vim.bo[event.buf].filetype == 'python' and is_python_diagnostics_client(client) then
+            set_python_diagnostics(python_diagnostics_enabled, event.buf)
+            map('<leader>tw', toggle_python_diagnostics, '[T]oggle Python LSP [W]arnings')
           end
         end,
       })
@@ -220,6 +280,11 @@ return {
         },
       },
       format_on_save = function(bufnr)
+        if vim.b[bufnr].conform_skip_format_once then
+          vim.b[bufnr].conform_skip_format_once = nil
+          return
+        end
+
         local disable_filetypes = { c = true, cpp = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
