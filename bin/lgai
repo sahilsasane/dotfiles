@@ -125,7 +125,7 @@ selected_message="$(
           if ($0 != "") printf "%s%c", $0, 0
         }
       ' \
-    | fzf --read0 --print0 --height 40% --border --ansi --preview 'printf "%s\n" {}' --preview-window=up:wrap \
+    | fzf --read0 --print0 --no-multi-line --height 40% --border --ansi --preview 'printf "%s\n" {}' --preview-window=up:wrap \
     | tr -d '\0'
 )"
 selected_message="$(format_commit_message "${selected_message}")"
