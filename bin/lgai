@@ -16,6 +16,25 @@ copy_to_clipboard() {
   fi
 }
 
+format_commit_message() {
+  local message="$1"
+  local subject body
+
+  subject="${message%%$'\n'*}"
+  if [[ "${message}" == "${subject}" ]]; then
+    printf '%s\n' "${subject}"
+    return
+  fi
+
+  body="${message#*$'\n'}"
+  while [[ "${body}" == $'\n'* ]]; do
+    body="${body#$'\n'}"
+  done
+
+  printf '%s\n\n' "${subject}"
+  printf '%s\n' "${body}" | fmt -w 72
+}
+
 cleanup() {
   local status=$?
 
@@ -72,6 +91,7 @@ $'- Prefer higher-level intent over low-level code narration\n'\
 $'- Keep each subject concise and under 72 characters when possible\n'\
 $'- Keep the subject as the first line, followed by exactly one blank line and a concise body of one to three sentences\n'\
 $'- Explain the intent and user or system impact in the body; do not merely restate the subject\n'\
+$'- Wrap body lines at 72 characters using real newline characters; do not output one unbroken paragraph\n'\
 $'- Match this format: feat(observability): serve Prometheus metrics on dedicated port, followed by a blank line and an explanatory paragraph\n'\
 $'- Do not add footers such as BREAKING CHANGE\n'\
 $'- Base every candidate on the STAGED diff, not unstaged changes\n'\
@@ -108,6 +128,7 @@ selected_message="$(
     | fzf --read0 --print0 --height 40% --border --ansi --preview 'printf "%s\n" {}' --preview-window=up:wrap \
     | tr -d '\0'
 )"
+selected_message="$(format_commit_message "${selected_message}")"
 
 __lg_ai_commit_tmp="$(mktemp "${TMPDIR:-/tmp}/lg-ai-commit.XXXXXX")"
 printf '%s\n' "${selected_message}" > "${__lg_ai_commit_tmp}"
