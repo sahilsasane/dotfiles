@@ -78,7 +78,7 @@ Optional AI commit flow for Lazygit:
 - run `aichat` once and choose/configure your provider and model
 - rerun `./bin/install.sh` if needed so Lazygit's config dir and `~/.local/bin/lgai` are linked
 - in Lazygit, stage changes and press `CtrlG` from the files view
-- `lgai` sends the staged diff plus recent commit subjects to `aichat`, lets you pick a Conventional Commit subject-and-body suggestion in `fzf`, then opens the selected message in `$VISUAL` or `$EDITOR` before committing
+- `lgai` sends the staged diff plus recent commit subjects to `aichat`, generates one complete single-line Conventional Commit message covering the full staged change set, then opens it in `$VISUAL` or `$EDITOR` before committing
 
 To switch from a cloud model to Ollama later, update your `aichat` model config. The Lazygit keybinding stays the same.
 On macOS, `lazygit --print-config-dir` commonly resolves to `~/Library/Application Support/lazygit` rather than `~/.config/lazygit`.

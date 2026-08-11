@@ -16,25 +16,6 @@ copy_to_clipboard() {
   fi
 }
 
-format_commit_message() {
-  local message="$1"
-  local subject body
-
-  subject="${message%%$'\n'*}"
-  if [[ "${message}" == "${subject}" ]]; then
-    printf '%s\n' "${subject}"
-    return
-  fi
-
-  body="${message#*$'\n'}"
-  while [[ "${body}" == $'\n'* ]]; do
-    body="${body#$'\n'}"
-  done
-
-  printf '%s\n\n' "${subject}"
-  printf '%s\n' "${body}" | fmt -w 72
-}
-
 cleanup() {
   local status=$?
 
@@ -49,7 +30,6 @@ trap cleanup EXIT
 
 require_cmd git
 require_cmd mktemp
-require_cmd fzf
 
 if ! command -v aichat >/dev/null 2>&1; then
   die "lg-ai-commit: aichat is not installed. Install it with 'brew install aichat' and configure a model with 'aichat'."
@@ -59,7 +39,6 @@ git rev-parse --git-dir >/dev/null 2>&1 || die "lg-ai-commit: not a git reposito
 git diff --staged --quiet && die "lg-ai-commit: no staged changes."
 
 recent_count="${LG_AI_COMMIT_RECENT_COUNT:-5}"
-suggestion_count="${LG_AI_COMMIT_SUGGESTIONS:-5}"
 diff_chars="${LG_AI_COMMIT_DIFF_CHARS:-120000}"
 recent_chars="${LG_AI_COMMIT_RECENT_CHARS:-4000}"
 
@@ -70,17 +49,14 @@ staged_diff="${staged_diff:0:${diff_chars}}"
 recent_commits="$(git log -n "${recent_count}" --pretty=format:%s 2>/dev/null | sed 's/^/- /')"
 recent_commits="${recent_commits:0:${recent_chars}}"
 
-prompt=$'You write git commit message candidates for the STAGED diff only.\n\n'\
+prompt=$'You write the one complete git commit message for the STAGED diff only.\n\n'\
 $'Use the recent commit subjects only to infer style and level of abstraction, not to copy content.\n\n'\
 $'Requirements:\n'\
-$'- Return exactly '"${suggestion_count}"$' commit message candidates\n'\
-$'- Output each candidate as a complete git commit message with a subject, one blank line, and a concise explanatory body\n'\
-$'- Separate candidates with a line containing exactly <LGAI_CANDIDATE>\n'\
-$'- Do not include <LGAI_CANDIDATE> anywhere else\n'\
-$'- No numbering, bullets, quotes, markdown, or commentary\n'\
+$'- Return exactly one complete commit message on exactly one line\n'\
+$'- Output the commit message only: no body, options, numbering, quotes, markdown, code fences, or commentary\n'\
 $'- Follow Conventional Commits exactly in the form <type>[optional scope][optional !]: <description>\n'\
 $'- Use lowercase Conventional Commit types such as feat, fix, docs, refactor, chore, test, build, ci, perf, style, or revert\n'\
-$'- Every candidate MUST start with a type, followed by the optional scope, optional !, and a required colon and space\n'\
+$'- Start with a type, followed by the optional scope, optional !, and a required colon and space\n'\
 $'- Use feat when the full staged change set primarily adds a feature\n'\
 $'- Use fix when the full staged change set primarily fixes a bug\n'\
 $'- Types other than feat and fix may be used when they fit the full staged change set better\n'\
@@ -88,47 +64,31 @@ $'- Use a scope only when it is genuinely helpful for the overall staged change 
 $'- If a scope is used, it must be a noun describing the main affected area and must appear in parentheses, for example feat(parser): ...\n'\
 $'- The description must immediately follow the colon and space and must be a short summary of the full staged change set\n'\
 $'- Prefer higher-level intent over low-level code narration\n'\
-$'- Keep each subject concise and under 72 characters when possible\n'\
-$'- Keep the subject as the first line, followed by exactly one blank line and a concise body of one to three sentences\n'\
-$'- Explain the intent and user or system impact in the body; do not merely restate the subject\n'\
-$'- Wrap body lines at 72 characters using real newline characters; do not output one unbroken paragraph\n'\
-$'- Match this format: feat(observability): serve Prometheus metrics on dedicated port, followed by a blank line and an explanatory paragraph\n'\
-$'- Do not add footers such as BREAKING CHANGE\n'\
-$'- Base every candidate on the STAGED diff, not unstaged changes\n'\
-$'- This tool is generating candidates for exactly one git commit being made now\n'\
+$'- Keep the message concise and under 72 characters when possible\n'\
+$'- Summarize the full staged change set in this single line, including all related edits\n'\
+$'- Do not add a body or footers such as BREAKING CHANGE\n'\
+$'- Base the message on the STAGED diff, not unstaged changes\n'\
+$'- This tool is generating exactly one message for the git commit being made now\n'\
 $'- First infer one honest umbrella summary that covers ALL staged changes together\n'\
-$'- Then write every candidate as an alternative phrasing of that SAME umbrella summary\n'\
-$'- Every candidate must describe the full staged change set as one commit\n'\
-$'- All candidates must keep the same overall focus; vary wording, not which subset of changes is described\n'\
+$'- The message must describe the full staged change set as one commit\n'\
+$'- Keep the focus on the overall outcome, not one particular file, task, or subset of changes\n'\
 $'- Do not split the staged work into separate per-task, per-file, or per-concern subjects\n'\
 $'- If the staged diff contains several related edits, prefer a broader umbrella subject that still truthfully covers all of them\n'\
-$'- Any candidate that mentions only one sub-change, one file, or one subset of the staged diff is invalid\n'\
-$'- Never suggest multiple commits, a commit plan, or subjects like "commit 1" / "commit 2"\n'\
-$'- Choose exactly one type and optional scope per candidate, based on the primary overall intent of the full staged diff\n'\
+$'- A message that mentions only one sub-change, one file, or one subset of the staged diff is invalid\n'\
+$'- Never suggest multiple commits or a commit plan\n'\
+$'- Choose exactly one type and optional scope based on the primary overall intent of the full staged diff\n'\
 $'- If the full staged change set is breaking, mark it with ! immediately before the colon\n'\
-$'- Different candidates may vary in wording or abstraction, but they must all cover the same overall change\n'\
-$'- If the diff spans multiple edits, still write one subject that summarizes the combined overall outcome being committed\n'\
+$'- If the diff spans multiple edits, write one line that summarizes the combined overall outcome being committed\n'\
 $'- If a scope is used, it must name the main area affected by the whole staged change set, not one subtask\n'\
-$'- Valid pattern for mixed tooling changes: a single umbrella subject like "chore: improve developer workflow helpers"\n'\
-$'- Invalid pattern: separate candidates that each only mention one detail like clipboard sync, alias updates, or repo ordering\n\n'\
+$'- Valid pattern for mixed tooling changes: "chore: improve developer workflow helpers"\n\n'\
 $'Recent commit subjects:\n'\
 "${recent_commits:-"- none"}"\
 $'\n\nSTAGED DIFF:\n'\
 "$staged_diff"
 
-selected_message="$(
-  aichat "$prompt" \
-    | awk '
-        BEGIN { RS="<LGAI_CANDIDATE>"; ORS="" }
-        {
-          gsub(/^[[:space:]]+|[[:space:]]+$/, "")
-          if ($0 != "") printf "%s%c", $0, 0
-        }
-      ' \
-    | fzf --read0 --print0 --no-multi-line --height 40% --border --ansi --preview 'printf "%s\n" {}' --preview-window=up:wrap \
-    | tr -d '\0'
-)"
-selected_message="$(format_commit_message "${selected_message}")"
+selected_message="$(aichat "$prompt")"
+selected_message="${selected_message//$'\r'/}"
+[[ "${selected_message}" != *$'\n'* ]] || die "lg-ai-commit: aichat returned more than one line."
 
 __lg_ai_commit_tmp="$(mktemp "${TMPDIR:-/tmp}/lg-ai-commit.XXXXXX")"
 printf '%s\n' "${selected_message}" > "${__lg_ai_commit_tmp}"

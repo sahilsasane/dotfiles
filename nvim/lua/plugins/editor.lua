@@ -88,6 +88,7 @@ return {
       icons = { mappings = vim.g.have_nerd_font },
       spec = {
         { '<leader>g', group = 'Git' },
+        { '<leader>d', group = '[D]ebug', mode = { 'n' } },
         { '<leader>r', group = 'Session' },
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
