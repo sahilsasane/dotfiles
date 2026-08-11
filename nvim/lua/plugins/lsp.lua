@@ -33,14 +33,38 @@ return {
     config = function()
       local inlay_hints_enabled = false
       local python_diagnostics_enabled = true
+      local python_diagnostic_servers = {
+        basedpyright = true,
+        pyright = true,
+        ty = true,
+        jedi_language_server = true,
+        ruff = true,
+      }
+
+      local python_lsp_names = {
+        basedpyright = 'basedpyright',
+        pyright = 'pyright',
+        ty = 'ty',
+        jedi = 'jedi_language_server',
+      }
+
+      local selected_python_lsp = vim.g.dotfiles_python_lsp or 'basedpyright'
+      if not python_lsp_names[selected_python_lsp] then
+        vim.notify(
+          string.format('Unsupported project Python LSP %q; using basedpyright', selected_python_lsp),
+          vim.log.levels.WARN
+        )
+        selected_python_lsp = 'basedpyright'
+      end
+      selected_python_lsp = python_lsp_names[selected_python_lsp]
 
       local function is_python_diagnostics_client(client)
-        return client.name == 'basedpyright' or client.name == 'ruff'
+        return python_diagnostic_servers[client.name] == true
       end
 
       local function is_python_diagnostic(diagnostic)
         local source = string.lower(diagnostic.source or '')
-        return source == 'basedpyright' or source == 'ruff'
+        return python_diagnostic_servers[source] == true
       end
 
       local function set_python_diagnostics(enabled, bufnr)
@@ -184,8 +208,7 @@ return {
       })
 
       ---@type table<string, vim.lsp.Config>
-      local servers = {
-        gopls = {},
+      local python_servers = {
         basedpyright = {
           settings = {
             basedpyright = {
@@ -204,6 +227,14 @@ return {
             },
           },
         },
+        pyright = {},
+        ty = {},
+        jedi_language_server = {},
+      }
+
+      local servers = {
+        gopls = {},
+        [selected_python_lsp] = python_servers[selected_python_lsp],
         ruff = {},
         ts_ls = {},
         eslint = {},

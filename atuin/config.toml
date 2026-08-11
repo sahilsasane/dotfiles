@@ -2,7 +2,7 @@ dialect = "uk"
 timezone = "local"
 
 search_mode = "fuzzy"
-filter_mode = "session"
+filter_mode = "directory"
 
 style = "compact"
 inline_height = 10
@@ -21,15 +21,20 @@ sync_frequency = "3h"
 cwd_filter = ["/private/", "/secrets/"]
 
 [search]
-filters = ["directory", "session", "host", "global"]
+filters = ["directory", "host", "global"]
 
 [ui]
 columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
 
 [stats]
-common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
+common_subcommands = ["git", "docker", "npm", "pnpm", "cargo", "uv"]
 common_prefix = ["sudo"]
-ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "ds"]
+ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl"]
 
 [theme]
 name = "sahil-slate"
+
+[tmux]
+enabled = false
+width = "70%"
+height = "40%"

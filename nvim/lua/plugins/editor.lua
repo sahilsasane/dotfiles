@@ -2,6 +2,16 @@ return {
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
   {
+    'aikhe/wrapped.nvim',
+    cmd = { 'WrappedNvim' },
+    dependencies = { 'nvzone/volt' },
+    opts = {
+      path = vim.fn.stdpath 'config',
+      nvim_root = 'nvim',
+    },
+  },
+
+  {
     'folke/persistence.nvim',
     event = 'BufReadPre',
     opts = {},

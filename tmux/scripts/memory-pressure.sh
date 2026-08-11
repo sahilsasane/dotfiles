@@ -12,7 +12,7 @@ percent_free="$(
 )"
 
 if [ -z "${percent_free:-}" ]; then
-  printf '󰍛 %s▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱%s' "$empty_style" "$reset_style"
+  printf '󰍛 %s▱▱▱▱▱▱▱▱%s' "$empty_style" "$reset_style"
   exit 0
 fi
 
@@ -34,12 +34,12 @@ fi
 
 bars=0
 if [ "$pressure" -gt 0 ]; then
-  bars=$(((pressure + 6) / 7))
+  bars=$(((pressure * 8 + 99) / 100))
 fi
 
 bar=""
 i=1
-while [ "$i" -le 15 ]; do
+while [ "$i" -le 8 ]; do
   if [ "$i" -le "$bars" ]; then
     bar="${bar}▰"
   else
