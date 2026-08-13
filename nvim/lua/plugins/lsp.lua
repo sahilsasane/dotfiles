@@ -35,32 +35,14 @@ return {
       local python_diagnostics_enabled = true
       local python_diagnostic_servers = {
         basedpyright = true,
-        pyright = true,
-        ty = true,
         jedi_language_server = true,
+        mypy = true,
+        pyright = true,
         ruff = true,
       }
+      local python = require 'dotfiles.python'
 
-      local python_lsp_names = {
-        basedpyright = 'basedpyright',
-        pyright = 'pyright',
-        ty = 'ty',
-        jedi = 'jedi_language_server',
-      }
-
-      local selected_python_lsp = vim.g.dotfiles_python_lsp or 'basedpyright'
-      if not python_lsp_names[selected_python_lsp] then
-        vim.notify(
-          string.format('Unsupported project Python LSP %q; using basedpyright', selected_python_lsp),
-          vim.log.levels.WARN
-        )
-        selected_python_lsp = 'basedpyright'
-      end
-      selected_python_lsp = python_lsp_names[selected_python_lsp]
-
-      local function is_python_diagnostics_client(client)
-        return python_diagnostic_servers[client.name] == true
-      end
+      local function is_python_diagnostics_client(client) return python_diagnostic_servers[client.name] == true end
 
       local function is_python_diagnostic(diagnostic)
         local source = string.lower(diagnostic.source or '')
@@ -94,10 +76,21 @@ return {
           if vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].filetype == 'python' then set_python_diagnostics(python_diagnostics_enabled, bufnr) end
         end
 
-        if package.loaded['trouble'] then require('trouble').refresh('diagnostics') end
+        if package.loaded['trouble'] then require('trouble').refresh 'diagnostics' end
 
         vim.notify(string.format('Python LSP diagnostics %s', python_diagnostics_enabled and 'enabled' or 'disabled'), vim.log.levels.INFO)
       end
+
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('dotfiles-python-diagnostics-keymap', { clear = true }),
+        pattern = 'python',
+        callback = function(event)
+          vim.keymap.set('n', '<leader>tw', toggle_python_diagnostics, {
+            buffer = event.buf,
+            desc = 'LSP: [T]oggle Python diagnostics',
+          })
+        end,
+      })
 
       vim.api.nvim_create_autocmd('DiagnosticChanged', {
         group = vim.api.nvim_create_augroup('dotfiles-python-diagnostics', { clear = true }),
@@ -105,9 +98,7 @@ return {
           if python_diagnostics_enabled or vim.bo[event.buf].filetype ~= 'python' then return end
 
           for _, diagnostic in ipairs(event.data.diagnostics or {}) do
-            if is_python_diagnostic(diagnostic) then
-              vim.diagnostic.enable(false, { bufnr = event.buf, ns_id = diagnostic.namespace })
-            end
+            if is_python_diagnostic(diagnostic) then vim.diagnostic.enable(false, { bufnr = event.buf, ns_id = diagnostic.namespace }) end
           end
         end,
       })
@@ -202,7 +193,6 @@ return {
 
           if client and vim.bo[event.buf].filetype == 'python' and is_python_diagnostics_client(client) then
             set_python_diagnostics(python_diagnostics_enabled, event.buf)
-            map('<leader>tw', toggle_python_diagnostics, '[T]oggle Python LSP [W]arnings')
           end
         end,
       })
@@ -210,6 +200,7 @@ return {
       ---@type table<string, vim.lsp.Config>
       local python_servers = {
         basedpyright = {
+          root_dir = python.root_dir_for 'basedpyright',
           settings = {
             basedpyright = {
               analysis = {
@@ -227,15 +218,17 @@ return {
             },
           },
         },
-        pyright = {},
-        ty = {},
-        jedi_language_server = {},
+        jedi_language_server = { root_dir = python.root_dir_for 'jedi_language_server' },
+        pyright = { root_dir = python.root_dir_for 'pyright' },
+        ruff = { root_dir = python.root_dir_for 'ruff' },
       }
 
       local servers = {
+        basedpyright = python_servers.basedpyright,
         gopls = {},
-        [selected_python_lsp] = python_servers[selected_python_lsp],
-        ruff = {},
+        jedi_language_server = python_servers.jedi_language_server,
+        pyright = python_servers.pyright,
+        ruff = python_servers.ruff,
         ts_ls = {},
         eslint = {},
         taplo = {},

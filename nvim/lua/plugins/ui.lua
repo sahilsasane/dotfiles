@@ -1,3 +1,35 @@
+local function setup_image_preview(_, opts)
+  require('image').setup(opts)
+
+  -- ImageMagick's SVG delegate does not resolve currentColor. Keep the source
+  -- SVG reusable by the web app, but give image.nvim a terminal-colored copy
+  -- when it rasterizes an SVG for Kitty.
+  local processor = require('image/processors').get_processor(opts.processor)
+  local original_transform = processor.transform
+  local preview_dir = vim.fn.stdpath('cache') .. '/image.nvim-svg'
+
+  local function preview_svg_path(path)
+    if type(path) ~= 'string' or not path:lower():match('%.svg$') then return path end
+    if vim.fn.filereadable(path) == 0 then return path end
+
+    local source = table.concat(vim.fn.readfile(path), '\n')
+    if not source:find('currentColor', 1, true) then return path end
+
+    local color = vim.o.background == 'light' and '#4c4f69' or '#cdd6f4'
+    local cache_key = vim.fn.sha256(path .. ':' .. vim.fn.getftime(path) .. ':' .. color)
+    local preview_path = preview_dir .. '/' .. cache_key .. '.svg'
+    if vim.fn.filereadable(preview_path) == 0 then
+      vim.fn.mkdir(preview_dir, 'p')
+      vim.fn.writefile(vim.split(source:gsub('currentColor', color), '\n', { plain = true }), preview_path)
+    end
+    return preview_path
+  end
+
+  processor.transform = function(path, request, output_path, callback)
+    return original_transform(preview_svg_path(path), request, output_path, callback)
+  end
+end
+
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
@@ -54,8 +86,11 @@ return {
       backend = 'kitty',
       processor = 'magick_cli',
       scale_factor = 3.0,
+      window_overlap_clear_enabled = true,
+      tmux_show_only_in_active_window = true,
       hijack_file_patterns = { '*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.avif', '*.svg' },
     },
+    config = setup_image_preview,
   },
 
   {

@@ -6,7 +6,7 @@ config-file = ?~/.config/dotfiles-theme/ghostty.conf
 
 # Typography and color rendering
 font-family = "JetBrains Mono"
-font-size = 10.5
+font-size = 16
 window-title-font-family = "Avenir Next"
 font-thicken = true
 font-thicken-strength = 100

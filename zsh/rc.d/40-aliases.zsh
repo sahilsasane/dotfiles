@@ -44,6 +44,7 @@ alias -g F='| fzf'
 alias -g R='| rg'
 alias -g L='| less -R'
 alias -g H='--help | bat --style=plain --language=help --color=always'
+alias -g HP='help | bat --style=plain --language=help --color=always'
 alias -g HL='--help 2>&1 | bat --style=plain --language=help --color=always | less -R'
 alias -g V='--version'
 
