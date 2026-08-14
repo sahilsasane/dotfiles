@@ -28,6 +28,9 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
 
+vim.keymap.set('n', '<C-j>', '<C-e>', { desc = 'Scroll down by one line' })
+vim.keymap.set('n', '<C-k>', '<C-y>', { desc = 'Scroll up by one line' })
+
 vim.keymap.set('n', '<C-o>', '<C-o>zz', { desc = 'Jump backward in the list and center' })
 vim.keymap.set('n', '<C-i>', '<C-i>zz', { desc = 'Jump forwared in the list and center' })
 
