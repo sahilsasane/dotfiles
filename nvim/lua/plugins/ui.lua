@@ -107,9 +107,11 @@ return {
         no_bold = false,
         no_underline = false,
         styles = {
-          keywords = { 'italic' },
-          functions = { 'bold' },
-          types = { 'bold' },
+          conditionals = {},
+          functions = {},
+          keywords = {},
+          loops = {},
+          types = {},
         },
         custom_highlights = function(colors)
           return {
@@ -118,8 +120,17 @@ return {
             NormalNC = { fg = colors.text },
 
             ['@comment'] = { fg = colors.overlay1, style = { 'italic' } },
+            ['@function.go'] = { fg = colors.blue, style = { 'italic' } },
+            ['@function.call.go'] = { fg = colors.blue, style = { 'italic' } },
+            ['@function.method.go'] = { fg = colors.blue, style = { 'italic' } },
+            ['@function.method.call.go'] = { fg = colors.blue, style = { 'italic' } },
+            ['@lsp.type.function.go'] = { fg = colors.blue, style = { 'italic' } },
+            ['@lsp.type.method.go'] = { fg = colors.blue, style = { 'italic' } },
+            ['@lsp.type.parameter.go'] = { fg = colors.maroon, style = { 'italic' } },
+            ['@variable.parameter.go'] = { fg = colors.maroon, style = { 'italic' } },
             CursorLine = { bg = colors.mantle, blend = 99 },
-            LspInlayHint = { fg = colors.overlay0, style = { 'italic' } },
+            LspInlayHint = { fg = colors.overlay0, bg = colors.none },
+            SymbolUsage = { fg = colors.overlay0 },
             Whitespace = { fg = colors.surface0 },
 
             TelescopeNormal = { bg = colors.none },
@@ -143,7 +154,8 @@ return {
             BlinkCmpSignatureHelpBorder = { fg = colors.surface1, bg = colors.crust },
             IblIndent = { fg = colors.surface1 },
             IblWhitespace = { fg = colors.surface0 },
-            IblScope = { fg = colors.overlay1 },
+            IblScope = { fg = colors.surface2 },
+            UfoFoldedEllipsis = { fg = colors.overlay1, bg = colors.surface0 },
             MiniStatuslineGit = { fg = colors.green, bg = colors.crust, style = { 'bold' } },
             MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.crust },
             MiniStatuslineFileinfo = { fg = colors.overlay1, bg = colors.crust },

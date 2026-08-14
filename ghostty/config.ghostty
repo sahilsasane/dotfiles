@@ -6,11 +6,18 @@ config-file = ?~/.config/dotfiles-theme/ghostty.conf
 
 # Typography and color rendering
 font-family = "JetBrains Mono"
-font-size = 16
+font-family-bold = "JetBrains Mono"
+font-family-italic = "JetBrainsMono Nerd Font Mono"
+font-family-bold-italic = "JetBrainsMono Nerd Font Mono"
+font-style = "ExtraLight"
+font-style-bold = "Regular"
+font-style-italic = "ExtraLight Italic"
+font-style-bold-italic = "Italic"
+font-size = 14
+adjust-cell-height = 10%
 window-title-font-family = "Avenir Next"
-font-thicken = true
-font-thicken-strength = 100
-font-feature = "calt" 0
+font-thicken = false
+font-feature = "+calt,+ss02,+cv03,+cv04,+cv08,+cv14,+cv15,+cv16,+cv18,+cv19,+cv20,+zero"
 minimum-contrast = 1.1
 window-colorspace = display-p3
 window-vsync = true
@@ -82,7 +89,7 @@ quit-after-last-window-closed = true
 # macOS behavior
 cursor-style = bar
 cursor-style-blink = false
-macos-option-as-alt = both
+macos-option-as-alt = true
 macos-auto-secure-input = true
 macos-secure-input-indication = true
 

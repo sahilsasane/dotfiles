@@ -2,6 +2,28 @@ return {
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
   {
+    'Wansmer/symbol-usage.nvim',
+    event = 'LspAttach',
+    opts = {
+      hl = { link = 'SymbolUsage' },
+      vt_position = 'end_of_line',
+      request_pending_text = false,
+      disable = {
+        cond = {
+          function(bufnr) return vim.bo[bufnr].filetype ~= 'go' end,
+        },
+      },
+      text_format = function(symbol)
+        if symbol.references == nil or symbol.references == 0 then return '' end
+
+        local count = symbol.references
+        local label = count == 1 and 'usage' or 'usages'
+        return string.format('%d %s', count, label)
+      end,
+    },
+  },
+
+  {
     'aikhe/wrapped.nvim',
     cmd = { 'WrappedNvim' },
     dependencies = { 'nvzone/volt' },
@@ -67,7 +89,11 @@ return {
       vim.o.foldenable = true
 
       require('ufo').setup {
-        provider_selector = function(_, filetype, buftype) return { 'treesitter', 'indent' } end,
+        provider_selector = function() return { 'treesitter', 'indent' } end,
+        close_fold_kinds_for_ft = {
+          default = {},
+          go = { 'import_declaration' },
+        },
       }
 
       vim.keymap.set('n', 'zR', require('ufo').openAllFolds)

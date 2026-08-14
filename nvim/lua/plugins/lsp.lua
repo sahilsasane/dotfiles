@@ -225,7 +225,15 @@ return {
 
       local servers = {
         basedpyright = python_servers.basedpyright,
-        gopls = {},
+        gopls = {
+          settings = {
+            gopls = {
+              hints = {
+                parameterNames = true,
+              },
+            },
+          },
+        },
         jedi_language_server = python_servers.jedi_language_server,
         pyright = python_servers.pyright,
         ruff = python_servers.ruff,
