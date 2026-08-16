@@ -39,6 +39,7 @@ return {
         mypy = true,
         pyright = true,
         ruff = true,
+        ty = true,
       }
       local python = require 'dotfiles.python'
 

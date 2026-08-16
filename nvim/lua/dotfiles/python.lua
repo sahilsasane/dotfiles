@@ -18,6 +18,7 @@ local type_checker_names = {
   lsp = true,
   none = true,
   mypy = true,
+  ty = true,
 }
 
 local root_markers = {

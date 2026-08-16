@@ -83,18 +83,90 @@ return {
     'kevinhwang91/nvim-ufo',
     dependencies = { 'kevinhwang91/promise-async' },
     config = function()
+      local function fold_virt_text(virt_text, _, _, width, truncate, ctx)
+        local source_text = ctx.text or ''
+        local trimmed_text = source_text:gsub('%s+$', '')
+        local opener = trimmed_text:sub(-1)
+        local closing_delimiters = {
+          ['{'] = '}',
+          ['['] = ']',
+          ['('] = ')',
+        }
+        local closing_delimiter = closing_delimiters[opener]
+        local line_prefix = closing_delimiter and trimmed_text:sub(1, -2) or nil
+        local chunks = virt_text
+        local suffix = { { ' ⋯ ', 'UfoFoldedEllipsis' } }
+
+        if line_prefix then
+          chunks = {}
+          local bytes_left = #line_prefix
+          for _, chunk in ipairs(virt_text) do
+            if bytes_left <= 0 then break end
+
+            local text, highlight = chunk[1], chunk[2]
+            if #text <= bytes_left then
+              table.insert(chunks, chunk)
+              bytes_left = bytes_left - #text
+            else
+              table.insert(chunks, { text:sub(1, bytes_left), highlight })
+              break
+            end
+          end
+          suffix = {
+            { opener, 'UfoFoldedDelimiters' },
+            { '…', 'UfoFoldedEllipsis' },
+            { closing_delimiter, 'UfoFoldedDelimiters' },
+          }
+        end
+
+        local suffix_width = 0
+        for _, chunk in ipairs(suffix) do
+          suffix_width = suffix_width + vim.fn.strdisplaywidth(chunk[1])
+        end
+
+        local target_width = width - suffix_width
+        local current_width = 0
+        local result = {}
+        for _, chunk in ipairs(chunks) do
+          local text, highlight = chunk[1], chunk[2]
+          local chunk_width = vim.fn.strdisplaywidth(text)
+          if current_width + chunk_width <= target_width then
+            table.insert(result, chunk)
+            current_width = current_width + chunk_width
+          else
+            text = truncate(text, target_width - current_width)
+            if text ~= '' then table.insert(result, { text, highlight }) end
+            break
+          end
+        end
+
+        vim.list_extend(result, suffix)
+        return result
+      end
+
       vim.o.foldcolumn = '1'
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
 
       require('ufo').setup {
+        fold_virt_text_handler = fold_virt_text,
         provider_selector = function() return { 'treesitter', 'indent' } end,
         close_fold_kinds_for_ft = {
           default = {},
           go = { 'import_declaration' },
         },
       }
+
+      local function clear_fold_background()
+        vim.api.nvim_set_hl(0, 'UfoFoldedBg', { bg = 'NONE' })
+      end
+      local fold_highlight_group = vim.api.nvim_create_augroup('dotfiles_fold_highlights', { clear = true })
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        group = fold_highlight_group,
+        callback = clear_fold_background,
+      })
+      clear_fold_background()
 
       vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
       vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
