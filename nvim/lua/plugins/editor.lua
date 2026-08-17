@@ -155,6 +155,7 @@ return {
         close_fold_kinds_for_ft = {
           default = {},
           go = { 'import_declaration' },
+          python = { 'string', 'concatenated_string' },
         },
       }
 

@@ -52,21 +52,26 @@ return {
 
       local function set_python_diagnostics(enabled, bufnr)
         local namespaces = {}
-        local sources = {}
+        local lsp_namespaces = {}
+        local use_lsp_diagnostics = python.for_buffer(bufnr).type_checker == 'lsp'
 
-        for _, diagnostic in ipairs(vim.diagnostic.get(bufnr)) do
-          if is_python_diagnostic(diagnostic) then
-            namespaces[diagnostic.namespace] = true
-            sources[string.lower(diagnostic.source)] = true
+        for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
+          if is_python_diagnostics_client(client) then
+            local namespace = vim.lsp.diagnostic.get_namespace(client.id)
+            lsp_namespaces[namespace] = true
+            namespaces[namespace] = enabled and use_lsp_diagnostics
           end
         end
 
-        for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
-          if is_python_diagnostics_client(client) and not sources[client.name] then namespaces[vim.lsp.diagnostic.get_namespace(client.id)] = true end
+        for _, diagnostic in ipairs(vim.diagnostic.get(bufnr)) do
+          if is_python_diagnostic(diagnostic) then
+            local is_lsp_diagnostic = lsp_namespaces[diagnostic.namespace] == true
+            namespaces[diagnostic.namespace] = enabled and (not is_lsp_diagnostic or use_lsp_diagnostics)
+          end
         end
 
-        for ns_id in pairs(namespaces) do
-          vim.diagnostic.enable(enabled, { bufnr = bufnr, ns_id = ns_id })
+        for ns_id, namespace_enabled in pairs(namespaces) do
+          vim.diagnostic.enable(namespace_enabled, { bufnr = bufnr, ns_id = ns_id })
         end
       end
 
@@ -222,6 +227,7 @@ return {
         jedi_language_server = { root_dir = python.root_dir_for 'jedi_language_server' },
         pyright = { root_dir = python.root_dir_for 'pyright' },
         ruff = { root_dir = python.root_dir_for 'ruff' },
+        ty = { root_dir = python.root_dir_for 'ty' },
       }
 
       local servers = {
@@ -238,6 +244,7 @@ return {
         jedi_language_server = python_servers.jedi_language_server,
         pyright = python_servers.pyright,
         ruff = python_servers.ruff,
+        ty = python_servers.ty,
         ts_ls = {},
         eslint = {},
         taplo = {},

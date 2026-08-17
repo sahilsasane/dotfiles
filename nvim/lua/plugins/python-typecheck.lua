@@ -48,19 +48,30 @@ return {
         end
       end
 
+      local function run_type_checker(bufnr)
+        if not vim.api.nvim_buf_is_valid(bufnr) or vim.bo[bufnr].filetype ~= 'python' then return end
+
+        local project = python.for_buffer(bufnr)
+        local root = python.root(bufnr)
+        reset_type_checker_diagnostics(bufnr)
+
+        if not vim.tbl_contains(type_checkers, project.type_checker) then return end
+
+        vim.api.nvim_buf_call(bufnr, function() lint.try_lint(project.type_checker, { cwd = root }) end)
+      end
+
       vim.api.nvim_create_autocmd('BufWritePost', {
         group = vim.api.nvim_create_augroup('dotfiles-python-type-checker', { clear = true }),
         pattern = '*.py',
-        callback = function(event)
-          local project = python.for_buffer(event.buf)
-          local root = python.root(event.buf)
-          reset_type_checker_diagnostics(event.buf)
-
-          if not vim.tbl_contains(type_checkers, project.type_checker) then return end
-
-          vim.api.nvim_buf_call(event.buf, function() lint.try_lint(project.type_checker, { cwd = root }) end)
-        end,
+        callback = function(event) run_type_checker(event.buf) end,
       })
+
+      vim.api.nvim_create_autocmd('BufEnter', {
+        group = vim.api.nvim_create_augroup('dotfiles-python-type-checker-enter', { clear = true }),
+        callback = function(event) vim.schedule(function() run_type_checker(event.buf) end) end,
+      })
+
+      if vim.bo.filetype == 'python' then vim.schedule(function() run_type_checker(0) end) end
     end,
   },
 }

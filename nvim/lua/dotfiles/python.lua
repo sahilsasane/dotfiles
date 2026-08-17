@@ -11,7 +11,7 @@ local lsp_names = {
   jedi = 'jedi_language_server',
   pyright = 'pyright',
   ruff = 'ruff',
-  ['ruff-lsp'] = 'ruff',
+  ty = 'ty',
 }
 
 local type_checker_names = {
