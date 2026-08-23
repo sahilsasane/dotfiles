@@ -32,6 +32,18 @@ ds() {
 
 dg()  { ds rs get -t "$1" -n "$2" "${@:3}"; }
 
+dsfl() {
+  [[ -n $1 ]] || { print -u2 'usage: dsfl <service-name>'; return 2; }
+
+  local runtime group
+  runtime=$(ds rs ls -t service -n "$1" runtime) || return
+  group=$(print -r -- "$runtime" |
+    awk -F'|' '$1 ~ /^[[:space:]]*service/ { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $1); print $1; exit }')
+  [[ -n $group ]] || { print -u2 "No service container group found for $1."; return 1; }
+
+  ds rs -t service -n "$1" --container-group "$group" logs --follow
+}
+
 v() {
   local venv="${1:-.venv}"
   local activate_file="$venv/bin/activate"
