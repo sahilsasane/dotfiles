@@ -77,6 +77,7 @@ link_path "$DOTFILES_ROOT/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 link_path "$DOTFILES_ROOT/bin/lgai" "$HOME/.local/bin/lgai"
 link_path "$DOTFILES_ROOT/bin/tmx" "$HOME/.local/bin/tmx"
+link_path "$DOTFILES_ROOT/bin/ds" "$HOME/.local/bin/ds"
 link_path "$DOTFILES_ROOT/bin/dotfiles-theme" "$HOME/.local/bin/dotfiles-theme"
 
 # These applications need a real config directory so the theme controller can

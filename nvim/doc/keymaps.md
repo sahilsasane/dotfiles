@@ -175,6 +175,8 @@ nvim .
 | Symbols in workspace | `<leader>sS` |
 | Browse Telescope pickers | `<leader>sp` |
 | Search nvim config files | `<leader>sn` |
+| FFF file picker | `<leader>F` |
+| FFF live grep | `<leader>G` |
 
 > Add `.ignore` file in project root to exclude folders like `.venv`, `vendor`, `node_modules` from grep.
 
@@ -216,7 +218,11 @@ nvim .
 | Toggle Python LSP warnings | `<leader>tw` |
 | Insert nearest inlay hint | `<leader>ti` |
 
-### 6. Pin files with Harpoon
+### 6. Folding
+
+- `zcf` — Select and close the whole function under the cursor
+
+### 7. Pin files with Harpoon
 
 | What | Key |
 | --- | --- |
@@ -229,7 +235,7 @@ nvim .
 
 > Note: `<C-h>` and `<C-t>` are claimed by Harpoon. Use `<C-o>` to jump back in the jump list, not `<C-t>`.
 
-### 7. Git
+### 8. Git
 
 | What | Key |
 | --- | --- |

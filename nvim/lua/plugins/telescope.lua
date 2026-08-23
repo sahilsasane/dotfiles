@@ -367,4 +367,16 @@ return {
       vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config' } end, { desc = '[S]earch [N]eovim files' })
     end,
   },
+  {
+    'dmtrKovalenko/fff',
+    build = function() require('fff.download').download_or_build_binary() end,
+    lazy = false,
+    opts = {
+      enable_home_dir_scanning = false,
+    },
+    keys = {
+      { '<leader>F', function() require('fff').find_files() end, desc = '[F]FF files' },
+      { '<leader>G', function() require('fff').live_grep() end, desc = '[F]FF grep' },
+    },
+  },
 }

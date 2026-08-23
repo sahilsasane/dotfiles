@@ -5,3 +5,6 @@ for _dotfiles_profile in "$DOTFILES_ZSH_DIR"/profile.d/*.zsh(N); do
 done
 
 unset _dotfiles_profile
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"

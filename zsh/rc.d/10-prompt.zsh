@@ -3,6 +3,8 @@ __dotfiles_theme_apply_shell() {
   local theme_dir="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles-theme"
   local effective=dark
   [[ -r "$state" && "$(<"$state")" == light ]] && effective=light
+  typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+  [[ "$effective" == light ]] && ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#9ca0b0'
   export TLRC_CONFIG="${theme_dir}/tlrc.toml"
 
   if [[ "$effective" == light ]]; then
@@ -12,7 +14,7 @@ __dotfiles_theme_apply_shell() {
     export LS_COLORS="$(vivid generate catppuccin-latte 2>/dev/null)"
     export RIPGREP_CONFIG_PATH="${RIPGREP_CONFIG_PATH:-${DOTFILES_ZSH_DIR}/../rg/ripgrep.conf}"
     typeset -g DOTFILES_FZF_THEME_OPTS='--color=fg:#4c4f69,bg:-1,hl:#1e66f5
-      --color=fg+:#4c4f69,bg+:-1,hl+:#df8e1d
+      --color=fg+:#4c4f69,bg+:#ccd0da,hl+:#df8e1d
       --color=info:#6c6f85,prompt:#1e66f5,pointer:#df8e1d,marker:#40a02b
       --color=border:#9ca0b0,header:#6c6f85,spinner:#1e66f5
       --color=gutter:-1,preview-bg:-1,preview-border:#9ca0b0

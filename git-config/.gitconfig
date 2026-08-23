@@ -49,3 +49,5 @@
 	insteadOf = https://bitbucket.org/
 [url "git@bitbucket.org:"]
 	insteadOf = https://bitbucket.org/
+[safe]
+	directory = /home/build/working_dir

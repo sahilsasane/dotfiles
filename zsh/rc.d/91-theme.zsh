@@ -17,5 +17,6 @@ theme() {
 
   __dotfiles_theme_apply_shell
   source "${DOTFILES_ZSH_DIR}/rc.d/58-fzf.zsh"
+  command -v atuin >/dev/null 2>&1 && bindkey '^R' atuin-search
   source "${DOTFILES_ZSH_DIR}/rc.d/90-oh-my-posh.zsh"
 }

@@ -159,9 +159,7 @@ return {
         },
       }
 
-      local function clear_fold_background()
-        vim.api.nvim_set_hl(0, 'UfoFoldedBg', { bg = 'NONE' })
-      end
+      local function clear_fold_background() vim.api.nvim_set_hl(0, 'UfoFoldedBg', { bg = 'NONE' }) end
       local fold_highlight_group = vim.api.nvim_create_augroup('dotfiles_fold_highlights', { clear = true })
       vim.api.nvim_create_autocmd('ColorScheme', {
         group = fold_highlight_group,
@@ -173,6 +171,13 @@ return {
       vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
       vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds)
       vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith)
+      vim.keymap.set('n', '<leader>zf', function()
+        local mini_ai = require 'mini.ai'
+        if not mini_ai.find_textobject('a', 'f') then return end
+
+        local keys = vim.api.nvim_replace_termcodes('Vafzc<Esc>', true, false, true)
+        vim.api.nvim_feedkeys(keys, 'm', false)
+      end, { desc = 'Close function fold' })
     end,
   },
 
@@ -227,8 +232,7 @@ return {
           filter = function(items)
             return vim.tbl_filter(function(item)
               local diagnostic = item.item
-              return diagnostic
-                and vim.diagnostic.is_enabled { bufnr = diagnostic.bufnr, ns_id = diagnostic.namespace }
+              return diagnostic and vim.diagnostic.is_enabled { bufnr = diagnostic.bufnr, ns_id = diagnostic.namespace }
             end, items)
           end,
         },

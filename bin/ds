@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+dataos_ctl="$HOME/.dataos/v2/bin/dataos-ctl"
+if [ ! -x "$dataos_ctl" ]; then
+  echo "dataos-ctl is not installed." >&2
+  exit 1
+fi
+
+exec "$dataos_ctl" "$@"

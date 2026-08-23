@@ -1,8 +1,20 @@
+[theme]
+name = "sahil-latte"
+parent = "default"
+
 [colors]
 AlertInfo = "#1e66f5"
 AlertWarn = "#df8e1d"
 AlertError = "#d20f39"
+Annotation = "#6c6f85"
+Base = "#4c4f69"
 Guidance = "#6c6f85"
-Input = "#4c4f69"
-Selection = "#8839ef"
-Title = "#4c4f69"
+Important = "#8839ef"
+Muted = "#9ca0b0"
+Title = "#1e66f5"
+SyntaxCommand = "#1e66f5"
+SyntaxFlag = "#8839ef"
+SyntaxString = "#40a02b"
+SyntaxVariable = "#df8e1d"
+SyntaxOperator = "#d20f39"
+SyntaxComment = "#9ca0b0"

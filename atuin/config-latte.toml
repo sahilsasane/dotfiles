@@ -22,7 +22,6 @@ cwd_filter = ["/private/", "/secrets/"]
 
 [search]
 filters = ["directory", "global"]
-filter_mode_shell_up_key_binding = "session"
 
 [ui]
 columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
@@ -30,7 +29,12 @@ columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
 [stats]
 common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
 common_prefix = ["sudo"]
-ignored_commands = ["cd", "ls", "ll", "pwd"]
+ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl"]
 
 [theme]
 name = "sahil-latte"
+
+[tmux]
+enabled = false
+width = "70%"
+height = "40%"

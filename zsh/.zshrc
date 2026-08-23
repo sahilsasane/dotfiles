@@ -19,3 +19,9 @@ unset _dotfiles_rc
 if command -v atuin >/dev/null 2>&1; then
   bindkey '^R' atuin-search 2>/dev/null
 fi
+
+# opencode
+export PATH=/Users/sahilsasane/.opencode/bin:$PATH
+
+# Added by cua-driver-rs installer — see https://github.com/trycua/cua
+export PATH="/Users/sahilsasane/.local/bin:$PATH"

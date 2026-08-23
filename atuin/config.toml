@@ -27,7 +27,7 @@ filters = ["directory", "host", "global"]
 columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
 
 [stats]
-common_subcommands = ["git", "docker", "npm", "pnpm", "cargo", "uv"]
+common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
 common_prefix = ["sudo"]
 ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl"]
 
