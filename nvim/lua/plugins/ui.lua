@@ -6,10 +6,10 @@ local function setup_image_preview(_, opts)
   -- when it rasterizes an SVG for Kitty.
   local processor = require('image/processors').get_processor(opts.processor)
   local original_transform = processor.transform
-  local preview_dir = vim.fn.stdpath('cache') .. '/image.nvim-svg'
+  local preview_dir = vim.fn.stdpath 'cache' .. '/image.nvim-svg'
 
   local function preview_svg_path(path)
-    if type(path) ~= 'string' or not path:lower():match('%.svg$') then return path end
+    if type(path) ~= 'string' or not path:lower():match '%.svg$' then return path end
     if vim.fn.filereadable(path) == 0 then return path end
 
     local source = table.concat(vim.fn.readfile(path), '\n')
@@ -25,9 +25,7 @@ local function setup_image_preview(_, opts)
     return preview_path
   end
 
-  processor.transform = function(path, request, output_path, callback)
-    return original_transform(preview_svg_path(path), request, output_path, callback)
-  end
+  processor.transform = function(path, request, output_path, callback) return original_transform(preview_svg_path(path), request, output_path, callback) end
 end
 
 return {
@@ -458,9 +456,7 @@ return {
       statusline.section_location = function() return '%2l:%-2v' end
 
       ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.inactive = function()
-        return '%#MiniStatuslineInactive#' .. statusline.section_filename() .. '%='
-      end
+      statusline.inactive = function() return '%#MiniStatuslineInactive#' .. statusline.section_filename() .. '%=' end
     end,
   },
 }
