@@ -2,6 +2,43 @@ return {
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
   {
+    'gbprod/yanky.nvim',
+    opts = {},
+    keys = {
+      { 'y', '<Plug>(YankyYank)', mode = { 'n', 'x' }, desc = 'Yank text' },
+      { 'p', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' }, desc = 'Put after cursor' },
+      { 'P', '<Plug>(YankyPutBefore)', mode = { 'n', 'x' }, desc = 'Put before cursor' },
+      { 'gp', '<Plug>(YankyGPutAfter)', mode = { 'n', 'x' }, desc = 'Put after cursor and move' },
+      { 'gP', '<Plug>(YankyGPutBefore)', mode = { 'n', 'x' }, desc = 'Put before cursor and move' },
+      { '<leader>y', '<cmd>YankyRingHistory<CR>', mode = { 'n', 'x' }, desc = 'Yank history' },
+      { ']p', '<Plug>(YankyPutIndentAfterLinewise)', desc = 'Put below with indent' },
+      { '[p', '<Plug>(YankyPutIndentBeforeLinewise)', desc = 'Put above with indent' },
+    },
+  },
+
+  {
+    'monaqa/dial.nvim',
+    config = function()
+      local augend = require 'dial.augend'
+      require('dial.config').augends:register_group {
+        default = {
+          augend.integer.alias.decimal,
+          augend.integer.alias.hex,
+          augend.date.new { pattern = '%Y-%m-%d', default_kind = 'day', only_valid = true },
+          augend.constant.alias.bool,
+          augend.semver.alias.semver,
+        },
+      }
+    end,
+    keys = {
+      { '<C-a>', '<Plug>(dial-increment)', mode = { 'n', 'x' }, desc = 'Increment value' },
+      { '<C-x>', '<Plug>(dial-decrement)', mode = { 'n', 'x' }, desc = 'Decrement value' },
+      { 'g<C-a>', '<Plug>(dial-g-increment)', mode = { 'n', 'x' }, desc = 'Increment sequence' },
+      { 'g<C-x>', '<Plug>(dial-g-decrement)', mode = { 'n', 'x' }, desc = 'Decrement sequence' },
+    },
+  },
+
+  {
     'Wansmer/symbol-usage.nvim',
     event = 'LspAttach',
     opts = {

@@ -145,8 +145,8 @@ return {
 
             CursorLineNr = { fg = colors.yellow, style = { 'bold' } },
             WinSeparator = { fg = colors.surface1 },
-            StatusLine = { fg = colors.text, bg = colors.crust },
-            StatusLineNC = { fg = colors.overlay1, bg = colors.crust },
+            StatusLine = { fg = colors.text, bg = colors.none },
+            StatusLineNC = { fg = colors.overlay1, bg = colors.none },
             LspReferenceText = { bg = colors.none, style = { 'underline' } },
             LspReferenceRead = { bg = colors.none, style = { 'underline' } },
             LspReferenceWrite = { bg = colors.none, style = { 'underline' } },
@@ -159,11 +159,23 @@ return {
             UfoFoldedFg = { fg = colors.overlay1 },
             UfoFoldedDelimiters = { fg = colors.sky, bg = colors.none, style = { 'bold' } },
             UfoFoldedEllipsis = { fg = colors.overlay1, bg = colors.none },
-            MiniStatuslineGit = { fg = colors.green, bg = colors.crust, style = { 'bold' } },
-            MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.crust },
-            MiniStatuslineFileinfo = { fg = colors.overlay1, bg = colors.crust },
-            MiniStatuslineFilename = { fg = colors.text, bg = colors.crust },
-            MiniStatuslineInactive = { fg = colors.overlay1, bg = colors.crust },
+            MiniStatuslineGit = { fg = colors.green, bg = colors.none, style = { 'bold' } },
+            MiniStatuslineDevinfo = { fg = colors.overlay1, bg = colors.none },
+            MiniStatuslineFileinfo = { fg = colors.overlay1, bg = colors.none },
+            MiniStatuslineFilename = { fg = colors.text, bg = colors.none },
+            MiniStatuslineInactive = { fg = colors.overlay1, bg = colors.none },
+            MiniStatuslineBubbleModeNormalEdge = { fg = colors.blue, bg = colors.none },
+            MiniStatuslineBubbleModeInsertEdge = { fg = colors.green, bg = colors.none },
+            MiniStatuslineBubbleModeVisualEdge = { fg = colors.mauve, bg = colors.none },
+            MiniStatuslineBubbleModeReplaceEdge = { fg = colors.red, bg = colors.none },
+            MiniStatuslineBubbleModeCommandEdge = { fg = colors.yellow, bg = colors.none },
+            MiniStatuslineBubbleModeOtherEdge = { fg = colors.sky, bg = colors.none },
+            MiniStatuslineBubbleGit = { fg = colors.green, bg = colors.surface0, style = { 'bold' } },
+            MiniStatuslineBubbleGitEdge = { fg = colors.surface0, bg = colors.none },
+            MiniStatuslineBubbleDevinfo = { fg = colors.overlay1, bg = colors.surface0 },
+            MiniStatuslineBubbleDevinfoEdge = { fg = colors.surface0, bg = colors.none },
+            MiniStatuslineBubbleLocation = { fg = colors.base, bg = colors.blue, style = { 'bold' } },
+            MiniStatuslineBubbleLocationEdge = { fg = colors.blue, bg = colors.none },
             MiniStarterHeader = { fg = colors.lavender, style = { 'bold' } },
             MiniStarterSection = { fg = colors.rosewater, style = { 'bold' } },
             MiniStarterItem = { fg = colors.text },
@@ -363,6 +375,23 @@ return {
 
       local function escape_statusline_text(text) return text:gsub('%%', '%%%%') end
 
+      local mode_edge_highlights = {
+        MiniStatuslineModeNormal = 'MiniStatuslineBubbleModeNormalEdge',
+        MiniStatuslineModeInsert = 'MiniStatuslineBubbleModeInsertEdge',
+        MiniStatuslineModeVisual = 'MiniStatuslineBubbleModeVisualEdge',
+        MiniStatuslineModeReplace = 'MiniStatuslineBubbleModeReplaceEdge',
+        MiniStatuslineModeCommand = 'MiniStatuslineBubbleModeCommandEdge',
+      }
+
+      local function bubble(text, highlight, edge_highlight)
+        if text == '' then return '' end
+        return string.format('%%#%s#%%#%s# %s %%#%s#', edge_highlight, highlight, text, edge_highlight)
+      end
+
+      local function join_bubbles(parts)
+        return table.concat(vim.tbl_filter(function(part) return part ~= '' end, parts), ' ')
+      end
+
       local function format_project_relative_path(path)
         local root = vim.fs.root(path, project_root_markers) or vim.uv.cwd()
         return (root and vim.fs.relpath(root, path)) or vim.fn.fnamemodify(path, ':~:.')
@@ -378,15 +407,22 @@ return {
         local location = statusline.section_location { trunc_width = 75 }
         local search = statusline.section_searchcount { trunc_width = 75 }
 
-        return statusline.combine_groups {
-          { hl = mode_hl, strings = { mode } },
-          { hl = 'MiniStatuslineGit', strings = { diff } },
-          { hl = 'MiniStatuslineDevinfo', strings = { diagnostics, lsp } },
-          '%<',
-          { hl = 'MiniStatuslineFilename', strings = { filename } },
+        local devinfo = table.concat(vim.tbl_filter(function(part) return part ~= '' end, { diagnostics, lsp }), ' ')
+        local location_info = table.concat(vim.tbl_filter(function(part) return part ~= '' end, { search, location }), ' ')
+        local left = join_bubbles {
+          bubble(mode, mode_hl, mode_edge_highlights[mode_hl] or 'MiniStatuslineBubbleModeOtherEdge'),
+          bubble(diff, 'MiniStatuslineBubbleGit', 'MiniStatuslineBubbleGitEdge'),
+          bubble(devinfo, 'MiniStatuslineBubbleDevinfo', 'MiniStatuslineBubbleDevinfoEdge'),
+        }
+
+        return table.concat {
+          left,
+          '%<%#MiniStatuslineFilename#',
+          filename,
           '%=',
-          { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
-          { hl = mode_hl, strings = { search, location } },
+          '%#MiniStatuslineFileinfo#',
+          fileinfo,
+          bubble(location_info, 'MiniStatuslineBubbleLocation', 'MiniStatuslineBubbleLocationEdge'),
         }
       end
 
@@ -423,10 +459,7 @@ return {
 
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.inactive = function()
-        return statusline.combine_groups {
-          { hl = 'MiniStatuslineInactive', strings = { statusline.section_filename() } },
-          '%=',
-        }
+        return '%#MiniStatuslineInactive#' .. statusline.section_filename() .. '%='
       end
     end,
   },
