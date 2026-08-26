@@ -41,7 +41,7 @@ dsfl() {
     awk -F'|' '$1 ~ /^[[:space:]]*service/ { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $1); print $1; exit }')
   [[ -n $group ]] || { print -u2 "No service container group found for $1."; return 1; }
 
-  ds rs -t service -n "$1" --container-group "$group" logs --follow
+  ds rs -t service -n "$1" --container-group "$group" logs
 }
 
 v() {

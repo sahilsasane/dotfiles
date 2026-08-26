@@ -99,3 +99,12 @@ symlink_path: { foreground: "#89DCEB" }
 control_char: { foreground: "#74C7EC" }
 broken_symlink: { foreground: "#F38BA8" }
 broken_path_overlay: { foreground: "#585B70" }
+
+extensions:
+  yaml: { icon: { glyph: "󰉢" } }
+  yml: { icon: { glyph: "󰉢" } }
+
+filenames:
+  Dockerfile.base: { icon: { glyph: "" } }
+  Dockerfile.mysql: { icon: { glyph: "" } }
+  Dockerfile.sparkBase: { icon: { glyph: "" } }
