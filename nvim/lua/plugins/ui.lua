@@ -86,6 +86,7 @@ return {
       scale_factor = 3.0,
       window_overlap_clear_enabled = true,
       tmux_show_only_in_active_window = true,
+      integrations = { markdown = { download_remote_images = false } },
       hijack_file_patterns = { '*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.avif', '*.svg' },
     },
     config = setup_image_preview,
@@ -228,39 +229,6 @@ return {
     'nvim-mini/mini.nvim',
     config = function()
       local starter = require 'mini.starter'
-      local uv = vim.uv or vim.loop
-
-      local function starter_recent_files()
-        local cwd = uv.cwd()
-        if not cwd then return {
-          { name = 'No recent files available', action = '', section = 'RECENT' },
-        } end
-
-        local sep = package.config:sub(1, 1)
-        local cwd_prefix = cwd:sub(-1) == sep and cwd or (cwd .. sep)
-        local items = {}
-
-        for _, path in ipairs(vim.v.oldfiles) do
-          if vim.fn.filereadable(path) == 1 and vim.startswith(path, cwd_prefix) then
-            local filename = vim.fn.fnamemodify(path, ':t')
-            local relative = vim.fs.relpath(cwd, path) or vim.fn.fnamemodify(path, ':.')
-
-            table.insert(items, {
-              action = function() vim.cmd.edit(vim.fn.fnameescape(path)) end,
-              name = string.format('%-24s %s', filename, relative),
-              section = 'RECENT',
-            })
-
-            if #items >= 6 then break end
-          end
-        end
-
-        if #items == 0 then return {
-          { name = 'No recent files in this workspace yet', action = '', section = 'RECENT' },
-        } end
-
-        return items
-      end
 
       starter.setup {
         evaluate_single = true,
@@ -335,7 +303,6 @@ return {
               section = 'COMMAND',
             },
           },
-          -- starter_recent_files,
         },
         content_hooks = {
           starter.gen_hook.indexing('all', { 'RECENT', 'SESSION' }),

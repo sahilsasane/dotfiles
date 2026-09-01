@@ -16,7 +16,7 @@
         {
           "type": "path",
           "style": "plain",
-          "foreground": "#fe640b",
+          "foreground": "#8839ef",
           "template": " {{ .Path }} ",
           "properties": {
             "style": "folder"
@@ -25,7 +25,7 @@
         {
           "type": "git",
           "style": "plain",
-          "foreground": "#8839ef",
+          "foreground": "#7287fd",
           "template": "  {{ .HEAD }}{{ if gt .Behind 0 }} <#df8e1d>⇣{{ .Behind }}</>{{ end }}{{ if gt .Ahead 0 }} <#fe640b>⇡{{ .Ahead }}</>{{ end }}{{ if gt .PushBehind 0 }} <#dd7878>⇠{{ .PushBehind }}</>{{ end }}{{ if gt .PushAhead 0 }} <#ea76cb>⇢{{ .PushAhead }}</>{{ end }}{{ if .UpstreamGone }} <#d20f39></>{{ end }}{{ if .Merge }} <#e64553></>{{ end }}{{ if .Rebase }} <#fe640b>{{ .Rebase.Current }}/{{ .Rebase.Total }}</>{{ end }}{{ if .CherryPick }} <#ea76cb></>{{ end }}{{ if .Revert }} <#dd7878>↶</>{{ end }}{{ if gt .StashCount 0 }} <#dc8a78>{{ .StashCount }}</>{{ end }}{{ if .Working.Changed }} <#d20f39> {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <#df8e1d> {{ .Staging.String }}</>{{ end }} ",
           "properties": {
             "branch_icon": "",

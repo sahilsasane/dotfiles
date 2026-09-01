@@ -14,7 +14,9 @@ if command -v security >/dev/null 2>&1; then
   export WIZ_CLIENT_ID="$(security find-generic-password -a "$USER" -s wiz_client_id -w 2>/dev/null)"
   export WIZ_CLIENT_SECRET="$(security find-generic-password -a "$USER" -s wiz_client_secret -w 2>/dev/null)"
   export CLAUDE_CODE_OAUTH_TOKEN="$(security find-generic-password -a "$USER" -s claude_code_oauth_token  -w 2>/dev/null)"
+  export WAKATIME_API_KEY="$(security find-generic-password -a "$USER" -s wakatime_api_key -w 2>/dev/null)"
   # export GITHUB_TOKEN="$(security find-generic-password -a "$USER" -s github_pat_token -w 2>/dev/null)"
 fi
 export OPENAI_MODEL="${OPENAI_MODEL:-gpt-5.6-luna}"
 export TER_MODEL_ID="BAAI/bge-small-en-v1.5"
+export GRANTEE_ID="sahilsasanetmdcio"

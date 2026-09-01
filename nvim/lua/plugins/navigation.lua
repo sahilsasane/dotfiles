@@ -1,34 +1,5 @@
 return {
   {
-    'preservim/nerdtree',
-    dependencies = {
-      'ryanoasis/vim-devicons',
-      'Xuyuanp/nerdtree-git-plugin',
-    },
-    cmd = { 'NERDTreeToggle', 'NERDTreeFind' },
-    keys = {
-      {
-        '<leader>n',
-        function()
-          if vim.bo.filetype == 'oil' then
-            vim.cmd 'NERDTreeToggle'
-          else
-            vim.cmd 'NERDTreeFind'
-            vim.cmd 'wincmd p'
-          end
-        end,
-        desc = 'Reveal current file in NERDTree',
-      },
-    },
-    init = function()
-      vim.g.NERDTreeShowHidden = 1
-      vim.g.NERDTreeMinimalUI = 1
-      vim.g.NERDTreeDirArrows = 1
-      vim.g.NERDTreeWinSize = 30
-      vim.g.NERDTreeQuitOnOpen = 1
-    end,
-  },
-  {
     'stevearc/oil.nvim',
     lazy = false,
     dependencies = { { 'nvim-mini/mini.icons', opts = {} } },

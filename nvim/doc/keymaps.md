@@ -149,7 +149,6 @@ nvim .
 | --- | --- |
 | Toggle file explorer float | `<leader>e` |
 | Open Oil in current dir | `-` |
-| Reveal current file in NERDTree | `<leader>n` |
 | Show/hide dotfiles | `g.` inside Oil |
 | Focus left window | `<leader>h` |
 | Focus right window | `<leader>l` |

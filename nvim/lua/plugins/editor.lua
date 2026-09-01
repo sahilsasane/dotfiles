@@ -1,4 +1,6 @@
 return {
+  { 'wakatime/vim-wakatime', lazy = false },
+
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
   {

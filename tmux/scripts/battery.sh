@@ -34,17 +34,28 @@ charge_tier() {
   fi
 }
 
-tier_icon() {
-  case "$(charge_tier "$1")" in
-    8) printf '█' ;;
-    7) printf '▇' ;;
-    6) printf '▆' ;;
-    5) printf '▅' ;;
-    4) printf '▄' ;;
-    3) printf '▃' ;;
-    2) printf '▂' ;;
-    *) printf '▁' ;;
-  esac
+charging_icon() {
+  if [ "$1" -ge 95 ]; then
+    printf '󰂅'
+  elif [ "$1" -ge 85 ]; then
+    printf '󰂋'
+  elif [ "$1" -ge 75 ]; then
+    printf '󰂊'
+  elif [ "$1" -ge 65 ]; then
+    printf '󰢞'
+  elif [ "$1" -ge 55 ]; then
+    printf '󰂉'
+  elif [ "$1" -ge 45 ]; then
+    printf '󰢝'
+  elif [ "$1" -ge 35 ]; then
+    printf '󰂈'
+  elif [ "$1" -ge 25 ]; then
+    printf '󰂇'
+  elif [ "$1" -ge 15 ]; then
+    printf '󰂆'
+  else
+    printf '󰢜'
+  fi
 }
 
 tier_color() {
@@ -94,7 +105,7 @@ render() {
   esac
 
   level_fg="$(tier_color "$percent")"
-  charge_icon="$(tier_icon "$percent")"
+  charge_icon="$(charging_icon "$percent")"
 
   printf '%s%s %s| %s%s%% %s%s%s' \
     "$accent_fg" \
@@ -120,23 +131,23 @@ self_check() {
     printf 'charging sample failed\n' >&2
     exit 1
   }
-  printf '%s\n' "$output" | grep -q '▇' || {
+  printf '%s\n' "$output" | grep -q '󰂋' || {
     printf 'charging sample failed\n' >&2
     exit 1
   }
 
-  BATTERY_STATUS_SAMPLE=$'Now drawing from '\''AC Power'\''\n -InternalBattery-0 (id=1)\t100%; finishing charge; 0:09 remaining present: true'
+  BATTERY_STATUS_SAMPLE=$'Now drawing from '\''AC Power'\''\n -InternalBattery-0 (id=1)\t100%; charged; 0:00 remaining present: true'
   output="$(render)"
-  printf '%s\n' "$output" | grep -q '⚡' || {
-    printf 'finishing charge sample failed\n' >&2
+  printf '%s\n' "$output" | grep -q '' || {
+    printf 'charged sample failed\n' >&2
     exit 1
   }
   printf '%s\n' "$output" | grep -q '100%' || {
-    printf 'finishing charge sample failed\n' >&2
+    printf 'charged sample failed\n' >&2
     exit 1
   }
-  printf '%s\n' "$output" | grep -q '█' || {
-    printf 'finishing charge sample failed\n' >&2
+  printf '%s\n' "$output" | grep -q '󰂅' || {
+    printf 'charged sample failed\n' >&2
     exit 1
   }
 
@@ -147,6 +158,10 @@ self_check() {
     exit 1
   }
   printf '%s\n' "$output" | grep -q '97%' || {
+    printf 'attached sample failed\n' >&2
+    exit 1
+  }
+  printf '%s\n' "$output" | grep -q '󰂅' || {
     printf 'attached sample failed\n' >&2
     exit 1
   }
@@ -161,7 +176,7 @@ self_check() {
     printf 'discharging sample failed\n' >&2
     exit 1
   }
-  printf '%s\n' "$output" | grep -q '▂' || {
+  printf '%s\n' "$output" | grep -q '󰢜' || {
     printf 'discharging sample failed\n' >&2
     exit 1
   }
