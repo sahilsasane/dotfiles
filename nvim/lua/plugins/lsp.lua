@@ -50,23 +50,31 @@ return {
         return python_diagnostic_servers[source] == true
       end
 
+      local python_lint_names = { mypy = true, ty = true }
+      local function is_lint_diagnostic(diagnostic)
+        local source = string.lower(diagnostic.source or '')
+        if not python_lint_names[source] then return false end
+
+        local ok, lint = pcall(require, 'lint')
+        return ok and diagnostic.namespace == lint.get_namespace(source)
+      end
+
+      local function is_lsp_diagnostic(diagnostic) return not is_lint_diagnostic(diagnostic) end
+
       local function set_python_diagnostics(enabled, bufnr)
         local namespaces = {}
-        local lsp_namespaces = {}
         local use_lsp_diagnostics = python.for_buffer(bufnr).type_checker == 'lsp'
 
         for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
           if is_python_diagnostics_client(client) then
             local namespace = vim.lsp.diagnostic.get_namespace(client.id)
-            lsp_namespaces[namespace] = true
             namespaces[namespace] = enabled and use_lsp_diagnostics
           end
         end
 
         for _, diagnostic in ipairs(vim.diagnostic.get(bufnr)) do
           if is_python_diagnostic(diagnostic) then
-            local is_lsp_diagnostic = lsp_namespaces[diagnostic.namespace] == true
-            namespaces[diagnostic.namespace] = enabled and (not is_lsp_diagnostic or use_lsp_diagnostics)
+            namespaces[diagnostic.namespace] = enabled and (not is_lsp_diagnostic(diagnostic) or use_lsp_diagnostics)
           end
         end
 
@@ -101,10 +109,15 @@ return {
       vim.api.nvim_create_autocmd('DiagnosticChanged', {
         group = vim.api.nvim_create_augroup('dotfiles-python-diagnostics', { clear = true }),
         callback = function(event)
-          if python_diagnostics_enabled or vim.bo[event.buf].filetype ~= 'python' then return end
+          if vim.bo[event.buf].filetype ~= 'python' then return end
+
+          local use_lsp_diagnostics = python.for_buffer(event.buf).type_checker == 'lsp'
 
           for _, diagnostic in ipairs(event.data.diagnostics or {}) do
-            if is_python_diagnostic(diagnostic) then vim.diagnostic.enable(false, { bufnr = event.buf, ns_id = diagnostic.namespace }) end
+            if is_python_diagnostic(diagnostic) then
+              local enabled = python_diagnostics_enabled and (not is_lsp_diagnostic(diagnostic) or use_lsp_diagnostics)
+              vim.diagnostic.enable(enabled, { bufnr = event.buf, ns_id = diagnostic.namespace })
+            end
           end
         end,
       })

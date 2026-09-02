@@ -5,7 +5,7 @@ return {
     ---@type Gitsigns.Config
     ---@diagnostic disable-next-line: missing-fields
     opts = {
-      current_line_blame = true,
+      current_line_blame = false,
       current_line_blame_opts = {
         delay = 0,
         virt_text_pos = 'eol',
@@ -16,6 +16,10 @@ return {
         vim.keymap.set('n', '<leader>tD', gitsigns.preview_hunk_inline, {
           buffer = bufnr,
           desc = '[T]oggle show deleted lines',
+        })
+        vim.keymap.set('n', '<leader>tb', gitsigns.toggle_current_line_blame, {
+          buffer = bufnr,
+          desc = '[T]oggle line [B]lame',
         })
         -- vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, {
         --   buffer = bufnr,

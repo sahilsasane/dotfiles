@@ -245,10 +245,11 @@ nvim .
 | Repository history | `<leader>gH` |
 | Preview current hunk | `<leader>hp` |
 | Preview deleted lines | `<leader>tD` |
+| Toggle current-line blame | `<leader>tb` |
 
 > Use Gitsigns for quick inline hunk inspection, Diffview for file-by-file diffs and history, and Lazygit for broader repository operations. In Diffview, `<Tab>` / `<S-Tab>` cycle files, `[c` / `]c` jump between diff hunks, and `g?` opens its contextual help.
 >
-> Gitsigns hunk navigation, staging, reset, and blame mappings are not configured.
+> Gitsigns hunk navigation, staging, and reset mappings are not configured.
 >
 > `git-conflict.nvim` is controlled by `vim.g.enable_git_conflict = true` in `init.lua`. Inside conflicted files it provides buffer-local defaults like `co`, `ct`, `cb`, `c0`, `[x`, and `]x`.
 

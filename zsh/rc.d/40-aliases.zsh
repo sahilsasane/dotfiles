@@ -1,9 +1,8 @@
 unset bat
-unset git
+unalias git 2>/dev/null
 
 alias bat='bat --color=always'
-alias git='git -c color.ui=always'
-alias git='git -c color.ui=always'
+git() { command git -c color.ui=always "$@"; }
 alias vd='deactivate 2>/dev/null || true'
 alias size='du -sh -- *(DN) 2>/dev/null | sort -rh'
 alias c='clear'
