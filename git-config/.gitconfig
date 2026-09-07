@@ -11,7 +11,7 @@
 [delta]
 	navigate = true
 	line-numbers = true
-	side-by-side = true
+	side-by-side = false
 [include]
 	path = ~/.config/dotfiles-theme/git-theme.gitconfig
 [diff]

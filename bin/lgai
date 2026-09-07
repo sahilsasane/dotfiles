@@ -49,7 +49,6 @@ trap cleanup EXIT
 
 require_cmd git
 require_cmd mktemp
-require_cmd fzf
 
 if ! command -v aichat >/dev/null 2>&1; then
   die "lg-ai-commit: aichat is not installed. Install it with 'brew install aichat' and configure a model with 'aichat'."
@@ -59,7 +58,7 @@ git rev-parse --git-dir >/dev/null 2>&1 || die "lg-ai-commit: not a git reposito
 git diff --staged --quiet && die "lg-ai-commit: no staged changes."
 
 recent_count="${LG_AI_COMMIT_RECENT_COUNT:-5}"
-suggestion_count="${LG_AI_COMMIT_SUGGESTIONS:-5}"
+suggestion_count="${LG_AI_COMMIT_SUGGESTIONS:-1}"
 diff_chars="${LG_AI_COMMIT_DIFF_CHARS:-120000}"
 recent_chars="${LG_AI_COMMIT_RECENT_CHARS:-4000}"
 
@@ -90,22 +89,10 @@ $'- Prefer higher-level intent over low-level code narration\n'\
 $'- Match this format: feat(observability): serve Prometheus metrics on dedicated port'\
 $'- Do not add footers such as BREAKING CHANGE\n'\
 $'- Base every candidate on the STAGED diff, not unstaged changes\n'\
-$'- This tool is generating candidates for exactly one git commit being made now\n'\
-$'- First infer one honest umbrella summary that covers ALL staged changes together\n'\
-$'- Then write every candidate as an alternative phrasing of that SAME umbrella summary\n'\
-$'- Every candidate must describe the full staged change set as one commit\n'\
-$'- All candidates must keep the same overall focus; vary wording, not which subset of changes is described\n'\
-$'- VERY IMPORTANT: Do not split the staged work into separate per-task, per-file, or per-concern subjects\n'\
-$'- If the staged diff contains several related edits, prefer a broader umbrella subject that still truthfully covers all of them\n'\
-$'- Any candidate that mentions only one sub-change, one file, or one subset of the staged diff is invalid\n'\
-$'- Never suggest multiple commits, a commit plan, or subjects like "commit 1" / "commit 2"\n'\
-$'- Choose exactly one type and optional scope per candidate, based on the primary overall intent of the full staged diff\n'\
+$'- Describe the FULL staged diff as one commit; do not split into per-file or per-task subjects\n'\
+$'- If the diff spans multiple related edits, choose one type/scope that best fits the overall intent, not any single sub-change\n'\
 $'- If the full staged change set is breaking, mark it with ! immediately before the colon\n'\
-$'- Different candidates may vary in wording or abstraction, but they must all cover the same overall change\n'\
-$'- If the diff spans multiple edits, still write one subject that summarizes the combined overall outcome being committed\n'\
-$'- If a scope is used, it must name the main area affected by the whole staged change set, not one subtask\n'\
-$'- Valid pattern for mixed tooling changes: a single umbrella subject like "chore: improve developer workflow helpers"\n'\
-$'- Invalid pattern: separate candidates that each only mention one detail like clipboard sync, alias updates, or repo ordering\n\n'\
+$'- Never suggest multiple commits, a commit plan, or subjects like "commit 1" / "commit 2"\n\n'\
 $'Recent commit subjects:\n'\
 "${recent_commits:-"- none"}"\
 $'\n\nSTAGED DIFF:\n'\
@@ -114,14 +101,9 @@ $'\n\nSTAGED DIFF:\n'\
 selected_message="$(
   aichat "$prompt" \
     | awk '
-        BEGIN { RS="<LGAI_CANDIDATE>"; ORS="" }
-        {
-          gsub(/^[[:space:]]+|[[:space:]]+$/, "")
-          if ($0 != "") printf "%s%c", $0, 0
-        }
-      ' \
-    | fzf --read0 --print0 --no-multi-line --height 40% --border --ansi --preview 'printf "%s\n" {}' --preview-window=up:wrap \
-    | tr -d '\0'
+        BEGIN { RS="<LGAI_CANDIDATE>" }
+        { gsub(/^[[:space:]]+|[[:space:]]+$/, ""); if ($0 != "") { print; exit } }
+      '
 )"
 selected_message="$(format_commit_message "${selected_message}")"
 
