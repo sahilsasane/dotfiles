@@ -23,6 +23,8 @@ vim.o.timeoutlen = 250
 vim.o.splitright = true
 vim.o.splitbelow = true
 
+vim.o.virtualedit = 'block'
+
 vim.o.list = true
 vim.opt.listchars = {
   tab = '  ',
