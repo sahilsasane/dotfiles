@@ -1,8 +1,8 @@
 local M = {}
 
 local project_options = {
-  'dotfiles_python_lsp',
-  'dotfiles_python_type_checker',
+  'python_lsp',
+  'python_type_checker',
 }
 
 local lsp_names = {
@@ -68,13 +68,13 @@ function M.root(bufnr) return vim.fs.root(bufnr, root_markers) end
 
 function M.for_root(root)
   local options = root and read_project_options(root) or {}
-  local lsp = options.dotfiles_python_lsp or 'basedpyright'
+  local lsp = options.python_lsp or 'basedpyright'
   if lsp_names[lsp] == nil then
     vim.notify(string.format('Unsupported project Python LSP %q; using basedpyright', lsp), vim.log.levels.WARN)
     lsp = 'basedpyright'
   end
 
-  local type_checker = options.dotfiles_python_type_checker or 'lsp'
+  local type_checker = options.python_type_checker or 'lsp'
   if not type_checker_names[type_checker] then
     vim.notify(string.format('Unsupported project Python type checker %q; using lsp', type_checker), vim.log.levels.WARN)
     type_checker = 'lsp'
