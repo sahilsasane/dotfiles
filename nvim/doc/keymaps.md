@@ -147,9 +147,9 @@ nvim .
 
 | What | Key |
 | --- | --- |
-| Toggle file explorer float | `<leader>e` |
-| Open Oil in current dir | `-` |
-| Show/hide dotfiles | `g.` inside Oil |
+| Open Yazi explorer | `<leader>e` / `-` |
+| Show Yazi help | `<f1>` inside Yazi |
+| Search current Yazi directory | `<C-s>` inside Yazi |
 | Focus left window | `<leader>h` |
 | Focus right window | `<leader>l` |
 
@@ -159,7 +159,7 @@ nvim .
 | --- | --- |
 | Find file by name | `<leader>sf` |
 | Find ALL files (hidden + gitignored) | `<leader>sF` |
-| Live grep with rg args | `<leader>sg` |
+| Live grep with extra rg args after `--` | `<leader>sg` |
 | Search word under cursor | `<leader>sw` |
 | Browse project marks | `<leader>sm` |
 | Browse all marks | `<leader>sM` |
@@ -172,7 +172,7 @@ nvim .
 | Search help tags | `<leader>sh` |
 | Symbols in current file | `<leader>ss` |
 | Symbols in workspace | `<leader>sS` |
-| Browse Telescope pickers | `<leader>sp` |
+| Browse Snacks pickers | `<leader>sp` |
 | Search nvim config files | `<leader>sn` |
 | FFF file picker | `<leader>F` |
 | FFF live grep | `<leader>G` |
@@ -277,9 +277,9 @@ nvim .
 | --- | --- |
 | Open project search/replace | `<leader>sR` |
 | Search/replace using visual selection | `<leader>sR` in visual mode |
-| Search current Oil directory | `gs` inside Oil |
+| Search and replace current Yazi directory | `<C-g>` inside Yazi |
 
-> `grug-far` is the repo-wide search/replace surface. Use it when Telescope grep shows you the matches but you need to actually apply a controlled replacement across files.
+> `grug-far` is the repo-wide search/replace surface. Use it when Snacks grep shows you the matches but you need to actually apply a controlled replacement across files.
 > Normal `<leader>sR` starts with the word under the cursor; visual `<leader>sR` starts with the selected text.
 
 ### 11. Marks

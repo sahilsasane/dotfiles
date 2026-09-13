@@ -64,7 +64,7 @@ return {
       },
       exclude = {
         buftypes = { 'nofile', 'prompt', 'quickfix', 'terminal' },
-        filetypes = { 'help', 'lazy', 'mason', 'oil', 'qf' },
+        filetypes = { 'help', 'lazy', 'mason', 'yazi', 'qf' },
       },
     },
   },
@@ -132,6 +132,35 @@ return {
             SymbolUsage = { fg = colors.overlay0 },
             Whitespace = { fg = colors.surface0 },
 
+            SnacksPicker = { bg = colors.none, fg = colors.text },
+            SnacksPickerBorder = { bg = colors.none, fg = colors.surface1 },
+            SnacksPickerTitle = { bg = colors.none, fg = colors.lavender, style = { 'bold' } },
+            SnacksPickerFooter = { bg = colors.none, fg = colors.overlay0 },
+            SnacksPickerCursorLine = { bg = colors.surface0 },
+            SnacksPickerBox = { bg = colors.none },
+            SnacksPickerBoxBorder = { bg = colors.none, fg = colors.surface1 },
+            SnacksPickerBoxTitle = { bg = colors.none, fg = colors.lavender, style = { 'bold' } },
+            SnacksPickerInput = { bg = colors.none, fg = colors.text },
+            SnacksPickerInputBorder = { bg = colors.none, fg = colors.blue },
+            SnacksPickerInputTitle = { bg = colors.none, fg = colors.blue, style = { 'bold' } },
+            SnacksPickerInputCursorLine = { bg = colors.none },
+            SnacksPickerList = { bg = colors.none, fg = colors.text },
+            SnacksPickerListBorder = { bg = colors.none, fg = colors.surface1 },
+            SnacksPickerListCursorLine = { bg = colors.surface0 },
+            SnacksPickerPreview = { bg = colors.none, fg = colors.text },
+            SnacksPickerPreviewBorder = { bg = colors.none, fg = colors.surface1 },
+            SnacksPickerPreviewTitle = { bg = colors.none, fg = colors.sky, style = { 'bold' } },
+            SnacksPickerPreviewCursorLine = { bg = colors.none },
+            SnacksPickerPrompt = { fg = colors.lavender, bg = colors.none, style = { 'bold' } },
+            SnacksPickerInputSearch = { fg = colors.yellow, bg = colors.none, style = { 'bold' } },
+            SnacksPickerMatch = { fg = colors.peach, style = { 'bold' } },
+            SnacksPickerSelected = { fg = colors.lavender, style = { 'bold' } },
+            SnacksPickerGitStatusAdded = { fg = colors.green },
+            SnacksPickerGitStatusModified = { fg = colors.yellow },
+            SnacksPickerGitStatusDeleted = { fg = colors.red },
+            SnacksPickerGitStatusRenamed = { fg = colors.mauve },
+            SnacksPickerGitStatusUntracked = { fg = colors.sky },
+
             TelescopeNormal = { bg = colors.none },
             TelescopeBorder = { bg = colors.none, fg = colors.surface1 },
             TelescopePromptNormal = { bg = colors.none },
@@ -184,14 +213,6 @@ return {
             MiniStarterFooter = { fg = colors.overlay1, style = { 'italic' } },
             MiniStarterQuery = { fg = colors.yellow, style = { 'bold' } },
 
-            OilDir = { fg = colors.lavender, style = { 'bold' } },
-            OilFile = { fg = colors.text },
-            OilLink = { fg = colors.mauve },
-            OilCopy = { fg = colors.green },
-            OilMove = { fg = colors.yellow },
-            OilChange = { fg = colors.peach },
-            OilCreate = { fg = colors.green },
-            OilDelete = { fg = colors.red },
           }
         end,
         integrations = {
@@ -264,27 +285,27 @@ return {
           {
             {
               name = '  Find files',
-              action = 'Telescope find_files',
+              action = 'lua Snacks.picker.files()',
               section = 'COMMAND',
             },
             {
               name = '󰱼  Live grep',
-              action = "lua require('telescope').extensions.live_grep_args.live_grep_args()",
+              action = 'lua Snacks.picker.grep()',
               section = 'COMMAND',
             },
             {
               name = '  Recent files',
-              action = 'Telescope oldfiles',
+              action = 'lua Snacks.picker.recent()',
               section = 'COMMAND',
             },
             {
               name = '  Config files',
-              action = "lua require('telescope.builtin').find_files({ cwd = vim.fn.stdpath('config') })",
+              action = 'lua Snacks.picker.files({ cwd = vim.fn.stdpath("config") })',
               section = 'COMMAND',
             },
             {
               name = '  File explorer',
-              action = 'Oil',
+              action = 'Yazi',
               section = 'COMMAND',
             },
             {
@@ -401,15 +422,6 @@ return {
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
         if vim.bo.buftype == 'terminal' then return '%t' end
-
-        if vim.bo.filetype == 'oil' then
-          local oil = require 'oil'
-          local oil_dir = oil.get_current_dir(0)
-          if oil_dir then
-            local display_path = format_project_relative_path(vim.fs.normalize(oil_dir))
-            return escape_statusline_text('oil:' .. display_path) .. '%m%r'
-          end
-        end
 
         local path = vim.api.nvim_buf_get_name(0)
         if path == '' then return '[No Name]%m%r' end

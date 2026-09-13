@@ -1,6 +1,7 @@
 unset bat
 unalias git 2>/dev/null
 
+alias python='python3'
 alias bat='bat --color=always'
 git() { command git -c color.ui=always "$@"; }
 alias vd='deactivate 2>/dev/null || true'
