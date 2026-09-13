@@ -99,6 +99,7 @@ return {
       { '<leader>sf', files, desc = '[S]earch [F]iles' },
       { '<leader>sF', function() files { hidden = true, ignored = true } end, desc = '[S]earch all [F]iles' },
       { '<leader>sg', grep, desc = '[S]earch by [G]rep' },
+      { '<leader>sG', function() grep { hidden = true, ignored = true } end, desc = '[S]earch all with [G]rep' },
       { '<leader>sw', grep_word, mode = { 'n', 'v' }, desc = '[S]earch current [W]ord' },
       { '<leader>s/', function() Snacks.picker.grep_buffers(with_excludes { title = 'Live Grep in Open Files' }) end, desc = '[S]earch open files' },
       { '<leader>/', function() Snacks.picker.lines() end, desc = '[/] Fuzzily search current buffer' },

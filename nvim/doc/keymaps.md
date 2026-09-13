@@ -160,6 +160,7 @@ nvim .
 | Find file by name | `<leader>sf` |
 | Find ALL files (hidden + gitignored) | `<leader>sF` |
 | Live grep with extra rg args after `--` | `<leader>sg` |
+| Live grep including hidden and ignored files | `<leader>sG` |
 | Search word under cursor | `<leader>sw` |
 | Browse project marks | `<leader>sm` |
 | Browse all marks | `<leader>sM` |
