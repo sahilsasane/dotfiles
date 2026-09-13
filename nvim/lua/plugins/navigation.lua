@@ -1,54 +1,24 @@
 return {
   {
-    'stevearc/oil.nvim',
+    'mikavilpas/yazi.nvim',
+    version = '*',
     lazy = false,
-    dependencies = { { 'nvim-mini/mini.icons', opts = {} } },
-    config = function()
-      local oil = require 'oil'
-      local function open_grug_far_from_oil()
-        local prefills = { paths = oil.get_current_dir() }
-        local grug_far = require 'grug-far'
-
-        if not grug_far.has_instance 'explorer' then
-          grug_far.open {
-            instanceName = 'explorer',
-            prefills = prefills,
-            staticTitle = 'Find and Replace from Explorer',
-          }
-        else
-          grug_far.get_instance('explorer'):open()
-          grug_far.get_instance('explorer'):update_input_values(prefills, false)
-        end
-      end
-
-      oil.setup {
-        default_file_explorer = true,
-        delete_to_trash = true,
-        skip_confirm_for_simple_edits = true,
-        keymaps = {
-          gs = {
-            callback = open_grug_far_from_oil,
-            desc = 'oil: Search in directory',
-          },
-        },
-        view_options = {
-          show_hidden = true,
-        },
-        float = {
-          padding = 1,
-          max_width = 0.65,
-          max_height = 0.75,
-          border = 'rounded',
-        },
-        win_options = {
-          signcolumn = 'no',
-          wrap = false,
-        },
-      }
-
-      vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-      vim.keymap.set('n', '<leader>e', function() oil.toggle_float() end, { desc = 'Toggle file [E]xplorer (float)' })
+    dependencies = { { 'nvim-lua/plenary.nvim', lazy = true } },
+    init = function()
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
     end,
+    opts = {
+      open_for_directories = true,
+      integrations = {
+        grep_in_directory = 'snacks.picker',
+        grep_in_selected_files = 'snacks.picker',
+      },
+    },
+    keys = {
+      { '-', '<cmd>Yazi<cr>', desc = 'Open Yazi at current file' },
+      { '<leader>e', '<cmd>Yazi<cr>', desc = 'Open Yazi [E]xplorer' },
+    },
   },
 
   {
