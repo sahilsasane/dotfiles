@@ -1,4 +1,4 @@
-local file_excludes = { '.venv', '.env', 'node_modules' }
+local file_excludes = { '.venv', 'node_modules' }
 local project_root_markers = { '.git', 'pyproject.toml', 'package.json', 'Cargo.toml', 'go.mod' }
 
 local function git_statuses(cwd)
