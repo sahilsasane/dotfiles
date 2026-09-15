@@ -5,5 +5,5 @@ edit = [{ run = "nvim %s", desc = "nvim", for = "unix", block = true }]
 wrap = "yes"
 
 [mgr]
-ratio = [2, 2, 4]
+ratio = [1, 2, 5]
 show_hidden = true

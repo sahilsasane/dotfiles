@@ -4,6 +4,7 @@ unfunction d 2>/dev/null
 compdef -d d 2>/dev/null
 
 alias d='docker'
+alias dco='docker compose'
 alias python='python3'
 alias bat='bat --color=always'
 git() { command git -c color.ui=always "$@"; }

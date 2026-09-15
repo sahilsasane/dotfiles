@@ -70,6 +70,16 @@ return {
   },
 
   {
+    'nvim-tree/nvim-web-devicons',
+    opts = {
+      override_by_extension = {
+        yaml = { icon = '󰉢', color = '#D70000', name = 'Yaml' },
+        yml = { icon = '󰉢', color = '#D70000', name = 'Yml' },
+      },
+    },
+  },
+
+  {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },
     ---@module 'render-markdown'
