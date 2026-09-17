@@ -114,7 +114,6 @@ render() {
     "${level_fg}#[bold]" \
     "$percent" \
     "$level_fg" \
-    "$charge_icon" \
     "$reset_style"
 }
 

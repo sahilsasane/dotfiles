@@ -51,3 +51,5 @@
 	insteadOf = https://bitbucket.org/
 [safe]
 	directory = /home/build/working_dir
+[url "git@github.com:"]
+	insteadOf = https://github.com/
