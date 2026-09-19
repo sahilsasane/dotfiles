@@ -25,3 +25,5 @@ export PATH=/Users/sahilsasane/.opencode/bin:$PATH
 
 # Added by cua-driver-rs installer — see https://github.com/trycua/cua
 export PATH="/Users/sahilsasane/.local/bin:$PATH"
+
+export PATH="/Users/sahilsasane/.bend/bin:$PATH"
