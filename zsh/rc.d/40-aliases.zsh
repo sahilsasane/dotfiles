@@ -38,7 +38,13 @@ alias -s txt='bat --color=always'
 alias -g NE='2>/dev/null'
 alias -g DN='> /dev/null'
 alias -g NUL='>/dev/null 2>&1'
-alias -g C='| pbcopy'
+if command -v pbcopy >/dev/null 2>&1; then
+  alias -g C='| pbcopy'
+elif command -v wl-copy >/dev/null 2>&1; then
+  alias -g C='| wl-copy'
+elif command -v xclip >/dev/null 2>&1; then
+  alias -g C='| xclip -selection clipboard'
+fi
 alias -g JQ='| jq'
 alias -g F='| fzf'
 alias -g R='| rg'

@@ -9,8 +9,12 @@ reset_style='#[default]'
 cpu_percent="$({
   if [ -n "${CPU_USAGE_SAMPLE:-}" ]; then
     printf '%s\n' "$CPU_USAGE_SAMPLE"
-  else
+  elif [[ "$(uname)" = Darwin ]]; then
     top -l 1 -n 0 2>/dev/null
+  else
+    # GNU top prints `%Cpu(s): <us> us, <sy> sy, <ni> ni, <id> id, ...`.
+    # Normalize it into the macOS `top` shape the parser below expects.
+    top -bn1 2>/dev/null | awk '/^%Cpu/ { printf "CPU usage: %s%% user, %s%% sys, %s%% idle\n", $2, $4, $8; exit }'
   fi
 } | awk '/^CPU usage:/ {
   gsub(/%/, "", $3)
@@ -67,7 +71,8 @@ self_check() {
   local output
 
   CPU_USAGE_SAMPLE='CPU usage: 48.12% user, 12.34% sys, 39.54% idle'
-  output="$(CPU_USAGE_SAMPLE="$CPU_USAGE_SAMPLE" "$0")"
+  # Strip tmux style codes; the rendered gauge interleaves them with the bars.
+  output="$(CPU_USAGE_SAMPLE="$CPU_USAGE_SAMPLE" "$0" | sed -E 's/#\[[^]]*\]//g')"
   printf '%s\n' "$output" | grep -q '▰' || {
     printf 'cpu sample failed\n' >&2
     exit 1

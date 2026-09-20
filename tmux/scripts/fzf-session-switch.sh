@@ -3,7 +3,7 @@
 set -euo pipefail
 
 TMUX_FZF_CLIENT="${TMUX_FZF_CLIENT:-}"
-PREVIEW_SCRIPT="/Users/sahilsasane/dotfiles/tmux/scripts/fzf-session-preview.sh"
+PREVIEW_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/fzf-session-preview.sh"
 
 tmux_display_args=()
 if [[ -n "$TMUX_FZF_CLIENT" ]]; then

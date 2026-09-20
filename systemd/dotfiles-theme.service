@@ -1,0 +1,8 @@
+[Unit]
+Description=Apply the dotfiles theme to match the desktop color scheme
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/dotfiles-theme apply-auto
+StandardOutput=append:%h/.cache/dotfiles-theme.log
+StandardError=append:%h/.cache/dotfiles-theme.log

@@ -83,8 +83,10 @@ link_path "$DOTFILES_ROOT/bin/dotfiles-theme" "$HOME/.local/bin/dotfiles-theme"
 # These applications need a real config directory so the theme controller can
 # switch only their selected child files. Existing real directories are backed
 # up, and Lazygit's local state is copied forward.
-migrate_lazygit_dir "$HOME/Library/Application Support/lazygit"
-link_path "$HOME/.config/dotfiles-theme/lazygit.yml" "$HOME/Library/Application Support/lazygit/config.yml"
+if [[ "$(uname)" = Darwin ]]; then
+  migrate_lazygit_dir "$HOME/Library/Application Support/lazygit"
+  link_path "$HOME/.config/dotfiles-theme/lazygit.yml" "$HOME/Library/Application Support/lazygit/config.yml"
+fi
 migrate_lazygit_dir "$HOME/.config/lazygit"
 link_path "$HOME/.config/dotfiles-theme/lazygit.yml" "$HOME/.config/lazygit/config.yml"
 
@@ -104,13 +106,19 @@ link_path "$HOME/.config/dotfiles-theme/gitk" "$HOME/.config/git/gitk"
 # Kitty and Ghostty read the runtime includes written by dotfiles-theme.
 prepare_runtime_dir "$HOME/.config/kitty"
 link_path "$DOTFILES_ROOT/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
-link_path "$DOTFILES_ROOT/ghostty/config.ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+if [[ "$(uname)" = Darwin ]]; then
+  link_path "$DOTFILES_ROOT/ghostty/config.ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+else
+  link_path "$DOTFILES_ROOT/ghostty/config.ghostty" "$HOME/.config/ghostty/config"
+fi
 
 link_path "$DOTFILES_ROOT/nvim" "$HOME/.config/nvim"
 link_path "$DOTFILES_ROOT/fish" "$HOME/.config/fish"
 link_path "$DOTFILES_ROOT/htop" "$HOME/.config/htop"
 link_path "$DOTFILES_ROOT/yazi" "$HOME/.config/yazi"
-link_path "$DOTFILES_ROOT/iterm2/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+if [[ "$(uname)" = Darwin ]]; then
+  link_path "$DOTFILES_ROOT/iterm2/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+fi
 
 mkdir -p "$HOME/.config/dotfiles-theme" "$HOME/.cache"
 "$DOTFILES_ROOT/bin/dotfiles-theme" apply
@@ -121,6 +129,15 @@ if [[ "$(uname)" = Darwin ]]; then
   sed "s#__HOME__#$HOME#g" "$DOTFILES_ROOT/launchd/com.sahilsasane.dotfiles-theme.plist" > "$launch_agent"
   launchctl bootout "gui/$(id -u)/com.sahilsasane.dotfiles-theme" 2>/dev/null || true
   launchctl bootstrap "gui/$(id -u)" "$launch_agent"
+else
+  # Linux: a systemd user timer mirrors the launchd agent (apply at start,
+  # then every 30 seconds) and logs to the same cache file.
+  systemd_dir="$HOME/.config/systemd/user"
+  mkdir -p "$systemd_dir"
+  install -m 0644 "$DOTFILES_ROOT/systemd/dotfiles-theme.service" "$systemd_dir/dotfiles-theme.service"
+  install -m 0644 "$DOTFILES_ROOT/systemd/dotfiles-theme.timer" "$systemd_dir/dotfiles-theme.timer"
+  systemctl --user daemon-reload
+  systemctl --user enable --now dotfiles-theme.timer 2>/dev/null || true
 fi
 
 echo "Linked dotfiles into $HOME."

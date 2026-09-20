@@ -8,6 +8,10 @@ if [[ -d "$HOME/.cargo/bin" ]]; then
   path=("$HOME/.cargo/bin" $path)
 fi
 
+if [[ -d "$HOME/go/bin" ]]; then
+  path=("$HOME/go/bin" $path)
+fi
+
 if [[ -d "$HOME/.antigravity/antigravity/bin" ]]; then
   path=("$HOME/.antigravity/antigravity/bin" $path)
 fi

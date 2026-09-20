@@ -7,8 +7,12 @@ empty_style="$muted_fg"
 reset_style='#[default]'
 
 percent_free="$(
-  memory_pressure -Q 2>/dev/null |
-    awk -F': ' '/System-wide memory free percentage/ {gsub(/%/, "", $2); print $2; exit}'
+  if [[ "$(uname)" = Darwin ]]; then
+    memory_pressure -Q 2>/dev/null |
+      awk -F': ' '/System-wide memory free percentage/ {gsub(/%/, "", $2); print $2; exit}'
+  else
+    awk '/MemTotal/ {total=$2} /MemAvailable/ {avail=$2} END {if (total) printf "%.0f", avail*100/total}' /proc/meminfo
+  fi
 )"
 
 if [ -z "${percent_free:-}" ]; then

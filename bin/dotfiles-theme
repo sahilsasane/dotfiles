@@ -51,9 +51,34 @@ macos_mode() {
   fi
 }
 
+linux_mode() {
+  local scheme
+  if command -v gsettings >/dev/null 2>&1; then
+    scheme="$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null)" || scheme=""
+    if [[ "$scheme" == *"dark"* ]]; then
+      printf 'dark\n'
+      return
+    fi
+    if [[ "$scheme" == *"light"* ]]; then
+      printf 'light\n'
+      return
+    fi
+  fi
+  # GNOME reports 'default' (or gsettings is unavailable); treat as light.
+  printf 'light\n'
+}
+
 effective_mode() {
   local mode="$1"
-  [[ "$mode" = auto ]] && macos_mode || printf '%s\n' "$mode"
+  if [[ "$mode" = auto ]]; then
+    if [[ "$(uname)" = Darwin ]]; then
+      macos_mode
+    else
+      linux_mode
+    fi
+  else
+    printf '%s\n' "$mode"
+  fi
 }
 
 reload_runtime() {
@@ -72,7 +97,7 @@ reload_runtime() {
 }
 
 apply() {
-  local mode="$1" effective="$2" force_reload="${3:-0}" lazygit_source atuin_source gitk_source tlrc_source changed=1
+  local mode="$1" effective="$2" force_reload="${3:-0}" lazygit_source atuin_source gitk_source tlrc_source ghostty_conf changed=1
   mkdir -p "$STATE_DIR"
 
   if [[ "$effective" = light ]]; then
@@ -92,6 +117,7 @@ apply() {
   for source in \
     "$ROOT/kitty/themes/$effective.conf" \
     "$ROOT/ghostty/themes/iterm-dark.ghostty" \
+    "$ROOT/ghostty/shaders/cursor_warp.glsl" \
     "$ROOT/tmux/themes/$effective.conf" \
     "$atuin_source" "$lazygit_source" "$gitk_source" "$tlrc_source" \
     "$ROOT/git-config/themes/$effective.gitconfig"; do
@@ -106,10 +132,15 @@ apply() {
 
   write_file "$STATE_DIR/kitty.conf" "include $ROOT/kitty/themes/$effective.conf"
   if [[ "$mode" = auto ]]; then
-    write_file "$STATE_DIR/ghostty.conf" "theme = light:$ROOT/ghostty/themes/catppuccin-latte.ghostty,dark:$ROOT/ghostty/themes/iterm-dark.ghostty"
+    ghostty_conf="theme = light:$ROOT/ghostty/themes/catppuccin-latte.ghostty,dark:$ROOT/ghostty/themes/iterm-dark.ghostty"
   else
-    write_file "$STATE_DIR/ghostty.conf" "theme = $ROOT/ghostty/themes/$( [[ "$effective" = light ]] && printf catppuccin-latte || printf iterm-dark ).ghostty"
+    ghostty_conf="theme = $ROOT/ghostty/themes/$( [[ "$effective" = light ]] && printf catppuccin-latte || printf iterm-dark ).ghostty"
   fi
+  # Machine-specific extras that cannot be expressed portably in the tracked
+  # config.ghostty (the shader path) live in this runtime include instead.
+  ghostty_conf+=$'\n'"custom-shader = $ROOT/ghostty/shaders/cursor_warp.glsl"
+  ghostty_conf+=$'\n'"custom-shader-animation = true"
+  write_file "$STATE_DIR/ghostty.conf" "$ghostty_conf"
   write_file "$STATE_DIR/tmux.conf" "source-file $ROOT/tmux/themes/$effective.conf"
   link_file "$ROOT/git-config/themes/$effective.gitconfig" "$STATE_DIR/git-theme.gitconfig"
   link_file "$lazygit_source" "$STATE_DIR/lazygit.yml"

@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+if [[ "$(uname)" != Darwin ]]; then
+  echo "sync-dotfiles pulls macOS-only state (plutil, Library paths) into this repo." >&2
+  echo "Run it on macOS so tracked files keep their macOS shape." >&2
+  exit 1
+fi
+
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 mkdir -p \

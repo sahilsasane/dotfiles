@@ -5,13 +5,38 @@ set -eu
 reset_style='#[default]'
 source "$(dirname "$0")/theme.sh"
 
+linux_status() {
+  local bat capacity status state
+
+  bat="$(find /sys/class/power_supply -maxdepth 1 -name 'BAT*' -type d 2>/dev/null | head -n 1)"
+  [ -n "$bat" ] || return 0
+  capacity="$(cat "$bat/capacity" 2>/dev/null)" || return 0
+
+  state='unknown'
+  status="$(cat "$bat/status" 2>/dev/null)"
+  case "$status" in
+    Charging) state='charging' ;;
+    Discharging) state='discharging' ;;
+    Full) state='charged' ;;
+    'Not charging') state='not charging' ;;
+  esac
+
+  # Same two-line shape as `pmset -g batt` so the renderer stays shared.
+  printf 'Now drawing from Battery Power\n -%s\t%s%%; %s; present: true\n' \
+    "$(basename "$bat")" "$capacity" "$state"
+}
+
 pmset_output() {
   if [ -n "${BATTERY_STATUS_SAMPLE:-}" ]; then
     printf '%b\n' "$BATTERY_STATUS_SAMPLE"
     return
   fi
 
-  pmset -g batt 2>/dev/null
+  if [[ "$(uname)" = Darwin ]]; then
+    pmset -g batt 2>/dev/null
+  else
+    linux_status
+  fi
 }
 
 charge_tier() {

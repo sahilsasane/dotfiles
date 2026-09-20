@@ -1,0 +1,53 @@
+;; Mac-style shortcut layer for a Windows-layout keyboard.
+;;
+;; Holding left Alt switches to a layer for macOS muscle memory:
+;;   - Cmd+<key> shortcuts become Ctrl+<key> (browsers, GTK apps, ...)
+;;   - everything else is re-emitted with Alt held, which the system-wide
+;;     altwin:swap_alt_win option turns into Super (kitty/Ghostty binds,
+;;     GNOME shortcuts)
+;; A quick tap still emits plain Alt.
+;;
+;; Clipboard keys (c/v/x/z) are deliberately NOT translated so terminals
+;; keep real Ctrl+C as SIGINT; kitty/Ghostty bind Super+C/V to clipboard
+;; copy/paste natively.
+;;
+;; NOTE: /dev/input/by-path/... is machine-specific; adjust per host.
+
+(defcfg
+  input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
+  output (uinput-sink "kmonad-mac-layer")
+  fallthrough true
+)
+
+;; Tab and backtick emit plain Alt chords: instant switching works, but
+;; GNOME's switcher popup needs a physically held modifier, which kmonad
+;; cannot synthesize here. For the held-popup switcher, use the physical
+;; Win key + Tab (GNOME's switch-applications is bound to Alt+Tab, and
+;; the altwin swap makes the Win key emit a real held Alt).
+(defalias
+  stkl (sticky-key 2000 lalt)
+)
+
+(defsrc
+  lalt
+  q w e r t n p f l s a o , bspc
+  1 2 3 4 5 6 7 8 9
+  c v x z d j k h m g u b
+  tab grv left right up down ret
+)
+
+(deflayer base
+  (tap-hold-next 200 lalt (layer-toggle mac))
+  _ _ _ _ _ _ _ _ _ _ _ _ _ _
+  _ _ _ _ _ _ _ _ _
+  _ _ _ _ _ _ _ _ _ _ _ _
+  _ _ _ _ _ _ _
+)
+
+(deflayer mac
+  _ C-q C-w C-e C-r C-t C-n C-p C-f C-l C-s C-a C-o C-, C-bspc
+  C-1 C-2 C-3 C-4 C-5 C-6 C-7 C-8 C-9
+  A-c A-v A-x A-z A-d A-j A-k A-h A-m A-g A-u A-b
+  A-tab A-grv
+  A-left A-right A-up A-down A-ret
+)

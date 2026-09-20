@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS-focused development dotfiles.
+Development dotfiles for macOS and Fedora Linux.
 
 ## What this repo is for
 
@@ -51,9 +51,12 @@ Run:
 
 That will:
 
-- install the Homebrew packages in `Brewfile`
+- install the Homebrew packages in `Brewfile` (macOS only; on Linux, install
+  packages with `dnf`/brew directly — `bootstrap` skips the Brewfile)
 - clone `oh-my-zsh` and tmux plugins that the config expects
 - symlink tracked config into `$HOME`
+- schedule the theme controller with launchd on macOS or a systemd user timer
+  on Linux
 
 After bootstrap:
 
@@ -97,10 +100,11 @@ theme toggle
 theme status
 ```
 
-`light` and `dark` are manual overrides. `auto` follows macOS appearance every
-30 seconds via `com.sahilsasane.dotfiles-theme`; it reads macOS but never changes
-the system appearance. The same controller is available outside zsh as
-`dotfiles-theme`. Kitty and tmux reload on switch when active; Neovim instances
+`light` and `dark` are manual overrides. `auto` follows the system appearance
+every 30 seconds — macOS via `com.sahilsasane.dotfiles-theme` (launchd), Linux
+via a `dotfiles-theme.timer` systemd user unit reading GNOME's color-scheme —
+and never changes the system appearance. The same controller is available
+outside zsh as `dotfiles-theme`. Kitty and tmux reload on switch when active; Neovim instances
 watch the effective-mode file, while Ghostty, LazyGit, Atuin, eza, Yazi, gitk,
 delta, bat, tldr, and htop use the new settings on their next supported reload
 or launch.
@@ -171,6 +175,7 @@ Run:
 ```
 
 This copies the current local config into the repo and keeps the tracked copy sanitized and path-stable.
+It runs on macOS only and refuses to run elsewhere, so macOS-specific tracked state stays intact.
 For zsh, the repo is the source of truth, so the sync script preserves the modular layout instead of rebuilding a single monolithic `~/.zshrc`.
 
 ## Secrets And Local State

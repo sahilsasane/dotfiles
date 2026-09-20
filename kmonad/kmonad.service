@@ -1,0 +1,18 @@
+# System service for the macOS shortcut layer. Installed to
+# /etc/systemd/system/kmonad.service by hand:
+#   sudo cp kmonad/kmonad.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now kmonad
+# Root is needed for /dev/input and /dev/uinput access. Adjust the config
+# path (and the device-file inside it) per machine.
+
+[Unit]
+Description=KMonad macOS shortcut layer
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/kmonad /home/sahilsasane/dotfiles/kmonad/mac-layer.kbd
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
