@@ -222,7 +222,6 @@ return {
             MiniStarterCurrent = { fg = colors.peach, style = { 'bold' } },
             MiniStarterFooter = { fg = colors.overlay1, style = { 'italic' } },
             MiniStarterQuery = { fg = colors.yellow, style = { 'bold' } },
-
           }
         end,
         integrations = {
@@ -271,67 +270,24 @@ return {
 ██║ ╚███║  ╚██╔╝  ██║██║ ╚═╝ ██║
 ╚═╝  ╚══╝   ╚═╝   ╚═╝╚═╝     ╚═╝
 
- enter quietly
 ]],
-        footer = 'query to filter  •  <CR> open  •  <Esc> reset',
+        footer = '',
         items = {
           {
             {
               name = '  Restore session',
               action = "lua require('persistence').load()",
-              section = 'SESSION',
+              section = '',
             },
             {
               name = '󰁯  Restore last session',
               action = "lua require('persistence').load({ last = true })",
-              section = 'SESSION',
+              section = '',
             },
             {
               name = '󰍉  Select session',
               action = "lua require('persistence').select()",
-              section = 'SESSION',
-            },
-          },
-          {
-            {
-              name = '  Find files',
-              action = 'lua Snacks.picker.files()',
-              section = 'COMMAND',
-            },
-            {
-              name = '󰱼  Live grep',
-              action = 'lua Snacks.picker.grep()',
-              section = 'COMMAND',
-            },
-            {
-              name = '  Recent files',
-              action = 'lua Snacks.picker.recent()',
-              section = 'COMMAND',
-            },
-            {
-              name = '  Config files',
-              action = 'lua Snacks.picker.files({ cwd = vim.fn.stdpath("config") })',
-              section = 'COMMAND',
-            },
-            {
-              name = '  File explorer',
-              action = 'Yazi',
-              section = 'COMMAND',
-            },
-            {
-              name = '󰊢  LazyGit',
-              action = 'LazyGit',
-              section = 'COMMAND',
-            },
-            {
-              name = '󰒲  Plugin manager',
-              action = 'Lazy',
-              section = 'COMMAND',
-            },
-            {
-              name = '󰗼  Quit',
-              action = 'qa',
-              section = 'COMMAND',
+              section = '',
             },
           },
         },

@@ -60,6 +60,7 @@ return {
           },
         },
         layout = {
+          -- reverse = true,
           layout = {
             box = 'horizontal',
             width = 0.85,
@@ -69,11 +70,10 @@ return {
             {
               box = 'vertical',
               width = 0.50,
-              border = 'rounded',
               title = '{title} {live} {flags}',
               title_pos = 'center',
-              { win = 'input', height = 1, border = 'bottom' },
-              { win = 'list', border = 'none' },
+              { win = 'input', height = 1, border = true },
+              { win = 'list', border = true, title = '{title} {live} {flags}', title_pos = 'center' },
             },
             {
               win = 'preview',
