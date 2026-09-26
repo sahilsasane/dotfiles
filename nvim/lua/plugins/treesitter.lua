@@ -20,7 +20,7 @@ return {
       vim.treesitter.language.register('bash', 'zsh')
       vim.treesitter.language.register('json', 'jsonl')
 
-      local parsers = { 'bash', 'c', 'diff', 'html', 'json', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python', 'go', 'yaml' }
+      local parsers = { 'bash', 'c', 'diff', 'html', 'json', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'regex', 'vim', 'vimdoc', 'python', 'go', 'yaml' }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)

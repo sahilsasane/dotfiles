@@ -53,6 +53,11 @@ return {
     priority = 1000,
     lazy = false,
     opts = {
+      notifier = {
+        enabled = true,
+        width = { min = 32, max = 0.32 },
+        height = { min = 1, max = 0.3 },
+      },
       picker = {
         sources = {
           files = {

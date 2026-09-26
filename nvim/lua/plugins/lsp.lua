@@ -27,7 +27,28 @@ return {
       },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
-      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        opts = {
+          progress = {
+            display = {
+              done_icon = '󰄬',
+              progress_icon = {
+                pattern = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+                period = 0.8,
+              },
+            },
+          },
+          notification = {
+            window = {
+              border = 'rounded',
+              normal_hl = 'NormalFloat',
+              winblend = 10,
+              max_width = 60,
+            },
+          },
+        },
+      },
       'saghen/blink.cmp',
     },
     config = function()
