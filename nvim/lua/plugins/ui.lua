@@ -337,7 +337,7 @@ return {
 
       local function bubble(text, highlight, edge_highlight)
         if text == '' then return '' end
-        return string.format('%%#%s#%%#%s# %s %%#%s#', edge_highlight, highlight, text, edge_highlight)
+        return string.format('%%#%s#%%#%s# %s %%#%s# ', edge_highlight, highlight, text, edge_highlight)
       end
 
       local function join_bubbles(parts)

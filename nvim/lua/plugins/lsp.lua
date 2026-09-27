@@ -35,15 +35,15 @@ return {
               done_icon = '󰄬',
               progress_icon = {
                 pattern = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
-                period = 0.8,
+                period = 0.6,
               },
             },
           },
           notification = {
             window = {
-              border = 'rounded',
+              border = 'none',
               normal_hl = 'NormalFloat',
-              winblend = 10,
+              winblend = 1,
               max_width = 60,
             },
           },
@@ -94,9 +94,7 @@ return {
         end
 
         for _, diagnostic in ipairs(vim.diagnostic.get(bufnr)) do
-          if is_python_diagnostic(diagnostic) then
-            namespaces[diagnostic.namespace] = enabled and (not is_lsp_diagnostic(diagnostic) or use_lsp_diagnostics)
-          end
+          if is_python_diagnostic(diagnostic) then namespaces[diagnostic.namespace] = enabled and (not is_lsp_diagnostic(diagnostic) or use_lsp_diagnostics) end
         end
 
         for ns_id, namespace_enabled in pairs(namespaces) do

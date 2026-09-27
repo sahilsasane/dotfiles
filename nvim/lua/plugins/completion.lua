@@ -23,6 +23,14 @@ return {
         ['<Tab>'] = { 'select_and_accept', 'snippet_forward', 'fallback' },
         ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
       },
+      cmdline = {
+        keymap = { preset = 'inherit' },
+        completion = {
+          menu = {
+            auto_show = function() return vim.fn.getcmdtype() == ':' end,
+          },
+        },
+      },
       appearance = {
         nerd_font_variant = 'mono',
       },

@@ -40,7 +40,7 @@ macos-titlebar-proxy-icon = hidden
 window-decoration = auto
 
 # Appearance
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
 macos-window-buttons = visible
 
 background-opacity = 0.75
