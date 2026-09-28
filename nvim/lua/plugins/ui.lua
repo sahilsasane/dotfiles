@@ -212,6 +212,7 @@ return {
             MiniStatuslineBubbleGitEdge = { fg = colors.surface0, bg = colors.none },
             MiniStatuslineBubbleDevinfo = { fg = colors.overlay1, bg = colors.surface0 },
             MiniStatuslineBubbleDevinfoEdge = { fg = colors.surface0, bg = colors.none },
+            MiniStatuslineBubbleRecording = { fg = colors.red, bg = colors.surface0, style = { 'bold' } },
             MiniStatuslineBubbleLocation = { fg = colors.base, bg = colors.blue, style = { 'bold' } },
             MiniStatuslineBubbleLocationEdge = { fg = colors.blue, bg = colors.none },
             MiniStarterHeader = { fg = colors.lavender, style = { 'bold' } },
@@ -349,6 +350,11 @@ return {
         return (root and vim.fs.relpath(root, path)) or vim.fn.fnamemodify(path, ':~:.')
       end
 
+      local function recording_macro()
+        local register = vim.fn.reg_recording()
+        return register ~= '' and ('REC @' .. register) or ''
+      end
+
       local function active_statusline()
         local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
         local diff = statusline.section_diff { trunc_width = 75, icon = '' }
@@ -363,6 +369,7 @@ return {
         local location_info = table.concat(vim.tbl_filter(function(part) return part ~= '' end, { search, location }), ' ')
         local left = join_bubbles {
           bubble(mode, mode_hl, mode_edge_highlights[mode_hl] or 'MiniStatuslineBubbleModeOtherEdge'),
+          bubble(recording_macro(), 'MiniStatuslineBubbleRecording', 'MiniStatuslineBubbleGitEdge'),
           bubble(diff, 'MiniStatuslineBubbleGit', 'MiniStatuslineBubbleGitEdge'),
           bubble(devinfo, 'MiniStatuslineBubbleDevinfo', 'MiniStatuslineBubbleDevinfoEdge'),
         }
@@ -384,6 +391,11 @@ return {
           active = active_statusline,
         },
       }
+
+      vim.api.nvim_create_autocmd({ 'RecordingEnter', 'RecordingLeave' }, {
+        group = vim.api.nvim_create_augroup('mini-statusline-recording', { clear = true }),
+        callback = function() vim.cmd 'redrawstatus' end,
+      })
 
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
