@@ -11,7 +11,6 @@ git() { command git -c color.ui=always "$@"; }
 alias vd='deactivate 2>/dev/null || true'
 alias size='du -sh -- *(DN) 2>/dev/null | sort -rh'
 alias c='clear'
-alias cls="printf '\033[2J\033[3J\033[H'"
 alias h='history'
 alias j='jobs -l'
 alias path='echo $PATH | tr ":" "\n"'

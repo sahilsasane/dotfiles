@@ -37,10 +37,10 @@ split-inherit-working-directory = true
 window-inherit-font-size = true
 window-save-state = always
 macos-titlebar-proxy-icon = hidden
-window-decoration = auto
+window-decoration = server
 
 # Appearance
-macos-titlebar-style = hidden
+macos-titlebar-style = tabs
 macos-window-buttons = visible
 
 background-opacity = 0.75
@@ -64,7 +64,7 @@ macos-icon-screen-color = #74c7ec,#89b4fa,#cba6f7
 
 # Shell integration and workflow
 shell-integration = detect
-shell-integration-features = cursor,sudo,no-title,ssh-env,path
+shell-integration-features = cursor,sudo,ssh-env,path
 cursor-click-to-move = true
 notify-on-command-finish = unfocused
 notify-on-command-finish-action = no-bell,notify
