@@ -173,6 +173,20 @@ return {
       vim.api.nvim_create_user_command('InlayHintsEnable', function() set_inlay_hints(true) end, { desc = 'Enable inlay hints globally' })
       vim.api.nvim_create_user_command('InlayHintsDisable', function() set_inlay_hints(false) end, { desc = 'Disable inlay hints globally' })
 
+      vim.api.nvim_create_user_command('Dls', function()
+        if vim.bo.filetype ~= 'yaml' then
+          vim.notify('Dls can only start in a YAML buffer', vim.log.levels.WARN)
+          return
+        end
+
+        vim.lsp.start {
+          name = 'dataos_resource',
+          cmd = { '/Users/sahilsasane/.dataos/v2/bin/dataos-ctl', 'develop', 'assist', 'lsp' },
+          root_dir = vim.fs.root(0, { '.git' }) or vim.fn.getcwd(),
+        }
+      end, { desc = 'Attach DataOS LSP to this YAML buffer' })
+      vim.cmd([[cnoreabbrev <expr> dls (getcmdtype() ==# ':' && getcmdline() ==# 'dls') ? 'Dls' : 'dls']])
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('dotfiles-lsp-attach', { clear = true }),
         callback = function(event)

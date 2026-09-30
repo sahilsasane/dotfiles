@@ -1,7 +1,3 @@
-if [[ ! -o interactive ]]; then
-  return
-fi
-
 if ! command -v oh-my-posh >/dev/null 2>&1; then
   return
 fi

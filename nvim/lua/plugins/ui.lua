@@ -290,6 +290,11 @@ return {
               action = "lua require('persistence').select()",
               section = '',
             },
+            {
+              name = '  Find files',
+              action = 'lua Snacks.picker.files()',
+              section = '',
+            },
           },
         },
         content_hooks = {

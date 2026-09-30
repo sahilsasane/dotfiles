@@ -43,9 +43,6 @@ if command -v fzf >/dev/null 2>&1; then
   __dotfiles_fzf_git_diff_commit_widget() {
     emulate -L zsh
 
-    __dotfiles_require_cmd git || return 0
-    __dotfiles_require_cmd fzf || return 0
-
     if [[ "$BUFFER" != git\ diff(|\ *) && "$BUFFER" != gd(|\ *) ]]; then
       zle -M 'Use Ctrl-G after typing: git diff or gd '
       return 0
@@ -133,29 +130,19 @@ if command -v fzf >/dev/null 2>&1; then
     esac
   }
 
-  if [[ -o interactive ]]; then
-    zle -N __dotfiles_fzf_git_diff_commit_widget
-    bindkey -M emacs '^G' __dotfiles_fzf_git_diff_commit_widget
-    bindkey -M viins '^G' __dotfiles_fzf_git_diff_commit_widget
-    bindkey -M vicmd '^G' __dotfiles_fzf_git_diff_commit_widget
-    source <(fzf --zsh)
-  fi
+  zle -N __dotfiles_fzf_git_diff_commit_widget
+  bindkey -M emacs '^G' __dotfiles_fzf_git_diff_commit_widget
+  bindkey -M viins '^G' __dotfiles_fzf_git_diff_commit_widget
+  bindkey -M vicmd '^G' __dotfiles_fzf_git_diff_commit_widget
+  source <(fzf --zsh)
 fi
 
 fat() {
-  __dotfiles_require_cmd fzf || return 1
-  __dotfiles_require_cmd bat || return 1
-
   local file="${1:A}"
   local selection line editor_cmd
 
   [[ -n "$1" ]] || {
     echo "Usage: fat <file>"
-    return 1
-  }
-
-  [[ -f "$file" ]] || {
-    echo "Not a file: $1"
     return 1
   }
 
@@ -188,18 +175,10 @@ fat() {
 }
 
 fcat() {
-  __dotfiles_require_cmd fzf || return 1
-  __dotfiles_require_cmd bat || return 1
-
   local file="${1:A}"
 
   [[ -n "$1" ]] || {
     echo "Usage: fcat <file>"
-    return 1
-  }
-
-  [[ -f "$file" ]] || {
-    echo "Not a file: $1"
     return 1
   }
 

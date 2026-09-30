@@ -19,3 +19,7 @@ fi
 export OPENAI_MODEL="${OPENAI_MODEL:-gpt-6-luna}"
 export TER_MODEL_ID="BAAI/bge-small-en-v1.5"
 export GRANTEE_ID="sahilsasanetmdcio"
+
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=1000000
+SAVEHIST=1000000

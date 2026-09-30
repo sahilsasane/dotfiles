@@ -44,3 +44,12 @@ if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || -n "${KITTY_PID:-}" || "${TERM_PROGRAM:
   precmd_functions=(${precmd_functions:#_dotfiles_terminal_precmd} _dotfiles_terminal_precmd)
   chpwd_functions=(${chpwd_functions:#_dotfiles_terminal_set_title} _dotfiles_terminal_set_title)
 fi
+
+if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == "ghostty" ]]; then
+  # Ignore Ghostty's Cmd-T sequence when tmux is not handling it.
+  __dotfiles_ignore_ghostty_cmd_t() { zle redisplay }
+  zle -N __dotfiles_ignore_ghostty_cmd_t
+  bindkey -M emacs $'\x01c' __dotfiles_ignore_ghostty_cmd_t
+  bindkey -M viins $'\x01c' __dotfiles_ignore_ghostty_cmd_t
+  bindkey -M vicmd $'\x01c' __dotfiles_ignore_ghostty_cmd_t
+fi

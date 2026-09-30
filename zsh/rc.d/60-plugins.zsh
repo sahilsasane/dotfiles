@@ -40,3 +40,15 @@ if [[ -n "${BREW_PREFIX:-}" && -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zs
 elif [[ -n "${ZSH_CUSTOM:-}" && -f "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
   source "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
+
+if [[ -x "$HOME/.dataos/v2/bin/dataos-ctl" ]]; then
+  source <("$HOME/.dataos/v2/bin/dataos-ctl" completion zsh)
+  compdef _dataos-ctl ds
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+unsetopt SHARE_HISTORY
+setopt INC_APPEND_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_SPACE
