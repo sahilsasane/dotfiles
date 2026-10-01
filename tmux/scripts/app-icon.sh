@@ -7,14 +7,17 @@ cmd="${cmd##*/}"
 cmd="$(printf '%s' "$cmd" | tr '[:upper:]' '[:lower:]')"
 
 case "$cmd" in
-  nvim|vim|vi)
+  vi)
     printf ''
+    ;;
+  nvim|vim)
+    printf ''
     ;;
   zsh|bash|fish|sh|nu)
     printf ''
     ;;
   claude|claude-code)
-    printf '✦'
+    printf ''
     ;;
   codex)
     printf '◎'
