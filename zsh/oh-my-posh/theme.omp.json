@@ -80,7 +80,7 @@
           "type": "text",
           "style": "plain",
           "foreground": "#ffffff",
-          "template": "╰─❯ "
+          "template": " ->"
         }
       ]
     }

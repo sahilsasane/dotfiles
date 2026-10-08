@@ -29,7 +29,7 @@ columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
 [stats]
 common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
 common_prefix = ["sudo"]
-ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl"]
+ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl", "gl", "gf"]
 
 [theme]
 name = "sahil-slate"
