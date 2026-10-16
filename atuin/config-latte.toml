@@ -2,7 +2,7 @@ dialect = "uk"
 timezone = "local"
 
 search_mode = "fuzzy"
-filter_mode = "global"
+filter_mode = "session"
 
 style = "compact"
 inline_height = 10
@@ -21,15 +21,15 @@ sync_frequency = "3h"
 cwd_filter = ["/private/", "/secrets/"]
 
 [search]
-filters = ["directory", "global"]
+filters = ["session", "host", "directory"]
 
 [ui]
-columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
+columns = ["duration", { type = "directory", width = 15 }, "command"]
 
 [stats]
 common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
 common_prefix = ["sudo"]
-ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl"]
+ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl", "gl", "gf"]
 
 [theme]
 name = "sahil-latte"
@@ -37,4 +37,4 @@ name = "sahil-latte"
 [tmux]
 enabled = true
 width = "70%"
-height = "40%"
+height = "50%"
