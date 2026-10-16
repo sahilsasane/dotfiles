@@ -24,7 +24,7 @@ cwd_filter = ["/private/", "/secrets/"]
 filters = ["session", "host", "directory"]
 
 [ui]
-columns = ["duration", "time", { type = "directory", width = 25 }, "command"]
+columns = ["duration", { type = "directory", width = 15 }, "command"]
 
 [stats]
 common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "cargo", "uv"]
@@ -35,6 +35,6 @@ ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl", "gl", "gf"]
 name = "sahil-slate"
 
 [tmux]
-enabled = false
+enabled = true
 width = "70%"
-height = "40%"
+height = "50%"

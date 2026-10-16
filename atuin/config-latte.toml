@@ -35,6 +35,6 @@ ignored_commands = ["cd", "ls", "ll", "pwd", "l", "gst", "g", "rl"]
 name = "sahil-latte"
 
 [tmux]
-enabled = false
+enabled = true
 width = "70%"
 height = "40%"
