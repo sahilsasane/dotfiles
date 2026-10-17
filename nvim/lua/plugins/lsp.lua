@@ -55,11 +55,6 @@ return {
       local inlay_hints_enabled = false
       local python_diagnostics_enabled = true
       local python_diagnostic_servers = {
-        basedpyright = true,
-        jedi_language_server = true,
-        mypy = true,
-        pyright = true,
-        ruff = true,
         ty = true,
       }
       local python = require 'dotfiles.python'
@@ -71,7 +66,7 @@ return {
         return python_diagnostic_servers[source] == true
       end
 
-      local python_lint_names = { mypy = true, ty = true }
+      local python_lint_names = { ty = true }
       local function is_lint_diagnostic(diagnostic)
         local source = string.lower(diagnostic.source or '')
         if not python_lint_names[source] then return false end
@@ -251,33 +246,10 @@ return {
 
       ---@type table<string, vim.lsp.Config>
       local python_servers = {
-        basedpyright = {
-          root_dir = python.root_dir_for 'basedpyright',
-          settings = {
-            basedpyright = {
-              analysis = {
-                typeCheckingMode = 'basic',
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                inlayHints = {
-                  variableTypes = true,
-                  callArgumentNames = true,
-                  callArgumentNamesMatching = false,
-                  functionReturnTypes = true,
-                  genericTypes = true,
-                },
-              },
-            },
-          },
-        },
-        jedi_language_server = { root_dir = python.root_dir_for 'jedi_language_server' },
-        pyright = { root_dir = python.root_dir_for 'pyright' },
-        ruff = { root_dir = python.root_dir_for 'ruff' },
         ty = { root_dir = python.root_dir_for 'ty' },
       }
 
       local servers = {
-        basedpyright = python_servers.basedpyright,
         gopls = {
           settings = {
             gopls = {
@@ -287,9 +259,6 @@ return {
             },
           },
         },
-        jedi_language_server = python_servers.jedi_language_server,
-        pyright = python_servers.pyright,
-        ruff = python_servers.ruff,
         ty = python_servers.ty,
         ts_ls = {},
         eslint = {},
@@ -327,6 +296,7 @@ return {
       }
 
       local tools = {
+        'ruff',
         'stylua',
         'prettierd',
       }

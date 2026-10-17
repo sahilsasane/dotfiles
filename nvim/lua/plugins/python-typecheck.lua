@@ -5,7 +5,6 @@ return {
     config = function()
       local python = require 'dotfiles.python'
       local lint = require 'lint'
-      local original_mypy = lint.linters.mypy
       local original_ty = lint.linters.ty or {
         cmd = 'ty',
         stdin = false,
@@ -34,14 +33,13 @@ return {
         return configured
       end
 
-      lint.linters.mypy = function() return project_linter(original_mypy, 'mypy') end
       lint.linters.ty = function() return project_linter(original_ty, 'ty') end
 
       lint.linters_by_ft = vim.tbl_deep_extend('force', lint.linters_by_ft or {}, {
-        python = { 'mypy', 'ty' },
+        python = { 'ty' },
       })
 
-      local type_checkers = { 'mypy', 'ty' }
+      local type_checkers = { 'ty' }
       local function reset_type_checker_diagnostics(bufnr)
         for _, name in ipairs(type_checkers) do
           vim.diagnostic.reset(lint.get_namespace(name), bufnr)

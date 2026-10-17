@@ -6,18 +6,13 @@ local project_options = {
 }
 
 local lsp_names = {
-  basedpyright = 'basedpyright',
   none = false,
-  jedi = 'jedi_language_server',
-  pyright = 'pyright',
-  ruff = 'ruff',
   ty = 'ty',
 }
 
 local type_checker_names = {
   lsp = true,
   none = true,
-  mypy = true,
   ty = true,
 }
 
@@ -68,10 +63,10 @@ function M.root(bufnr) return vim.fs.root(bufnr, root_markers) end
 
 function M.for_root(root)
   local options = root and read_project_options(root) or {}
-  local lsp = options.python_lsp or 'basedpyright'
+  local lsp = options.python_lsp or 'ty'
   if lsp_names[lsp] == nil then
-    vim.notify(string.format('Unsupported project Python LSP %q; using basedpyright', lsp), vim.log.levels.WARN)
-    lsp = 'basedpyright'
+    vim.notify(string.format('Unsupported project Python LSP %q; using ty', lsp), vim.log.levels.WARN)
+    lsp = 'ty'
   end
 
   local type_checker = options.python_type_checker or 'lsp'
