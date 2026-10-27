@@ -3,11 +3,14 @@ unalias git 2>/dev/null
 unfunction d 2>/dev/null
 compdef -d d 2>/dev/null
 
+git() { command git -c color.ui=always "$@"; }
+
 alias d='docker'
+alias dv='docker volume'
+alias dn='docker network'
 alias dco='docker compose'
 alias python='python3'
 alias bat='bat --color=always'
-git() { command git -c color.ui=always "$@"; }
 alias vd='deactivate 2>/dev/null || true'
 alias size='du -sh -- *(DN) 2>/dev/null | sort -rh'
 alias c='clear'

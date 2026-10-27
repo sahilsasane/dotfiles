@@ -38,3 +38,11 @@ name = "sahil-slate"
 enabled = true
 width = "70%"
 height = "50%"
+
+[ai]
+enabled = true
+model = "fast"
+
+[daemon]
+enabled = true
+autostart = true
