@@ -48,7 +48,8 @@ macos-titlebar-style = tabs
 macos-window-buttons = visible
 
 background-opacity = 0.75
-background-opacity-cells = true
+# Keep colored statusline backgrounds as opaque as their Powerline glyphs.
+background-opacity-cells = false
 background-blur = 40
 unfocused-split-opacity = 0.97
 custom-shader = /Users/sahilsasane/dotfiles/ghostty/shaders/cursor_warp.glsl
