@@ -11,12 +11,16 @@ font-family-italic = "JetBrainsMono Nerd Font Mono"
 font-family-bold-italic = "JetBrainsMono Nerd Font Mono"
 font-codepoint-map = U+F0262=JetBrainsMono Nerd Font Mono
 font-codepoint-map = U+F0085-U+F008B,U+F089C-U+F089E=JetBrainsMono Nerd Font Propo
+# Kitty's bundled symbol font has the larger Apple glyph; installed in ~/Library/Fonts.
+font-codepoint-map = U+F179=Symbols Nerd Font Mono
 font-style = "ExtraLight"
 font-style-bold = "Regular"
 font-style-italic = "ExtraLight Italic"
 font-style-bold-italic = "Italic"
 font-size = 18
 adjust-cell-height = 10%
+# Counter fallback metric scaling of Kitty's symbol font (79.2px to ~60px at 30pt/2x).
+adjust-icon-height = -24%
 font-thicken = false
 font-feature = "+calt,+ss02,+cv03,+cv04,+cv08,+cv14,+cv15,+cv16,+cv18,+cv19,+cv20,+zero"
 minimum-contrast = 1.1
