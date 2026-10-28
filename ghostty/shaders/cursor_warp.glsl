@@ -1,14 +1,13 @@
 // --- CONFIGURATION ---
-vec4 TRAIL_COLOR = vec4(0.565, 0.443, 0.737, 1.0); // darker Catppuccin-style mauve
-const float DURATION = 0.22; // total animation time
-const float TRAIL_SIZE = 0.8; // 0.0 = all corners move together. 1.0 = max smear (leading corners jump instantly)
-const float THRESHOLD_MIN_DISTANCE = 1.5; // min distance to show trail (units of cursor height)
+const float DURATION = 0.4; // total animation time
+const float TRAIL_SIZE = 0.9; // 0.0 = all corners move together. 1.0 = max smear (leading corners jump instantly)
+const float THRESHOLD_MIN_DISTANCE = 2.0; // min distance to show trail (units of cursor height)
 const float BLUR = 1.0; // blur size in pixels (for antialiasing)
 const float TRAIL_THICKNESS = 1.0;  // 1.0 = full cursor height, 0.0 = zero height, >1.0 = funky aah
 const float TRAIL_THICKNESS_X = 0.9;
 
-const float FADE_ENABLED = 0.0; // 1.0 to enable fade gradient along the trail, 0.0 to disable
-const float FADE_EXPONENT = 5.0; // exponent for fade gradient along the trail
+const float FADE_ENABLED = 1.0; // 1.0 to enable fade gradient along the trail, 0.0 to disable
+const float FADE_EXPONENT = 2.0; // exponent for fade gradient along the trail
 
 // --- CONSTANTS for easing functions ---
 const float PI = 3.14159265359;
@@ -270,13 +269,13 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord){
         // tiny epsilon to avoid division by zero if moveVec is (0,0)
         float fadeProgress = clamp(dot(fragVec, moveVec) / (dot(moveVec, moveVec) + 1e-6), 0.0, 1.0);
 
-        vec4 trail = TRAIL_COLOR;
+        vec4 trail = iCurrentCursorColor; // match the cursor, like kitty's cursor_trail_color none
         
         float effectiveBlur = BLUR;
         if (BLUR < 2.5) {
           // no antialising on horizontal/vertical movement, fixes 'pulse' like thing on end cursor
           float isDiagonal = abs(s.x) * abs(s.y); // 1.0 if diagonal, 0.0 if H/V
-          float effectiveBlur = mix(0.0, BLUR, isDiagonal);
+          effectiveBlur = mix(0.0, BLUR, isDiagonal);
         }
         float shapeAlpha = antialising(sdfTrail, effectiveBlur); // shape mask
 
