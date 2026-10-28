@@ -43,10 +43,10 @@ vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result and center' }
 vim.keymap.set('n', '{', '{zz')
 vim.keymap.set('n', '}', '}zz')
 
-vim.keymap.set('n', '<A-j>', ':m .+1<CR>==', { desc = 'Move line down' })
-vim.keymap.set('n', '<A-k>', ':m .-2<CR>==', { desc = 'Move line up' })
-vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
-vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
+vim.keymap.set('n', '<A-j>', '<Cmd>move .+1<CR>==', { desc = 'Move line down' })
+vim.keymap.set('n', '<A-k>', '<Cmd>move .-2<CR>==', { desc = 'Move line up' })
+vim.keymap.set('v', '<A-j>', "<Esc><Cmd>'<,'>move '>+1<CR>gv=gv", { desc = 'Move selection down' })
+vim.keymap.set('v', '<A-k>', "<Esc><Cmd>'<,'>move '<-2<CR>gv=gv", { desc = 'Move selection up' })
 vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Delete without overwriting register' })
 
 -- Window navigation
