@@ -21,11 +21,21 @@ export TER_MODEL_ID="BAAI/bge-small-en-v1.5"
 export GRANTEE_ID="sahilsasanetmdcio"
 
 bindkey -v
+# Esc waits KEYTIMEOUT (default 0.4s) for an Option-key sequence; 10ms is enough for terminal-sent ones
+KEYTIMEOUT=1
 # vi mode drops emacs' Esc/Option+Enter = insert newline; restore it
 bindkey -M viins '^[^M' self-insert-unmeta
 # vi versions stop where insert mode began; use emacs ones that delete freely
 bindkey -M viins '^W' backward-kill-word
 bindkey -M viins '^U' backward-kill-line
+# emacs-style cursor moves in insert mode
+bindkey -M viins '^B' backward-char
+bindkey -M viins '^F' forward-char
+bindkey -M viins '^[b' backward-word
+bindkey -M viins '^[f' forward-word
+# Ghostty sends these for Cmd+Left/Right
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^E' end-of-line
 function vi-yank-to-clipboard() {
     zle vi-yank
     echo -n "$CUTBUFFER" | pbcopy

@@ -13,6 +13,8 @@ plugins=(git)
 
 if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
   source "$ZSH/oh-my-zsh.sh"
+  # OMZ lib/key-bindings.zsh runs `bindkey -e`; restore vi mode from 20-shell.zsh
+  bindkey -v
 fi
 
 if command -v brew >/dev/null 2>&1; then
