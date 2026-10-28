@@ -3,14 +3,11 @@ unalias git 2>/dev/null
 unfunction d 2>/dev/null
 compdef -d d 2>/dev/null
 
-git() { command git -c color.ui=always "$@"; }
-
 alias d='docker'
 alias dv='docker volume'
 alias dn='docker network'
 alias dco='docker compose'
 alias python='python3'
-alias bat='bat --color=always'
 alias vd='deactivate 2>/dev/null || true'
 alias size='du -sh -- *(DN) 2>/dev/null | sort -rh'
 alias c='clear'
@@ -26,7 +23,6 @@ alias lzd='lazydocker'
 alias tk='tmux kill-session -t'
 alias t='tmux attach -t'
 alias k='kubectl'
-alias rg='rg --color=always'
 alias f='fzf --preview="bat --color=always {}"'
 alias vim='nvim'
 alias gal='git add --all'
@@ -48,9 +44,9 @@ alias -g C='| pbcopy'
 alias -g JQ='| jq'
 alias -g JL='| jless'
 alias -g YJ='| yq -p=json'
-alias -g YQ='| yq'
+alias -g YQ='| yqg'
 alias -g F='| fzf'
-alias -g R='| rg'
+alias -g R='| rg --color=always'
 alias -g L='| less -R'
 alias -g HD='| head'
 alias -g T='| tail'
@@ -84,6 +80,12 @@ tldr() {
     args[1]="$(__dotfiles_doc_command "$1")"
   fi
   command tldr "${args[@]}"
+}
+
+yqg() {
+  sed $'s/\x1b\\[[0-9;]*[A-Za-z]//g' \
+    | yq -C "${@:-.}" \
+    | perl -CS -pe 's/^((?:\e\[[0-9;]*m| )+)/my($p,$c,$o)=($1,"",""); while($p=~m{\G(\e\[[0-9;]*m|  | )}gc){my $t=$1; if($t=~m{^\e}){$c=$t;$o.=$t}elsif($t eq "  "){$o.="\e[38;2;45;45;45m\x{2502}\e[0m$c "}else{$o.=$t}} $o/e'
 }
 
 man() {
