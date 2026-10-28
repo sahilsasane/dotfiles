@@ -24,6 +24,7 @@ local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
 require('lazy').setup({ { import = 'plugins' } }, { ---@diagnostic disable-line: missing-fields
+  rocks = { enabled = false }, -- no plugin needs luarocks
   ui = {
     icons = vim.g.have_nerd_font and {} or {
       cmd = '⌘',
