@@ -96,7 +96,7 @@ macos-auto-secure-input = true
 macos-secure-input-indication = true
 
 # Quality-of-life keybinds
-keybind = super+k=clear_screen
+keybind = super+k=text:\x1bk
 keybind = super+shift+p=toggle_command_palette
 keybind = super+shift+j=jump_to_prompt:-1
 keybind = super+shift+k=jump_to_prompt:1
@@ -118,4 +118,3 @@ keybind = alt+delete=esc:d
 keybind = super+left=text:\x01
 keybind = super+right=text:\x05
 keybind = super+backspace=text:\x15
-keybind = delete=text:\x04

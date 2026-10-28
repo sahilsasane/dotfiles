@@ -1,4 +1,4 @@
-if [[ -n "${KITTY_PID:-}" ]]; then
+if [[ -n "${KITTY_PID:-}" || -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
   __dotfiles_kitty_clear_screen() {
     emulate -L zsh
     builtin print -rn -- $'\r\e[0J\e[H\e[22J' >"$TTY"
