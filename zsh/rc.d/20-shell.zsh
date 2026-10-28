@@ -5,6 +5,7 @@ export VISUAL="$EDITOR"
 export FCEDIT="$EDITOR"
 unset LSCOLORS
 export CLAUDE_CODE_NO_FLICKER=1
+export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
 export HOMEBREW_NO_ENV_HINTS=1
 unalias man 2>/dev/null
 export MANPAGER='col -b | bat --style=plain --language=man --color=always'
