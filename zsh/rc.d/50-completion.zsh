@@ -2,9 +2,8 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey '^x^e' edit-command-line
 
+# compinit runs once, from oh-my-zsh in 60-plugins.zsh
 fpath=("$HOME/.docker/completions" $fpath)
-autoload -Uz compinit
-compinit
 
 # Bind the terminal's Home/End sequences in every ZLE mode.
 for _dotfiles_keymap in emacs viins vicmd; do
