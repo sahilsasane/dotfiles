@@ -37,12 +37,6 @@ if (( ${+widgets[autosuggest-clear]} )); then
   bindkey -M viins '^]' autosuggest-clear
 fi
 
-if [[ -n "${BREW_PREFIX:-}" && -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
-  source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-elif [[ -n "${ZSH_CUSTOM:-}" && -f "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
-  source "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi
-
 if [[ -x "$HOME/.dataos/v2/bin/dataos-ctl" ]]; then
   source <("$HOME/.dataos/v2/bin/dataos-ctl" completion zsh)
   compdef _dataos-ctl ds
