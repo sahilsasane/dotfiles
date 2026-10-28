@@ -1,0 +1,104 @@
+#!/usr/bin/env perl
+# Redraw dataos-ctl tables as rounded boxes.
+#
+# Handles every table style the CLI prints (pkg/ui/table_writer.go):
+#   ASCII   ( | - + )  rs ls / rs get / runtime / depot / lakehouse
+#   Unicode ( │ ─ ┼ )  operate get-tenants, user, forge, collation ...
+#   row separators between rows, footers, cells wrapped onto several lines.
+# Also handles refresh mode (-r): the CLI redraws through pterm's Area, which
+# starts each frame with ESC[1G ESC[2K; each frame replaces the previous box.
+use strict; use warnings; use utf8;
+use IO::Select;
+use Encode qw(decode);
+binmode STDOUT, ':utf8';
+$| = 1;
+
+my $B = "\e[38;2;147;153;178m";   # border (catppuccin overlay2)
+my $H = "\e[1;38;2;137;180;250m"; # header (catppuccin blue, bold)
+my $D = "\e[38;2;205;214;244m";   # body (catppuccin text)
+my $R = "\e[0m";
+
+my $FRAME = qr/\e\[1G\e\[2K(?:\e\[1A\e\[2K)*/;
+my $tty = -t STDOUT;
+my ($frame, $shown, $dirty) = ('', 0, 0); # frame bytes, lines on screen, unshown data
+
+my $sel = IO::Select->new(\*STDIN);
+my $buf = '';
+while (1) {
+    # Idle for 150ms means the CLI finished writing a frame: show it now.
+    if ($tty && !$sel->can_read(0.15)) { flush(); $sel->can_read }
+    my $n = sysread STDIN, my $chunk, 65536;
+    last unless $n;
+    $buf .= $chunk;
+    while ($buf =~ /$FRAME/) {
+        my ($pre, $post) = ($`, $');
+        $frame .= $pre;
+        $dirty = 1 if $pre ne '';
+        flush();                  # the next frame replaces this one on screen
+        ($frame, $buf) = ('', $post);
+    }
+    # Keep a trailing ESC fragment until the rest of the sequence arrives.
+    my $len = length $frame;
+    if ($buf =~ /(\e[\[\d;]*)\z/) { $frame .= $`; $buf = $1 } else { $frame .= $buf; $buf = '' }
+    $dirty = 1 if length $frame > $len;
+}
+$dirty = 1 if $buf ne '';
+$frame .= $buf;
+flush();
+
+sub flush {
+    return unless $dirty;
+    $dirty = 0;
+    my $out = render(decode('UTF-8', $frame, Encode::FB_DEFAULT));
+    print "\e[${shown}F\e[J" if $tty && $shown;
+    print $out;
+    $shown = () = $out =~ /\n/g;
+}
+
+sub render {
+    my @l = map { s/\e\[[0-9;?]*[A-Za-z]//gr =~ s/\s+$//r } split /\n/, shift, -1;
+    my $sep = qr/^[-─]{3,}(?:[+┼][-─]+)*$/;
+    my @out;
+    my $i = 0;
+    while ($i < @l) {
+        my $s = $i;
+        $s++ while $s < @l && !($l[$s] =~ $sep && $s > 0 && $l[$s - 1] ne '');
+        my @pos;
+        if ($s < @l) {
+            while ($l[$s] =~ /[+┼]/g) { push @pos, pos($l[$s]) - 1 }
+        }
+        my $isrow = sub { my $x = shift; $x ne '' && $x !~ $sep && !grep { (substr($x, $_, 1) // '') !~ /[|│]/ } @pos };
+        my $h = $s;
+        $h-- while $s < @l && $h > $i && $isrow->($l[$h - 1]);
+        push @out, @l[$i .. $h - 1];
+        last if $s >= @l;
+        my $e = $s + 1;
+        $e++ while $e < @l && ($isrow->($l[$e]) || ($l[$e] =~ $sep && $e + 1 < @l && $isrow->($l[$e + 1])));
+        push @out, table([@l[$h .. $s - 1]], [@l[$s + 1 .. $e - 1]], \@pos, $sep);
+        $i = $e;
+    }
+    join '', map { "$_\n" } @out[0 .. $#out - (@out && $out[-1] eq '' ? 1 : 0)];
+}
+
+sub table {
+    my ($head, $body, $pos, $sep) = @_;
+    my @start = (0, map { $_ + 1 } @$pos);
+    my $cells = sub {
+        my $x = shift;
+        map { my $end = $_ < @$pos ? $pos->[$_] : length $x; (substr($x, $start[$_], $end - $start[$_]) // '') =~ s/^\s+|\s+$//gr } 0 .. $#start;
+    };
+    my @rows = ((map { [$H, $cells->($_)] } @$head), map { $_ =~ $sep ? undef : [$D, $cells->($_)] } @$body);
+    my @w = (0) x @start;
+    for my $r (grep defined, @rows) { for (0 .. $#w) { my $n = length $r->[$_ + 1]; $w[$_] = $n if $n > $w[$_] } }
+    my $line = sub { my ($a, $m, $z) = @_; $B . $a . join($m, map { '─' x ($_ + 2) } @w) . $z . $R };
+    my @t = ($line->('╭', '┬', '╮'));
+    push @t, map { my $r = $_; $B . '│' . join("$B│", map { " $r->[0]" . sprintf('%-*s', $w[$_], $r->[$_ + 1]) . " $R" } 0 .. $#w) . "$B│$R" } @rows[0 .. $#$head];
+    push @t, $line->('├', '┼', '┤');
+    for my $r (@rows[@$head .. $#rows]) {
+        push @t, defined $r
+            ? $B . '│' . join("$B│", map { " $r->[0]" . sprintf('%-*s', $w[$_], $r->[$_ + 1]) . " $R" } 0 .. $#w) . "$B│$R"
+            : $line->('├', '┼', '┤');
+    }
+    push @t, $line->('╰', '┴', '╯');
+    @t;
+}
