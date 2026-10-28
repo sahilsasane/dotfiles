@@ -91,6 +91,9 @@ quit-after-last-window-closed = true
 # macOS behavior
 cursor-style = bar
 cursor-style-blink = false
+# Invert the cell under a block cursor so it stays visible on tmux selections
+cursor-color = cell-foreground
+cursor-text = cell-background
 macos-option-as-alt = true
 macos-auto-secure-input = true
 macos-secure-input-indication = true
