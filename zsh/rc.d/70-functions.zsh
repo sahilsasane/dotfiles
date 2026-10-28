@@ -153,6 +153,16 @@ ter3001() {
 
 ds() { command dataos-ctl "$@"; }
 
+# Claude Code emits OSC 9;4 progress only when TERM_PROGRAM=ghostty (>= 1.2.0);
+# tmux sets TERM_PROGRAM=tmux, so report the attached Ghostty client instead.
+claude() {
+  if [[ -n $TMUX && "$(tmux display -p '#{client_termname}' 2>/dev/null)" == xterm-ghostty ]]; then
+    TERM_PROGRAM=ghostty TERM_PROGRAM_VERSION=1.2.0 command claude "$@"
+  else
+    command claude "$@"
+  fi
+}
+
 dg()  { ds rs get -t "$1" -n "$2" "${@:3}"; }
 
 dsfl() {
