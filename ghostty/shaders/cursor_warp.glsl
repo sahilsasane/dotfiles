@@ -7,7 +7,7 @@ const float TRAIL_THICKNESS = 1.0;  // 1.0 = full cursor height, 0.0 = zero heig
 const float TRAIL_THICKNESS_X = 0.9;
 
 const float FADE_ENABLED = 1.0; // 1.0 to enable fade gradient along the trail, 0.0 to disable
-const float FADE_EXPONENT = 2.0; // exponent for fade gradient along the trail
+const float FADE_EXPONENT = 0.4; // exponent for fade gradient along the trail
 
 // --- CONSTANTS for easing functions ---
 const float PI = 3.14159265359;
