@@ -1,6 +1,6 @@
 case "$OSTYPE:$CPUTYPE" in
-  darwin:arm64) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}" ;;
-  darwin:*) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/usr/local}" ;;
+  darwin*:arm64) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}" ;;
+  darwin*:*) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/usr/local}" ;;
   *) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/home/linuxbrew/.linuxbrew}" ;;
 esac
 eval "$("$BREW_PREFIX/bin/brew" shellenv)"
