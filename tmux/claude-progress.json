@@ -1,0 +1,86 @@
+{
+  "terminalProgressBarEnabled": false,
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec python3 /Users/sahilsasane/dotfiles/tmux/scripts/claude-progress.py"
+          }
+        ]
+      }
+    ]
+  }
+}

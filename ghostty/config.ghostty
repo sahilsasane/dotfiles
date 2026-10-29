@@ -13,10 +13,10 @@ font-codepoint-map = U+F0262=JetBrainsMono Nerd Font Mono
 font-codepoint-map = U+F0085-U+F008B,U+F089C-U+F089E=JetBrainsMono Nerd Font Propo
 # Kitty's bundled symbol font has the larger Apple glyph; installed in ~/Library/Fonts.
 font-codepoint-map = U+F179=Symbols Nerd Font Mono
-font-style = "ExtraLight"
-font-style-bold = "Regular"
+font-style = "Regular"
+font-style-bold = "SemiBold"
 font-style-italic = "ExtraLight Italic"
-font-style-bold-italic = "Italic"
+font-style-bold-italic = "SemiBold Italic"
 font-size = 18
 adjust-cell-height = 10%
 # Counter fallback metric scaling of Kitty's symbol font (79.2px to ~60px at 30pt/2x).
@@ -24,6 +24,8 @@ adjust-icon-height = -24%
 font-thicken = false
 font-feature = "+calt,+ss02,+cv03,+cv04,+cv08,+cv14,+cv15,+cv16,+cv18,+cv19,+cv20,+zero"
 minimum-contrast = 1.1
+faint-opacity = 0.8
+progress-style = true
 window-colorspace = display-p3
 window-vsync = true
 
@@ -45,12 +47,12 @@ window-decoration = server
 
 # Appearance
 macos-titlebar-style = tabs
-macos-window-buttons = visible
+macos-window-buttons = hidden
 
 background-opacity = 0.75
 # Keep colored statusline backgrounds as opaque as their Powerline glyphs.
 background-opacity-cells = false
-background-blur = 40
+background-blur = 35
 unfocused-split-opacity = 0.97
 custom-shader = /Users/sahilsasane/dotfiles/ghostty/shaders/cursor_warp.glsl
 custom-shader-animation = true
@@ -76,7 +78,7 @@ notify-on-command-finish-action = no-bell,notify
 notify-on-command-finish-after = 5s
 quick-terminal-position = top
 quick-terminal-size = 40%
-quick-terminal-screen = main
+quick-terminal-screen = mouse
 quick-terminal-animation-duration = 0.12
 quick-terminal-autohide = true
 quick-terminal-space-behavior = move
@@ -104,6 +106,10 @@ macos-auto-secure-input = true
 macos-secure-input-indication = true
 
 # Quality-of-life keybinds
+keybind = global:ctrl+backquote=toggle_quick_terminal
+keybind = super+shift+l=toggle_readonly
+keybind = super+alt+1=set_font_size:18
+keybind = super+alt+2=set_font_size:20
 keybind = super+k=text:\x1bk
 keybind = super+shift+p=toggle_command_palette
 keybind = super+shift+j=jump_to_prompt:-1
@@ -117,6 +123,12 @@ keybind = super+alt+j=goto_split:down
 keybind = super+alt+k=goto_split:up
 keybind = super+alt+l=goto_split:right
 keybind = super+enter=toggle_split_zoom
+
+# Named controls for the tmux workflow, available through Cmd+Shift+P.
+command-palette-entry = title:"Font: Laptop (18 pt)", action:set_font_size:18
+command-palette-entry = title:"Font: Dell (20 pt)", action:set_font_size:20
+command-palette-entry = title:"Input: Toggle Read-Only", action:toggle_readonly
+command-palette-entry = title:"Input: Toggle Mouse Capture", action:toggle_mouse_reporting
 
 # Shell-style editing keybinds
 keybind = alt+left=esc:b
