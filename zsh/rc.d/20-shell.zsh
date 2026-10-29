@@ -10,7 +10,7 @@ export HOMEBREW_NO_ENV_HINTS=1
 unalias man 2>/dev/null
 export MANPAGER='col -b | bat --style=plain --language=man --color=always'
 
-if command -v security >/dev/null 2>&1; then
+if [[ "$OSTYPE" == darwin* ]]; then
   export OPENAI_API_KEY="$(security find-generic-password -a "$USER" -s openai_api_key -w 2>/dev/null)"
   export HF_TOKEN="$(security find-generic-password -a "$USER" -s hf_token -w 2>/dev/null)"
   export WIZ_CLIENT_ID="$(security find-generic-password -a "$USER" -s wiz_client_id -w 2>/dev/null)"

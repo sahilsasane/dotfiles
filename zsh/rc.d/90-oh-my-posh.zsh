@@ -1,11 +1,3 @@
-if ! command -v oh-my-posh >/dev/null 2>&1; then
-  return
-fi
-
-if [[ ! -r "${OMP_CONFIG:-}" ]]; then
-  return
-fi
-
 if (( ${+widgets} )) && (( $+functions[_omp_create_widget] || $+functions[enable_poshtooltips] )); then
   # Remove any previously initialized OMP widget wrappers before reloading.
   typeset _dotfiles_omp_widget _dotfiles_omp_backup _dotfiles_omp_func

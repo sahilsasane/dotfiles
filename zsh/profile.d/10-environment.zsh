@@ -1,8 +1,9 @@
-if [ -x /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -x /usr/local/bin/brew ]; then
-  eval "$(/usr/local/bin/brew shellenv)"
-fi
+case "$OSTYPE:$CPUTYPE" in
+  darwin:arm64) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}" ;;
+  darwin:*) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/usr/local}" ;;
+  *) typeset -g BREW_PREFIX="${HOMEBREW_PREFIX:-/home/linuxbrew/.linuxbrew}" ;;
+esac
+eval "$("$BREW_PREFIX/bin/brew" shellenv)"
 
 typeset -aU path
 path=(

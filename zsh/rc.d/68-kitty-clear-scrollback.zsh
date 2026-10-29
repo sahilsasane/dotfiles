@@ -8,7 +8,7 @@ if [[ -n "${KITTY_PID:-}" || -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
   __dotfiles_kitty_clear_scrollback() {
     emulate -L zsh
 
-    if [[ -n "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then
+    if [[ -n "${TMUX:-}" ]]; then
       tmux clear-history -t "${TMUX_PANE:-}" 2>/dev/null
     fi
 

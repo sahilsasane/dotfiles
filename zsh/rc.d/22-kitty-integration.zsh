@@ -12,21 +12,19 @@ _dotfiles_terminal_write() {
 if [[ -n "${KITTY_PID:-}" || -n "${KITTY_INSTALLATION_DIR:-}" ]]; then
   typeset -g KITTY_INSTALLATION_DIR="${KITTY_INSTALLATION_DIR:-/Applications/kitty.app/Contents/Resources/kitty}"
 
-  if [[ -r "$KITTY_INSTALLATION_DIR/shell-integration/zsh/kitty-integration" ]]; then
-    export KITTY_SHELL_INTEGRATION="${KITTY_SHELL_INTEGRATION:-no-title}"
-    autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
-    kitty-integration
-    unfunction kitty-integration
+  export KITTY_SHELL_INTEGRATION="${KITTY_SHELL_INTEGRATION:-no-title}"
+  autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+  kitty-integration
+  unfunction kitty-integration
 
-    notify-me() {
-      emulate -L zsh -o no_aliases
-      local title="${1:-Alert}"
-      (( $# )) && shift
-      local sequence
-      sequence="$(command kitten notify --only-print-escape-code "$title" "$@")" || return
-      _dotfiles_terminal_write "$sequence"
-    }
-  fi
+  notify-me() {
+    emulate -L zsh -o no_aliases
+    local title="${1:-Alert}"
+    (( $# )) && shift
+    local sequence
+    sequence="$(command kitten notify --only-print-escape-code "$title" "$@")" || return
+    _dotfiles_terminal_write "$sequence"
+  }
 fi
 
 if [[ -n "${TMUX:-}" ]]; then

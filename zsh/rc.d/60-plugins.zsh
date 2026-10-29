@@ -11,21 +11,11 @@ fi
 
 plugins=(git)
 
-if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
-  source "$ZSH/oh-my-zsh.sh"
-  # OMZ lib/key-bindings.zsh runs `bindkey -e`; restore vi mode from 20-shell.zsh
-  bindkey -v
-fi
+source "$ZSH/oh-my-zsh.sh"
+# OMZ lib/key-bindings.zsh runs `bindkey -e`; restore vi mode from 20-shell.zsh
+bindkey -v
 
-if command -v brew >/dev/null 2>&1; then
-  typeset -g BREW_PREFIX="${BREW_PREFIX:-$(brew --prefix 2>/dev/null)}"
-fi
-
-if [[ -n "${BREW_PREFIX:-}" && -f "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-  source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-elif [[ -n "${ZSH_CUSTOM:-}" && -f "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-  source "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
+source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 if (( ${+widgets[autosuggest-accept]} )); then
   bindkey -M emacs '^Y' autosuggest-accept
@@ -37,14 +27,10 @@ if (( ${+widgets[autosuggest-clear]} )); then
   bindkey -M viins '^]' autosuggest-clear
 fi
 
-if [[ -x "$HOME/.dataos/v2/bin/dataos-ctl" ]]; then
-  source <("$HOME/.dataos/v2/bin/dataos-ctl" completion zsh)
-  compdef _dataos-ctl ds
-fi
+source <("$HOME/.dataos/v2/bin/dataos-ctl" completion zsh)
+compdef _dataos-ctl ds
 
-if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
-fi
+eval "$(zoxide init zsh)"
 
 unsetopt SHARE_HISTORY
 setopt INC_APPEND_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_SPACE
