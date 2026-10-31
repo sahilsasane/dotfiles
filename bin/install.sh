@@ -2,6 +2,8 @@
 set -euo pipefail
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_HOME="$HOME/.config"
+DATA_HOME="$HOME/.local/share"
 
 backup_path() {
   local target="$1"
@@ -24,23 +26,10 @@ prepare_runtime_dir() {
   local target="$1"
   if [[ -L "$target" ]]; then
     rm "$target"
-  elif [[ -e "$target" ]]; then
+  elif [[ -e "$target" && ! -d "$target" ]]; then
     backup_path "$target"
   fi
   mkdir -p "$target"
-}
-
-migrate_lazygit_dir() {
-  local target="$1" state_backup=""
-  if [[ -f "$target/state.yml" ]]; then
-    state_backup="$(mktemp)"
-    cp -p "$target/state.yml" "$state_backup"
-  fi
-  prepare_runtime_dir "$target"
-  if [[ -n "$state_backup" ]]; then
-    cp -p "$state_backup" "$target/state.yml"
-    rm "$state_backup"
-  fi
 }
 
 clone_or_update() {
@@ -55,70 +44,60 @@ clone_or_update() {
 }
 
 clone_or_update https://github.com/ohmyzsh/ohmyzsh.git \
-  "$HOME/.oh-my-zsh"
+  "$DATA_HOME/oh-my-zsh"
 
 clone_or_update https://github.com/tmux-plugins/tpm \
-  "$HOME/.tmux/plugins/tpm"
+  "$DATA_HOME/tmux/plugins/tpm"
 clone_or_update https://github.com/catppuccin/tmux \
-  "$HOME/.tmux/plugins/catppuccin"
+  "$DATA_HOME/tmux/plugins/catppuccin"
 clone_or_update https://github.com/tmux-plugins/tmux-cpu \
-  "$HOME/.tmux/plugins/tmux-cpu"
+  "$DATA_HOME/tmux/plugins/tmux-cpu"
 clone_or_update https://github.com/tmux-plugins/tmux-battery \
-  "$HOME/.tmux/plugins/tmux-battery"
+  "$DATA_HOME/tmux/plugins/tmux-battery"
 
-link_path "$DOTFILES_ROOT/zsh/.zshrc" "$HOME/.zshrc"
-link_path "$DOTFILES_ROOT/zsh/.zshenv" "$HOME/.zshenv"
-link_path "$DOTFILES_ROOT/zsh/.zprofile" "$HOME/.zprofile"
-
-link_path "$DOTFILES_ROOT/git-config/.gitconfig" "$HOME/.gitconfig"
-link_path "$DOTFILES_ROOT/git-config/.gitignore_global" "$HOME/.gitignore_global"
-
-link_path "$DOTFILES_ROOT/tmux/.tmux.conf" "$HOME/.tmux.conf"
+# .zshenv is the only file zsh reads from $HOME; it points ZDOTDIR at ~/.config/zsh.
+link_path "$DOTFILES_ROOT/home/.zshenv" "$HOME/.zshenv"
 
 link_path "$DOTFILES_ROOT/bin/lgai" "$HOME/.local/bin/lgai"
 link_path "$DOTFILES_ROOT/bin/tmx" "$HOME/.local/bin/tmx"
 link_path "$DOTFILES_ROOT/bin/ds" "$HOME/.local/bin/ds"
 link_path "$DOTFILES_ROOT/bin/dotfiles-theme" "$HOME/.local/bin/dotfiles-theme"
 
+# Each config/<tool> becomes ~/.config/<tool>, except the tools below that need
+# a real directory.
+for source in "$DOTFILES_ROOT"/config/*; do
+  case "${source##*/}" in atuin|git|kitty|lazygit) continue ;; esac
+  link_path "$source" "$CONFIG_HOME/${source##*/}"
+done
+
 # These applications need a real config directory so the theme controller can
-# switch only their selected child files. Existing real directories are backed
-# up, and Lazygit's local state is copied forward.
-migrate_lazygit_dir "$HOME/Library/Application Support/lazygit"
-link_path "$HOME/.config/dotfiles-theme/lazygit.yml" "$HOME/Library/Application Support/lazygit/config.yml"
-migrate_lazygit_dir "$HOME/.config/lazygit"
-link_path "$HOME/.config/dotfiles-theme/lazygit.yml" "$HOME/.config/lazygit/config.yml"
+# switch only their selected child files. Existing real directories are kept,
+# so local state such as Lazygit's state.yml survives.
+prepare_runtime_dir "$CONFIG_HOME/lazygit"
+link_path "$CONFIG_HOME/dotfiles-theme/lazygit.yml" "$CONFIG_HOME/lazygit/config.yml"
 
-prepare_runtime_dir "$HOME/.config/atuin"
-link_path "$HOME/.config/dotfiles-theme/atuin.toml" "$HOME/.config/atuin/config.toml"
-mkdir -p "$HOME/.config/atuin/themes"
-link_path "$DOTFILES_ROOT/atuin/themes/sahil-slate.toml" "$HOME/.config/atuin/themes/sahil-slate.toml"
-link_path "$DOTFILES_ROOT/atuin/themes/sahil-latte.toml" "$HOME/.config/atuin/themes/sahil-latte.toml"
+prepare_runtime_dir "$CONFIG_HOME/atuin"
+link_path "$CONFIG_HOME/dotfiles-theme/atuin.toml" "$CONFIG_HOME/atuin/config.toml"
+link_path "$DOTFILES_ROOT/config/atuin/themes" "$CONFIG_HOME/atuin/themes"
 
-prepare_runtime_dir "$HOME/.config/eza"
-link_path "$DOTFILES_ROOT/eza/theme.yml" "$HOME/.config/eza/theme.yml"
+prepare_runtime_dir "$CONFIG_HOME/git"
+link_path "$DOTFILES_ROOT/config/git/config" "$CONFIG_HOME/git/config"
+link_path "$DOTFILES_ROOT/config/git/ignore" "$CONFIG_HOME/git/ignore"
+link_path "$CONFIG_HOME/dotfiles-theme/gitk" "$CONFIG_HOME/git/gitk"
 
-prepare_runtime_dir "$HOME/.config/git"
-link_path "$DOTFILES_ROOT/git/ignore" "$HOME/.config/git/ignore"
-link_path "$HOME/.config/dotfiles-theme/gitk" "$HOME/.config/git/gitk"
+# Kitty reads the runtime include written by dotfiles-theme.
+prepare_runtime_dir "$CONFIG_HOME/kitty"
+link_path "$DOTFILES_ROOT/config/kitty/kitty.conf" "$CONFIG_HOME/kitty/kitty.conf"
 
-# Kitty and Ghostty read the runtime includes written by dotfiles-theme.
-prepare_runtime_dir "$HOME/.config/kitty"
-link_path "$DOTFILES_ROOT/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
-link_path "$DOTFILES_ROOT/ghostty/config.ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+link_path "$DOTFILES_ROOT/macos/iterm2/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 
-link_path "$DOTFILES_ROOT/nvim" "$HOME/.config/nvim"
-link_path "$DOTFILES_ROOT/fish" "$HOME/.config/fish"
-link_path "$DOTFILES_ROOT/htop" "$HOME/.config/htop"
-link_path "$DOTFILES_ROOT/yazi" "$HOME/.config/yazi"
-link_path "$DOTFILES_ROOT/iterm2/com.googlecode.iterm2.plist" "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
-
-mkdir -p "$HOME/.config/dotfiles-theme" "$HOME/.cache"
+mkdir -p "$CONFIG_HOME/dotfiles-theme" "$HOME/.cache"
 "$DOTFILES_ROOT/bin/dotfiles-theme" apply
 
 if [[ "$(uname)" = Darwin ]]; then
   launch_agent="$HOME/Library/LaunchAgents/com.sahilsasane.dotfiles-theme.plist"
   mkdir -p "$(dirname "$launch_agent")"
-  sed "s#__HOME__#$HOME#g" "$DOTFILES_ROOT/launchd/com.sahilsasane.dotfiles-theme.plist" > "$launch_agent"
+  sed "s#__HOME__#$HOME#g" "$DOTFILES_ROOT/macos/launchd/com.sahilsasane.dotfiles-theme.plist" > "$launch_agent"
   launchctl bootout "gui/$(id -u)/com.sahilsasane.dotfiles-theme" 2>/dev/null || true
   launchctl bootstrap "gui/$(id -u)" "$launch_agent"
 fi

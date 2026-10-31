@@ -1,7 +1,7 @@
 # Managed from dotfiles. The App Support config should only load this file.
 
 # Runtime-selected by `theme`; it overrides this dark default when installed.
-theme = /Users/sahilsasane/dotfiles/ghostty/themes/iterm-dark.ghostty
+theme = /Users/sahilsasane/dotfiles/config/ghostty/themes/iterm-dark.ghostty
 config-file = ?~/.config/dotfiles-theme/ghostty.conf
 
 # Typography and color rendering
@@ -54,7 +54,7 @@ background-opacity = 0.75
 background-opacity-cells = false
 background-blur = 35
 unfocused-split-opacity = 0.97
-custom-shader = /Users/sahilsasane/dotfiles/ghostty/shaders/cursor_warp.glsl
+custom-shader = /Users/sahilsasane/dotfiles/config/ghostty/shaders/cursor_warp.glsl
 custom-shader-animation = true
 
 scrollbar = never

@@ -159,7 +159,7 @@ ds() { command dataos-ctl "$@"; }
 claude() {
   if [[ -n $TMUX && "$(tmux display -p '#{client_termname}' 2>/dev/null)" == xterm-ghostty ]]; then
     TERM_PROGRAM=ghostty TERM_PROGRAM_VERSION=1.2.0 command claude \
-      --settings /Users/sahilsasane/dotfiles/tmux/claude-progress.json "$@"
+      --settings "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/claude-progress.json" "$@"
   else
     command claude "$@"
   fi

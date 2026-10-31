@@ -57,7 +57,7 @@ with tempfile.TemporaryDirectory(prefix='claude-progress-test-') as directory:
         tmux('set-option', '-as', 'terminal-features', ',xterm-ghostty:progressbar')
         bindings = base / 'bindings.conf'
         bindings.write_text('\n'.join(
-            line for line in (ROOT / 'tmux/.tmux.conf').read_text().splitlines()
+            line for line in (ROOT / 'tmux/tmux.conf').read_text().splitlines()
             if line.startswith(('bind -n Escape ', 'bind -n C-c '))
         ) + '\n')
         tmux('source-file', str(bindings))

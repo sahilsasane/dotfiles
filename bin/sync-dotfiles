@@ -4,61 +4,14 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-mkdir -p \
-  "$ROOT_DIR/atuin" \
-  "$ROOT_DIR/atuin/themes" \
-  "$ROOT_DIR/bin" \
-  "$ROOT_DIR/eza" \
-  "$ROOT_DIR/fish" \
-  "$ROOT_DIR/git" \
-  "$ROOT_DIR/git-config" \
-  "$ROOT_DIR/htop" \
-  "$ROOT_DIR/iterm2" \
-  "$ROOT_DIR/lazygit" \
-  "$ROOT_DIR/nvim" \
-  "$ROOT_DIR/tmux" \
-  "$ROOT_DIR/yazi" \
-  "$ROOT_DIR/zsh" \
-  "$ROOT_DIR/zsh/profile.d" \
-  "$ROOT_DIR/zsh/rc.d"
-
-rsync -a --delete \
-  --exclude '.DS_Store' \
-  --exclude '.cursor/' \
-  "$HOME/.config/nvim/" "$ROOT_DIR/nvim/"
-
-# eza and Atuin contain runtime-selected links. Their tracked variants are
-# source-controlled directly, so never copy the active selection back here.
-
-rsync -a --delete --exclude '.DS_Store' "$HOME/.config/fish/" "$ROOT_DIR/fish/"
-# git/gitk is runtime-selected; keep the tracked dark and Latte variants intact.
-rsync -a --delete --exclude '.DS_Store' "$HOME/.config/htop/" "$ROOT_DIR/htop/"
-# Lazygit's config and state are runtime/local state and are intentionally not synced.
-if [ -d "$HOME/.config/yazi" ]; then
-  rsync -a --delete --exclude '.DS_Store' "$HOME/.config/yazi/" "$ROOT_DIR/yazi/"
-fi
-
-install -m 0644 "$HOME/.gitconfig" "$ROOT_DIR/git-config/.gitconfig"
-install -m 0644 "$HOME/.gitignore_global" "$ROOT_DIR/git-config/.gitignore_global"
-perl -0pi -e '
-  s#^(\s*excludesfile\s*=\s*).*$#$1~/.gitignore_global#mg;
-' "$ROOT_DIR/git-config/.gitconfig"
-
-echo "Skipping zsh loader/module sync: dotfiles is the source of truth for zsh."
-
-install -m 0644 "$HOME/.tmux.conf" "$ROOT_DIR/tmux/.tmux.conf"
-perl -0pi -e '
-  s#~/.config/tmux/tmux\.conf#~/.tmux.conf#g;
-  s#~/.config/tmux/plugins/catppuccin/tmux#~/.tmux/plugins/catppuccin#g;
-  s#~/.config/tmux/plugins/tmux-plugins/tmux-cpu/cpu\.tmux#~/.tmux/plugins/tmux-cpu/cpu.tmux#g;
-  s#~/.config/tmux/plugins/tmux-plugins/tmux-battery/battery\.tmux#~/.tmux/plugins/tmux-battery/battery.tmux#g;
-' "$ROOT_DIR/tmux/.tmux.conf"
+# Everything under config/ and home/ is symlinked into place, so edits already
+# land in this repo. Only copies made outside those links need syncing back.
 
 if [ -f "$HOME/bin/tmxp" ]; then
   install -m 0755 "$HOME/bin/tmxp" "$ROOT_DIR/bin/tmxp"
 fi
 
-plutil -convert xml1 -o "$ROOT_DIR/iterm2/com.googlecode.iterm2.plist" \
+plutil -convert xml1 -o "$ROOT_DIR/macos/iterm2/com.googlecode.iterm2.plist" \
   "$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 
-echo "Sync complete. Runtime-selected theme files and LaunchAgent state were skipped. Review with: git status --short"
+echo "Sync complete. Review with: git status --short"

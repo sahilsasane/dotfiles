@@ -20,26 +20,29 @@ Secrets, auth, caches, and app state are intentionally out of scope.
 - `Brewfile`: core packages and casks used by this setup
 - `bin/bootstrap`: install packages, clone framework dependencies, and link configs
 - `bin/install.sh`: link tracked files into `$HOME`
-- `bin/sync-dotfiles`: copy current machine config back into the repo and sanitize it
-- `nvim/`: Neovim config, keymaps, plugins, lockfile
-- `kitty/`: Kitty config plus custom tab bar code
-- `ghostty/`: Ghostty config, themes, and shader experiments
-- `fastfetch/`: Fastfetch configuration
-- `launchd/`: launchd template for automatic theme application
-- `atuin/`: Atuin history search config
-- `lazygit/`: Lazygit config and custom commands
-- `tldr/`: Catppuccin Latte and Mocha configurations for `tldr`
-- `eza/`: eza theme config
-- `rg/`: ripgrep color configuration
-- `procs/`: process-list color and column configuration
-- `yazi/`: Yazi config and flavor assets
-- `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
-- `tmux/`: tmux config using `~/.tmux.conf` and `~/.tmux/plugins`
-- `git-config/`: Git config and global ignore
-- `git/`: extra Git UI config
-- `fish/`: fish snippets
-- `htop/`: htop config
-- `iterm2/`: iTerm2 preferences plist
+- `bin/sync-dotfiles`: copy the iTerm2 plist and `~/bin/tmxp` back into the repo
+- `home/.zshenv`: the only file linked into `$HOME`; it sets the XDG base
+  directories and `ZDOTDIR=~/.config/zsh`
+- `config/<tool>/`: mirrors `~/.config/<tool>/`
+  - `nvim/`: Neovim config, keymaps, plugins, lockfile
+  - `kitty/`: Kitty config plus custom tab bar code
+  - `ghostty/`: Ghostty config, themes, and shader experiments
+  - `fastfetch/`: Fastfetch configuration
+  - `atuin/`: Atuin history search config
+  - `lazygit/`: Lazygit config and custom commands
+  - `tldr/`: Catppuccin Latte and Mocha configurations for `tldr`
+  - `eza/`: eza theme config
+  - `ripgrep/`: ripgrep color configuration
+  - `procs/`: process-list color and column configuration
+  - `yazi/`: Yazi config and flavor assets
+  - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
+  - `tmux/`: tmux config, scripts, and themes
+  - `git/`: Git config, global ignore, theme includes, and gitk config
+  - `fish/`: fish snippets
+  - `htop/`: htop config
+- `macos/`: files macOS reads from outside `~/.config`
+  - `iterm2/`: iTerm2 preferences plist
+  - `launchd/`: launchd template for automatic theme application
 
 ## Bootstrap A New Machine
 
@@ -63,8 +66,14 @@ After bootstrap:
 
 What `bin/install.sh` links:
 
-- zsh, git, tmux, Neovim, Lazygit, Atuin, eza, fish, htop, yazi, Kitty, Ghostty, iTerm2
-- `bin/lgai`, `bin/tmx`, and `bin/dotfiles-theme` into `~/.local/bin`
+- `home/.zshenv` into `~/.zshenv`
+- each `config/<tool>` into `~/.config/<tool>`; Atuin, git, Kitty, and Lazygit
+  get real directories with linked child files instead
+- the iTerm2 plist into `~/Library/Preferences`
+- `bin/lgai`, `bin/tmx`, `bin/ds`, and `bin/dotfiles-theme` into `~/.local/bin`
+
+Framework code lives under `~/.local/share`: oh-my-zsh in
+`~/.local/share/oh-my-zsh` and tmux plugins in `~/.local/share/tmux/plugins`.
 
 What it does not currently link:
 
@@ -81,7 +90,7 @@ Optional AI commit flow for Lazygit:
 - `lgai` sends the staged diff plus recent commit subjects to `aichat`, generates one complete single-line Conventional Commit message covering the full staged change set, then opens it in `$VISUAL` or `$EDITOR` before committing
 
 To switch from a cloud model to Ollama later, update your `aichat` model config. The Lazygit keybinding stays the same.
-On macOS, `lazygit --print-config-dir` commonly resolves to `~/Library/Application Support/lazygit` rather than `~/.config/lazygit`.
+Because `.zshenv` exports `XDG_CONFIG_HOME`, `lazygit --print-config-dir` resolves to `~/.config/lazygit` on macOS too.
 
 ## Theme
 
@@ -105,22 +114,20 @@ watch the effective-mode file, while Ghostty, LazyGit, Atuin, eza, Yazi, gitk,
 delta, bat, tldr, and htop use the new settings on their next supported reload
 or launch.
 
-The controller writes only `~/.config/dotfiles-theme/`. The installer converts
-Lazygit, Atuin, eza, and git to real config directories with linked child files,
-backs up pre-existing real directories, and preserves `lazygit/state.yml`.
-`bin/sync-dotfiles` deliberately skips these runtime selections and the
-LaunchAgent-generated state.
+The controller writes only `~/.config/dotfiles-theme/`. The installer keeps
+Lazygit, Atuin, Kitty, and git as real config directories with linked child
+files, so local state such as `lazygit/state.yml` stays in place.
 
 ## Colored Shell Commands
 
 Interactive zsh applies the active Catppuccin palette to common command output:
 
-- `rg` uses `rg/ripgrep.conf` through `RIPGREP_CONFIG_PATH`; the command remains
+- `rg` uses `config/ripgrep/ripgrep.conf` through `RIPGREP_CONFIG_PATH`; the command remains
   `rg` rather than a `batgrep` wrapper.
 - `pwd`, `history`, `jobs`, and `du` use shell wrappers for readable interactive
   output. `pwd`, `jobs`, and `du` only add colors when stdout is a terminal;
   `history` can also color piped output.
-- `procs` loads `procs/config.toml` automatically. `lsof` remains native and is
+- `procs` loads `config/procs/config.toml` automatically. `lsof` remains native and is
   not wrapped.
 - Command-position highlighting uses bold Catppuccin blue for commands and
   mauve for aliases/builtins, while paths remain teal.
@@ -170,8 +177,9 @@ Run:
 ./bin/sync-dotfiles
 ```
 
-This copies the current local config into the repo and keeps the tracked copy sanitized and path-stable.
-For zsh, the repo is the source of truth, so the sync script preserves the modular layout instead of rebuilding a single monolithic `~/.zshrc`.
+Everything under `config/` and `home/` is symlinked, so edits already land in
+the repo. The sync script only copies back the iTerm2 plist, which iTerm2
+rewrites in binary form, and `~/bin/tmxp`.
 
 ## Secrets And Local State
 
@@ -186,7 +194,7 @@ For zsh, keep machine-specific env vars in:
 Example values are in:
 
 ```bash
-zsh/.zshrc.local.example
+config/zsh/.zshrc.local.example
 ```
 
 These are intentionally not tracked here:
@@ -199,10 +207,10 @@ These are intentionally not tracked here:
 
 ## Notes
 
-- `nvim/lazy-lock.json` is tracked so plugin versions stay pinned across machines.
-- tmux plugins are installed under `~/.tmux/plugins`.
-- This repo prefers portable paths like `~/.gitignore_global` over machine-specific absolute paths.
+- `config/nvim/lazy-lock.json` is tracked so plugin versions stay pinned across machines.
+- tmux plugins are installed under `~/.local/share/tmux/plugins`.
+- This repo prefers portable paths like `~/.config/tmux/scripts` over machine-specific absolute paths.
 - zsh is organized as small ordered modules:
-  `zsh/profile.d/*.zsh` for login-time env and runtimes, and
-  `zsh/rc.d/*.zsh` for interactive shell behavior.
+  `config/zsh/profile.d/*.zsh` for login-time env and runtimes, and
+  `config/zsh/rc.d/*.zsh` for interactive shell behavior.
 - Reload Kitty config from inside a Kitty shell with `kitty @ load-config`.

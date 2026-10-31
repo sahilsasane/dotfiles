@@ -23,16 +23,16 @@ shada/
 session/
 
 # Lazy / plugin cache (DON’T commit)
-nvim/.cache/
-nvim/.local/
-nvim/.luarc.json
-nvim/.cursor/
+config/nvim/.cache/
+config/nvim/.local/
+config/nvim/.luarc.json
+config/nvim/.cursor/
 
 # ========================
 # TMUX
 # ========================
 # plugins should NOT be committed
-tmux/plugins/
+config/tmux/plugins/
 
 # ========================
 # Python / UV / venvs
@@ -55,14 +55,15 @@ node_modules/
 # ========================
 # iTerm / macOS app data
 # ========================
-iterm2/AppSupport
-iterm2/sockets/
-lazygit/state.yml
+macos/iterm2/AppSupport
+macos/iterm2/sockets/
+config/lazygit/state.yml
 raycast/ai/
 cagent/
 
 # Generated shell state
-zsh/.zcompdump*
+config/zsh/.zcompdump*
+config/zsh/.zsh_sessions/
 
 # ========================
 # Backup configs (your case)

@@ -1,4 +1,7 @@
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="$XDG_DATA_HOME/oh-my-zsh"
+# ZDOTDIR points into this repo, so keep the completion dump in the cache.
+ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-${HOST%%.*}-$ZSH_VERSION"
+[[ -d ${ZSH_COMPDUMP:h} ]] || command mkdir -p "${ZSH_COMPDUMP:h}"
 ZSH_THEME=""
 DISABLE_AUTO_UPDATE=true
 ZSH_DISABLE_COMPFIX=true

@@ -62,7 +62,7 @@ reload_runtime() {
     reloaded+=(kitty)
   fi
   if command -v tmux >/dev/null 2>&1 && tmux list-sessions >/dev/null 2>&1; then
-    tmux source-file "$HOME/.tmux.conf" && reloaded+=(tmux)
+    tmux source-file "$CONFIG_HOME/tmux/tmux.conf" && reloaded+=(tmux)
   fi
   if ((${#reloaded[@]})); then
     printf 'reloaded: %s\n' "${reloaded[*]}"
@@ -76,42 +76,42 @@ apply() {
   mkdir -p "$STATE_DIR"
 
   if [[ "$effective" = light ]]; then
-    lazygit_source="$ROOT/lazygit/config-latte.yml"
-    atuin_source="$ROOT/atuin/config-latte.toml"
-    gitk_source="$ROOT/git/gitk-latte"
-    tlrc_source="$ROOT/tldr/config-latte.toml"
+    lazygit_source="$ROOT/config/lazygit/config-latte.yml"
+    atuin_source="$ROOT/config/atuin/config-latte.toml"
+    gitk_source="$ROOT/config/git/gitk-latte"
+    tlrc_source="$ROOT/config/tldr/config-latte.toml"
   else
-    lazygit_source="$ROOT/lazygit/config.yml"
-    atuin_source="$ROOT/atuin/config.toml"
-    gitk_source="$ROOT/git/gitk"
-    tlrc_source="$ROOT/tldr/config-mocha.toml"
+    lazygit_source="$ROOT/config/lazygit/config.yml"
+    atuin_source="$ROOT/config/atuin/config.toml"
+    gitk_source="$ROOT/config/git/gitk"
+    tlrc_source="$ROOT/config/tldr/config-mocha.toml"
   fi
 
   # Validate every repo source before changing any runtime target.
   local source
   for source in \
-    "$ROOT/kitty/themes/$effective.conf" \
-    "$ROOT/ghostty/themes/iterm-dark.ghostty" \
-    "$ROOT/tmux/themes/$effective.conf" \
+    "$ROOT/config/kitty/themes/$effective.conf" \
+    "$ROOT/config/ghostty/themes/iterm-dark.ghostty" \
+    "$ROOT/config/tmux/themes/$effective.conf" \
     "$atuin_source" "$lazygit_source" "$gitk_source" "$tlrc_source" \
-    "$ROOT/git-config/themes/$effective.gitconfig"; do
+    "$ROOT/config/git/themes/$effective.gitconfig"; do
     [[ -f "$source" ]] || { echo "missing theme file: $source" >&2; return 1; }
   done
-  if [[ "$effective" = light && ! -f "$ROOT/ghostty/themes/catppuccin-latte.ghostty" ]]; then
-    echo "missing theme file: $ROOT/ghostty/themes/catppuccin-latte.ghostty" >&2
+  if [[ "$effective" = light && ! -f "$ROOT/config/ghostty/themes/catppuccin-latte.ghostty" ]]; then
+    echo "missing theme file: $ROOT/config/ghostty/themes/catppuccin-latte.ghostty" >&2
     return 1
   fi
 
   [[ -r "$EFFECTIVE_FILE" && "$(<"$EFFECTIVE_FILE")" = "$effective" ]] && changed=0
 
-  write_file "$STATE_DIR/kitty.conf" "include $ROOT/kitty/themes/$effective.conf"
+  write_file "$STATE_DIR/kitty.conf" "include $ROOT/config/kitty/themes/$effective.conf"
   if [[ "$mode" = auto ]]; then
-    write_file "$STATE_DIR/ghostty.conf" "theme = light:$ROOT/ghostty/themes/catppuccin-latte.ghostty,dark:$ROOT/ghostty/themes/iterm-dark.ghostty"
+    write_file "$STATE_DIR/ghostty.conf" "theme = light:$ROOT/config/ghostty/themes/catppuccin-latte.ghostty,dark:$ROOT/config/ghostty/themes/iterm-dark.ghostty"
   else
-    write_file "$STATE_DIR/ghostty.conf" "theme = $ROOT/ghostty/themes/$( [[ "$effective" = light ]] && printf catppuccin-latte || printf iterm-dark ).ghostty"
+    write_file "$STATE_DIR/ghostty.conf" "theme = $ROOT/config/ghostty/themes/$( [[ "$effective" = light ]] && printf catppuccin-latte || printf iterm-dark ).ghostty"
   fi
-  write_file "$STATE_DIR/tmux.conf" "source-file $ROOT/tmux/themes/$effective.conf"
-  link_file "$ROOT/git-config/themes/$effective.gitconfig" "$STATE_DIR/git-theme.gitconfig"
+  write_file "$STATE_DIR/tmux.conf" "source-file $ROOT/config/tmux/themes/$effective.conf"
+  link_file "$ROOT/config/git/themes/$effective.gitconfig" "$STATE_DIR/git-theme.gitconfig"
   link_file "$lazygit_source" "$STATE_DIR/lazygit.yml"
   link_file "$atuin_source" "$STATE_DIR/atuin.toml"
   link_file "$gitk_source" "$STATE_DIR/gitk"

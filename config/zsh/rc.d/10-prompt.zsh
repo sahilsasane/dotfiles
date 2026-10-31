@@ -12,7 +12,7 @@ __dotfiles_theme_apply_shell() {
     export EZA_CONFIG_DIR="${DOTFILES_ZSH_DIR}/../eza/themes/latte"
     export BAT_THEME="Catppuccin Latte"
     export LS_COLORS="$(vivid generate catppuccin-latte 2>/dev/null)"
-    export RIPGREP_CONFIG_PATH="${RIPGREP_CONFIG_PATH:-${DOTFILES_ZSH_DIR}/../rg/ripgrep.conf}"
+    export RIPGREP_CONFIG_PATH="${RIPGREP_CONFIG_PATH:-${DOTFILES_ZSH_DIR}/../ripgrep/ripgrep.conf}"
     typeset -g DOTFILES_FZF_THEME_OPTS='--color=fg:#4c4f69,bg:-1,hl:#1e66f5
       --color=fg+:#4c4f69,bg+:#ccd0da,hl+:#df8e1d
       --color=info:#6c6f85,prompt:#1e66f5,pointer:#df8e1d,marker:#40a02b
@@ -32,7 +32,7 @@ __dotfiles_theme_apply_shell() {
     export EZA_CONFIG_DIR="${DOTFILES_ZSH_DIR}/../eza"
     export BAT_THEME="Catppuccin Mocha"
     export LS_COLORS="$(vivid generate catppuccin-mocha 2>/dev/null)"
-    export RIPGREP_CONFIG_PATH="${RIPGREP_CONFIG_PATH:-${DOTFILES_ZSH_DIR}/../rg/ripgrep.conf}"
+    export RIPGREP_CONFIG_PATH="${RIPGREP_CONFIG_PATH:-${DOTFILES_ZSH_DIR}/../ripgrep/ripgrep.conf}"
     typeset -g DOTFILES_FZF_THEME_OPTS='--color=fg:#d7dae0,bg:-1,hl:#8fb7ff
       --color=fg+:#f5f7ff,bg+:-1,hl+:#ffd580
       --color=info:#8b93a6,prompt:#8fb7ff,pointer:#ffd580,marker:#7bd88f
