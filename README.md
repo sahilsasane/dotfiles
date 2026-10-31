@@ -37,6 +37,7 @@ Secrets, auth, caches, and app state are intentionally out of scope.
   - `yazi/`: Yazi config and flavor assets
   - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
   - `tmux/`: tmux config, scripts, and themes
+  - `rex/`: Rex keybindings that follow the tmux prefix workflow
   - `git/`: Git config, global ignore, theme includes, and gitk config
   - `fish/`: fish snippets
   - `htop/`: htop config
