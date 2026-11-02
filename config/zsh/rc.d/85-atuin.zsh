@@ -1,3 +1,4 @@
+export ATUIN_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/atuin"
 export ATUIN_SEARCH_MODE="${ATUIN_SEARCH_MODE:-fuzzy}"
 export ATUIN_STYLE="${ATUIN_STYLE:-compact}"
 __dotfiles_inside_current_tmux_pane() {

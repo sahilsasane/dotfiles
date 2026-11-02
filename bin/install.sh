@@ -54,6 +54,8 @@ clone_or_update https://github.com/tmux-plugins/tmux-cpu \
   "$DATA_HOME/tmux/plugins/tmux-cpu"
 clone_or_update https://github.com/tmux-plugins/tmux-battery \
   "$DATA_HOME/tmux/plugins/tmux-battery"
+clone_or_update https://github.com/laktak/extrakto \
+  "$DATA_HOME/extrakto"
 
 # .zshenv is the only file zsh reads from $HOME; it points ZDOTDIR at ~/.config/zsh.
 link_path "$DOTFILES_ROOT/home/.zshenv" "$HOME/.zshenv"

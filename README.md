@@ -37,13 +37,16 @@ Secrets, auth, caches, and app state are intentionally out of scope.
   - `yazi/`: Yazi config and flavor assets
   - `zsh/`: shell config split into top-level loaders plus `profile.d/` and `rc.d/`
   - `tmux/`: tmux config, scripts, and themes
-  - `rex/`: Rex keybindings that follow the tmux prefix workflow
+  - `rex/`: Rex keybindings that follow the tmux prefix workflow, plus a Neovim copy overlay
   - `git/`: Git config, global ignore, theme includes, and gitk config
   - `fish/`: fish snippets
   - `htop/`: htop config
 - `macos/`: files macOS reads from outside `~/.config`
   - `iterm2/`: iTerm2 preferences plist
   - `launchd/`: launchd template for automatic theme application
+- `fonts/sahil-mono/`: reproducible JetBrains Mono variant with the Ghostty
+  character features enabled through Rex's Ligatures setting; see its
+  [build and installation notes](fonts/sahil-mono/README.md)
 
 ## Bootstrap A New Machine
 
@@ -208,10 +211,32 @@ These are intentionally not tracked here:
 
 ## Notes
 
+- Rex and tmux use `Ctrl-Space`, then `h/j/k/l` to focus panes left/down/up/right.
+  `Ctrl-Space`, then `Shift-h/j/k/l` resizes panes.
+- Rex: `Ctrl-Space`, then `[` opens a read-only scrollback snapshot over the
+  focused pane. Use `v`/`V`/`Ctrl-v` to select, `y` to copy to the macOS
+  clipboard and close, or `q` to dismiss. `/`, `?`, `n`, and `N` search as in
+  Neovim. Reload with `Ctrl-Space`, then `r` after editing the Rex config.
+  Inside the viewer, `s` uses Flash to jump or extend a selection. Flash loads
+  only when invoked, from the existing Neovim plugin installation.
+  `Ctrl-Space`, then `Ctrl-e` opens a centered Extrakto picker, 70% of the
+  window width and 55% of its height, for the focused pane:
+  `Tab` pastes, `Enter` copies, and `Ctrl-f` cycles word/all/line filters.
+  Its standalone filters are installed at `~/.local/share/extrakto` by the installer.
+  The shell and Extrakto share the palettes in `config/zsh/fzf/`; the picker
+  reads the selected theme directly without loading shell startup files.
+  `Ctrl-Space`, then `Shift-P` opens a new floating shell in the focused pane's
+  working directory. Run `exit` or press `Ctrl-D` to close it.
+  Rex's default disk persistence restores the session/window layout after a
+  server restart; no separate snapshot plugin is needed for that topology.
+  Before/after timings and a repeatable benchmark are in
+  [`benchmarks/rex-copy-mode/`](benchmarks/rex-copy-mode/README.md).
 - `config/nvim/lazy-lock.json` is tracked so plugin versions stay pinned across machines.
 - tmux plugins are installed under `~/.local/share/tmux/plugins`.
 - This repo prefers portable paths like `~/.config/tmux/scripts` over machine-specific absolute paths.
 - zsh is organized as small ordered modules:
   `config/zsh/profile.d/*.zsh` for login-time env and runtimes, and
   `config/zsh/rc.d/*.zsh` for interactive shell behavior.
+- zsh sets `ATUIN_CONFIG_DIR` to `~/.config/atuin` so Atuin uses the selected
+  dotfiles theme even when `~/.atuin/config.toml` also exists.
 - Reload Kitty config from inside a Kitty shell with `kitty @ load-config`.

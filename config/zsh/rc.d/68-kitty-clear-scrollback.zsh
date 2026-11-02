@@ -1,4 +1,4 @@
-if [[ -n "${KITTY_PID:-}" || -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
+if [[ -n "${KITTY_PID:-}" || -n "${GHOSTTY_RESOURCES_DIR:-}" || "${TERM_PROGRAM:-}" == rex ]]; then
   __dotfiles_kitty_clear_screen() {
     emulate -L zsh
     builtin print -rn -- $'\r\e[0J\e[H\e[22J' >"$TTY"
@@ -18,9 +18,11 @@ if [[ -n "${KITTY_PID:-}" || -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
 
   zle -N __dotfiles_kitty_clear_screen
   zle -N __dotfiles_kitty_clear_scrollback
-  bindkey -M emacs '^L' __dotfiles_kitty_clear_screen
-  bindkey -M viins '^L' __dotfiles_kitty_clear_screen
-  bindkey -M vicmd '^L' __dotfiles_kitty_clear_screen
+  if [[ -n "${KITTY_PID:-}" || -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
+    bindkey -M emacs '^L' __dotfiles_kitty_clear_screen
+    bindkey -M viins '^L' __dotfiles_kitty_clear_screen
+    bindkey -M vicmd '^L' __dotfiles_kitty_clear_screen
+  fi
   bindkey -M emacs '\ek' __dotfiles_kitty_clear_scrollback
   bindkey -M viins '\ek' __dotfiles_kitty_clear_scrollback
   bindkey -M vicmd '\ek' __dotfiles_kitty_clear_scrollback
