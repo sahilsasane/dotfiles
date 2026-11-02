@@ -50,7 +50,6 @@ macos-titlebar-style = tabs
 macos-window-buttons = hidden
 
 background-opacity = 0.75
-# Keep colored statusline backgrounds as opaque as their Powerline glyphs.
 background-opacity-cells = false
 background-blur = 35
 unfocused-split-opacity = 0.97

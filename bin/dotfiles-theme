@@ -108,7 +108,11 @@ apply() {
   if [[ "$mode" = auto ]]; then
     write_file "$STATE_DIR/ghostty.conf" "theme = light:$ROOT/config/ghostty/themes/catppuccin-latte.ghostty,dark:$ROOT/config/ghostty/themes/iterm-dark.ghostty"
   else
-    write_file "$STATE_DIR/ghostty.conf" "theme = $ROOT/config/ghostty/themes/$( [[ "$effective" = light ]] && printf catppuccin-latte || printf iterm-dark ).ghostty"
+    # Ghostty #13604 reports light mode for a single theme; retain the pair,
+    # then override its colors and window appearance for a manually forced mode.
+    write_file "$STATE_DIR/ghostty.conf" "theme = light:$ROOT/config/ghostty/themes/catppuccin-latte.ghostty,dark:$ROOT/config/ghostty/themes/iterm-dark.ghostty
+config-file = $ROOT/config/ghostty/themes/$( [[ "$effective" = light ]] && printf catppuccin-latte || printf iterm-dark ).ghostty
+window-theme = $effective"
   fi
   write_file "$STATE_DIR/tmux.conf" "source-file $ROOT/config/tmux/themes/$effective.conf"
   link_file "$ROOT/config/git/themes/$effective.gitconfig" "$STATE_DIR/git-theme.gitconfig"

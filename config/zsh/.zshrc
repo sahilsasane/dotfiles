@@ -15,3 +15,6 @@ unset _dotfiles_rc
 bindkey '^R' atuin-search
 
 path=("$HOME/.bend/bin" "$HOME/.local/bin" "$HOME/.opencode/bin" $path)
+fpath=(/Users/sahilsasane/.docker/completions $fpath)
+autoload -Uz compinit
+(( ${+_comps[docker]} )) || compinit
