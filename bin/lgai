@@ -32,7 +32,40 @@ format_commit_message() {
   done
 
   printf '%s\n\n' "${subject}"
-  printf '%s\n' "${body}" | fmt -w 72
+  wrap_body "${body}"
+}
+
+# Wrap the body at 72 columns. Each "- " bullet wraps on its own with a
+# two-space hanging indent; `fmt` would merge consecutive bullets into one line.
+wrap_body() {
+  printf '%s\n' "$1" | awk -v width=72 '
+    function flush() {
+      if (text == "") return
+      n = split(text, words, " ")
+      line = prefix
+      for (i = 1; i <= n; i++) {
+        if (line != prefix && length(line) + 1 + length(words[i]) > width) {
+          print line
+          line = indent
+        }
+        line = (line == prefix || line == indent) ? line words[i] : line " " words[i]
+      }
+      print line
+      text = ""
+    }
+    /^[[:space:]]*$/ { flush(); print ""; next }
+    /^[[:space:]]*[-*] / {
+      flush()
+      sub(/^[[:space:]]*[-*] /, "")
+      prefix = "- "; indent = "  "; text = $0
+      next
+    }
+    {
+      sub(/^[[:space:]]+/, "")
+      if (text == "") { prefix = ""; indent = ""; text = $0 } else { text = text " " $0 }
+    }
+    END { flush() }
+  '
 }
 
 cleanup() {
@@ -65,14 +98,31 @@ recent_chars="${LG_AI_COMMIT_RECENT_CHARS:-4000}"
 
 # Lockfiles and generated files: listed in the file summary, left out of the patch.
 # Their churn is a side effect of other changes and would eat the patch budget.
-noise_pathspecs=(
-  ':(exclude,glob)**/uv.lock' ':(exclude,glob)**/poetry.lock' ':(exclude,glob)**/Pipfile.lock'
-  ':(exclude,glob)**/package-lock.json' ':(exclude,glob)**/pnpm-lock.yaml' ':(exclude,glob)**/yarn.lock'
-  ':(exclude,glob)**/bun.lock' ':(exclude,glob)**/bun.lockb' ':(exclude,glob)**/Cargo.lock'
-  ':(exclude,glob)**/go.sum' ':(exclude,glob)**/flake.lock' ':(exclude,glob)**/Gemfile.lock'
-  ':(exclude,glob)**/composer.lock' ':(exclude,glob)**/*.min.js' ':(exclude,glob)**/*.min.css'
-  ':(exclude,glob)**/*.map' ':(exclude,glob)**/*.snap'
+noise_globs=(
+  '**/uv.lock' '**/poetry.lock' '**/Pipfile.lock' '**/package-lock.json' '**/pnpm-lock.yaml'
+  '**/yarn.lock' '**/bun.lock' '**/bun.lockb' '**/Cargo.lock' '**/go.sum' '**/flake.lock'
+  '**/Gemfile.lock' '**/composer.lock' '**/*.min.js' '**/*.min.css' '**/*.map' '**/*.snap'
 )
+noise_pathspecs=()
+noise_only_pathspecs=()
+for glob in "${noise_globs[@]}"; do
+  noise_pathspecs+=(":(exclude,glob)${glob}")
+  noise_only_pathspecs+=(":(glob)${glob}")
+done
+
+# For left-out files, keep only package name/version lines so the model can
+# still say which dependencies moved.
+lock_chars="${LG_AI_COMMIT_LOCK_CHARS:-3000}"
+lock_changes=""
+while IFS= read -r -d '' file; do
+  changes="$(git diff --staged -U1 -- "$file" \
+    | grep -E '^[ +-][[:space:]]*"?(name|version)"?[[:space:]]*[=:]' || true)"
+  [[ -z "$changes" ]] && continue
+  if ((${#changes} > lock_chars)); then
+    changes="${changes:0:${lock_chars}}"$'\n'"[... more version changes truncated ...]"
+  fi
+  lock_changes+="--- ${file}"$'\n'"${changes}"$'\n'
+done < <(git diff --staged --name-only -z -- "${noise_only_pathspecs[@]}")
 
 # Always shows every staged file, even when the patch below gets truncated.
 staged_summary="$(git diff --staged --stat=200 --stat-graph-width=20 --summary)"
@@ -115,12 +165,21 @@ $'\n\nSTAGED FILE SUMMARY (complete list of every staged file):\n'\
 "${staged_summary}"\
 $'\n\nSTAGED PATCH (lockfiles and generated files left out; large files truncated):\n'\
 "${staged_diff}"\
+$'\nLOCKFILE VERSION CHANGES (name/version lines only):\n'\
+"${lock_changes:-"none"}"\
 $'\nRequirements:\n'\
 $'- Return exactly '"${suggestion_count}"$' commit message candidates\n'\
-$'- Output each candidate as a complete git commit message.\n'\
+$'- Each candidate is a complete git commit message: a subject line, a blank line, then a body\n'\
 $'- Separate candidates with a line containing exactly <LGAI_CANDIDATE>\n'\
 $'- Do not include <LGAI_CANDIDATE> anywhere else\n'\
-$'- No numbering, bullets, quotes, markdown, or commentary\n'\
+$'- No numbering, quotes, markdown headings, code fences, or commentary outside the message\n'\
+$'- Subject: at most 72 characters, imperative mood, no trailing period\n'\
+$'- Body: one "- " bullet per distinct change, each a single sentence saying what changed and, when the diff shows it, why\n'\
+$'- The body must cover every meaningful change in the file summary, so someone reading git history later knows what this commit touched without opening the diff\n'\
+$'- Be concrete in the body: name the settings, commands, functions, files, versions, or behavior that changed; avoid vague phrases like "update config" or "various fixes"\n'\
+$'- Group trivial related edits into one bullet, and mention lockfile or generated-file changes only as a single bullet naming the notable dependency version changes\n'\
+$'- Scale the body to the change: a small single-purpose change gets one or two bullets, a large change gets as many as it needs; never pad\n'\
+$'- Use the recent commit subjects as a style reference for the subject line only\n'\
 $'- Follow Conventional Commits exactly in the form <type>[optional scope][optional !]: <description>\n'\
 $'- Use lowercase Conventional Commit types such as feat, fix, docs, refactor, chore, test, build, ci, perf, style, or revert\n'\
 $'- Every candidate MUST start with a type, followed by the optional scope, optional !, and a required colon and space\n'\
@@ -129,12 +188,12 @@ $'- Use fix when the full staged change set primarily fixes a bug\n'\
 $'- Types other than feat and fix may be used when they fit the full staged change set better\n'\
 $'- Use a scope only when it is genuinely helpful for the overall staged change set\n'\
 $'- If a scope is used, it must be a noun describing the main affected area and must appear in parentheses, for example feat(parser): ...\n'\
-$'- Prefer higher-level intent over low-level code narration\n'\
-$'- Match this format: feat(observability): serve Prometheus metrics on dedicated port\n'\
-$'- Do not add footers such as BREAKING CHANGE\n'\
+$'- In the subject, prefer higher-level intent over low-level code narration\n'\
+$'- Subject example: feat(observability): serve Prometheus metrics on dedicated port\n'\
+$'- Do not add footers such as BREAKING CHANGE or Co-authored-by\n'\
 $'- Describe the FULL staged change set as one commit; use the file summary to cover files whose patch was truncated or omitted\n'\
 $'- Weigh changes by significance, not by line count: lockfile and generated-file churn is a side effect, not the purpose\n'\
-$'- If the changes span multiple related edits, choose one type/scope that best fits the overall intent, not any single sub-change\n'\
+$'- If the changes span multiple related edits, choose one subject type/scope that best fits the overall intent, and list the sub-changes in the body\n'\
 $'- If the full staged change set is breaking, mark it with ! immediately before the colon\n'\
 $'- Never suggest multiple commits, a commit plan, or subjects like "commit 1" / "commit 2"'
 
