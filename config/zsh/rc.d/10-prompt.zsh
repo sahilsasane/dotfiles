@@ -9,7 +9,7 @@ __dotfiles_theme_apply_shell() {
   typeset -g DOTFILES_FZF_THEME_OPTS="$(<"${DOTFILES_ZSH_DIR}/fzf/${effective}.opts")"
 
   if [[ "$effective" == light ]]; then
-    typeset -g OMP_CONFIG="${DOTFILES_ZSH_DIR}/oh-my-posh/theme-latte.omp.json"
+    typeset -g OMP_CONFIG="${DOTFILES_ZSH_DIR}/oh-my-posh/theme-latte.omp.yaml"
     export EZA_CONFIG_DIR="${DOTFILES_ZSH_DIR}/../eza/themes/latte"
     export BAT_THEME="Catppuccin Latte"
     export LS_COLORS="$(vivid generate catppuccin-latte 2>/dev/null)"
@@ -23,7 +23,7 @@ __dotfiles_theme_apply_shell() {
       unknown-token 'fg=#d20f39'
     )
   else
-    typeset -g OMP_CONFIG="${DOTFILES_ZSH_DIR}/oh-my-posh/theme.omp.json"
+    typeset -g OMP_CONFIG="${DOTFILES_ZSH_DIR}/oh-my-posh/theme.omp.yaml"
     export EZA_CONFIG_DIR="${DOTFILES_ZSH_DIR}/../eza"
     export BAT_THEME="Catppuccin Mocha"
     export LS_COLORS="$(vivid generate catppuccin-mocha 2>/dev/null)"

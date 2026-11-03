@@ -1,9 +1,8 @@
 unalias l la ll lsa tre 2>/dev/null
 
-alias ls='eza --icons --group-directories-first --color=always'
+alias ls='eza -l --icons --group-directories-first --color=always'
 alias l='eza -la --git --icons --group-directories-first --color=always'
 alias la='eza -a --git --icons --group-directories-first --color=always'
-alias ll='eza -lh --git --icons --group-directories-first --color=always'
 alias tre='eza --tree --git --icons --color=always'
 pwd() {
   local value
@@ -179,8 +178,45 @@ dsfl() {
   ds rs -t service -n "$1" --container-group "$group" logs
 }
 
+vd() {
+  local env_root="${VIRTUAL_ENV:-}" python_command python_executable
+  local venv_bin path_entry
+  local -a remaining_path
+
+  if [[ -z "$env_root" ]]; then
+    for python_command in python python3; do
+      python_executable=$(whence -p "$python_command" 2>/dev/null) || continue
+      if [[ -f "${python_executable:h:h}/pyvenv.cfg" ]]; then
+        env_root="${python_executable:h:h}"
+        break
+      fi
+    done
+  fi
+
+  (( $+functions[deactivate] )) && { deactivate 2>/dev/null || true; }
+
+  # Reloaded shells inherit the venv PATH without its deactivation bookkeeping.
+  if [[ -n "$env_root" ]]; then
+    venv_bin="${env_root%/}/bin"
+    for path_entry in "${path[@]}"; do
+      [[ "${path_entry:A}" == "${venv_bin:A}" ]] || remaining_path+=("$path_entry")
+    done
+    path=("${remaining_path[@]}")
+  fi
+
+  unset VIRTUAL_ENV VIRTUAL_ENV_PROMPT
+  rehash
+}
+
 v() {
-  source "${1:-.venv}/bin/activate"
+  local activate_file="${1:-.venv}/bin/activate"
+  [[ -r "$activate_file" ]] || {
+    print -u2 -- "v: no activation script at $activate_file"
+    return 1
+  }
+
+  vd
+  source "$activate_file"
 }
 
 y() {

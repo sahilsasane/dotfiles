@@ -8,7 +8,7 @@ alias dv='docker volume'
 alias dn='docker network'
 alias dco='docker compose'
 alias python='python3'
-alias vd='deactivate 2>/dev/null || true'
+unalias vd 2>/dev/null
 alias size='du -sh -- *(DN) 2>/dev/null | sort -rh'
 alias c='clear'
 alias h='history'
