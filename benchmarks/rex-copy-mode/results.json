@@ -1,0 +1,456 @@
+{
+  "measurement": "CLI action dispatch to first captured Neovim frame containing the end marker and correct line total; excludes native app paint/animation",
+  "poll_sleep_ms": 5,
+  "logical_cpus": 8,
+  "load_average_start": [
+    4.89892578125,
+    4.24072265625,
+    3.7841796875
+  ],
+  "rex": {
+    "rex_version": "0.0.1793377904-ge6592f",
+    "platform": "darwin_arm64",
+    "commit": "e6592f74969959db77f1f84261901ef599a025cf",
+    "built_at": "2026-10-30T16:31:44Z",
+    "dirty": false,
+    "api_revision": 8
+  },
+  "variants": {
+    "before": {
+      "init.lua": "64693db68d263b9fb50e94262d703232ef4fe5c63692682979d1313f7c001c31",
+      "copy-mode.lua": "aede04e900edd6f3edb905c67edf912b8faa95da3c8e64828eda7306a280754a"
+    },
+    "after": {
+      "init.lua": "a025d5594bfef03e1dbbeb3780642ab8f2761ee5dcd774ea736d189a1a244552",
+      "copy-mode.lua": "aede04e900edd6f3edb905c67edf912b8faa95da3c8e64828eda7306a280754a"
+    }
+  },
+  "fixtures": [
+    {
+      "output_lines": 100,
+      "captured_lines": 101,
+      "captured_bytes": 6619
+    },
+    {
+      "output_lines": 10000,
+      "captured_lines": 10001,
+      "captured_bytes": 660019
+    }
+  ],
+  "profiles": [
+    {
+      "variant": "before",
+      "ready_ms": 852.646667,
+      "action_ms": 36.705958,
+      "polls": 31,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "stages_ms": {
+        "dispatch_and_shell_start": 784.281457,
+        "capture": 25.30077,
+        "nvim_start_and_redraw": 34.632303,
+        "frame_observation": 8.43347
+      },
+      "output_lines": 100
+    },
+    {
+      "variant": "after",
+      "ready_ms": 152.382916,
+      "action_ms": 21.480458,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "stages_ms": {
+        "dispatch_and_shell_start": 61.288774,
+        "capture": 29.882475,
+        "nvim_start_and_redraw": 36.394719,
+        "frame_observation": 24.820032
+      },
+      "output_lines": 100
+    },
+    {
+      "variant": "before",
+      "ready_ms": 852.989292,
+      "action_ms": 31.454,
+      "polls": 30,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "stages_ms": {
+        "dispatch_and_shell_start": 760.402262,
+        "capture": 36.079094,
+        "nvim_start_and_redraw": 43.956004,
+        "frame_observation": 12.55264
+      },
+      "output_lines": 10000
+    },
+    {
+      "variant": "after",
+      "ready_ms": 173.530834,
+      "action_ms": 19.663459,
+      "polls": 6,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "stages_ms": {
+        "dispatch_and_shell_start": 65.407471,
+        "capture": 39.867299,
+        "nvim_start_and_redraw": 54.597286,
+        "frame_observation": 13.660944
+      },
+      "output_lines": 10000
+    }
+  ],
+  "samples": [
+    {
+      "variant": "before",
+      "ready_ms": 898.8435,
+      "action_ms": 31.721541,
+      "polls": 31,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 1
+    },
+    {
+      "variant": "after",
+      "ready_ms": 145.9655,
+      "action_ms": 19.815042,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 1
+    },
+    {
+      "variant": "before",
+      "ready_ms": 814.134625,
+      "action_ms": 30.817958,
+      "polls": 29,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 2
+    },
+    {
+      "variant": "after",
+      "ready_ms": 123.913708,
+      "action_ms": 20.766958,
+      "polls": 4,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 2
+    },
+    {
+      "variant": "before",
+      "ready_ms": 793.482708,
+      "action_ms": 32.037,
+      "polls": 28,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 3
+    },
+    {
+      "variant": "after",
+      "ready_ms": 145.211459,
+      "action_ms": 19.90925,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 3
+    },
+    {
+      "variant": "before",
+      "ready_ms": 877.575917,
+      "action_ms": 32.727833,
+      "polls": 31,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 4
+    },
+    {
+      "variant": "after",
+      "ready_ms": 154.18275,
+      "action_ms": 21.016542,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 4
+    },
+    {
+      "variant": "before",
+      "ready_ms": 844.003125,
+      "action_ms": 31.530584,
+      "polls": 30,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 5
+    },
+    {
+      "variant": "after",
+      "ready_ms": 148.842791,
+      "action_ms": 20.976541,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 5
+    },
+    {
+      "variant": "before",
+      "ready_ms": 814.717834,
+      "action_ms": 30.923042,
+      "polls": 29,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 6
+    },
+    {
+      "variant": "after",
+      "ready_ms": 123.681291,
+      "action_ms": 20.615458,
+      "polls": 4,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 6
+    },
+    {
+      "variant": "before",
+      "ready_ms": 815.22,
+      "action_ms": 31.900375,
+      "polls": 29,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 7
+    },
+    {
+      "variant": "after",
+      "ready_ms": 147.0985,
+      "action_ms": 20.041208,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 7
+    },
+    {
+      "variant": "before",
+      "ready_ms": 836.009292,
+      "action_ms": 31.316084,
+      "polls": 30,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 1
+    },
+    {
+      "variant": "after",
+      "ready_ms": 149.5555,
+      "action_ms": 20.216292,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 1
+    },
+    {
+      "variant": "before",
+      "ready_ms": 840.137708,
+      "action_ms": 32.163125,
+      "polls": 30,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 2
+    },
+    {
+      "variant": "after",
+      "ready_ms": 146.965709,
+      "action_ms": 20.003584,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 2
+    },
+    {
+      "variant": "before",
+      "ready_ms": 883.965375,
+      "action_ms": 30.911792,
+      "polls": 31,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 3
+    },
+    {
+      "variant": "after",
+      "ready_ms": 147.066834,
+      "action_ms": 21.168042,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 3
+    },
+    {
+      "variant": "before",
+      "ready_ms": 841.604167,
+      "action_ms": 31.332792,
+      "polls": 30,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 4
+    },
+    {
+      "variant": "after",
+      "ready_ms": 147.528209,
+      "action_ms": 19.766959,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 4
+    },
+    {
+      "variant": "before",
+      "ready_ms": 783.52925,
+      "action_ms": 30.877292,
+      "polls": 27,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 5
+    },
+    {
+      "variant": "after",
+      "ready_ms": 173.643084,
+      "action_ms": 19.959542,
+      "polls": 6,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 5
+    },
+    {
+      "variant": "before",
+      "ready_ms": 870.262875,
+      "action_ms": 32.344333,
+      "polls": 31,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 6
+    },
+    {
+      "variant": "after",
+      "ready_ms": 185.297958,
+      "action_ms": 22.447042,
+      "polls": 6,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 6
+    },
+    {
+      "variant": "before",
+      "ready_ms": 879.483541,
+      "action_ms": 33.590583,
+      "polls": 31,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 7
+    },
+    {
+      "variant": "after",
+      "ready_ms": 149.893208,
+      "action_ms": 21.269291,
+      "polls": 5,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 7
+    }
+  ],
+  "errors": [],
+  "load_average_end": [
+    4.50146484375,
+    4.19140625,
+    3.7763671875
+  ],
+  "summary": [
+    {
+      "output_lines": 100,
+      "variant": "before",
+      "runs": 7,
+      "median_ms": 815.22,
+      "min_ms": 793.482708,
+      "max_ms": 898.8435
+    },
+    {
+      "output_lines": 100,
+      "variant": "after",
+      "runs": 7,
+      "median_ms": 145.9655,
+      "min_ms": 123.681291,
+      "max_ms": 154.18275
+    },
+    {
+      "output_lines": 10000,
+      "variant": "before",
+      "runs": 7,
+      "median_ms": 841.604167,
+      "min_ms": 783.52925,
+      "max_ms": 883.965375
+    },
+    {
+      "output_lines": 10000,
+      "variant": "after",
+      "runs": 7,
+      "median_ms": 149.5555,
+      "min_ms": 146.965709,
+      "max_ms": 185.297958
+    }
+  ]
+}

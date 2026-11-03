@@ -1,0 +1,120 @@
+{
+  "verdict": "Moving-trail GPU microbenchmark improved; no measurable native Ghostty CPU or idle GPU improvement.",
+  "date": "2026-11-02",
+  "native_cpu": {
+    "report": "cursor-warp-visible-2026-11-02.json",
+    "rounds_per_variant": 5,
+    "dimensions": [
+      100,
+      29
+    ],
+    "seconds_per_phase": 3,
+    "animation_override": "always",
+    "all_focus_samples_matched": true,
+    "summary": {
+      "before": {
+        "idle": {
+          "median_cpu_percent": 8.876158894409935,
+          "min": 8.42377510155335,
+          "max": 9.312789518337253
+        },
+        "moving": {
+          "median_cpu_percent": 8.775314638462858,
+          "min": 8.40946038783186,
+          "max": 8.86251122372805
+        }
+      },
+      "after": {
+        "idle": {
+          "median_cpu_percent": 8.797359389860505,
+          "min": 8.425094557328396,
+          "max": 9.1281510371185
+        },
+        "moving": {
+          "median_cpu_percent": 8.564944987942127,
+          "min": 8.516968229805524,
+          "max": 8.61028960049131
+        }
+      }
+    }
+  },
+  "gpu_microbenchmark": {
+    "report": "cursor-warp-metal-2026-11-02.json",
+    "device": "Apple M3",
+    "resolution": [
+      2560,
+      1440
+    ],
+    "timing_format": "bgra8Unorm",
+    "frames_per_timing": 32,
+    "rounds_per_variant": 5,
+    "scenarios": {
+      "idle": {
+        "before": {
+          "median_ms_per_frame": 0.2609309896115519,
+          "min": 0.2602812500072105,
+          "max": 0.29083854167311074
+        },
+        "after": {
+          "median_ms_per_frame": 0.26250000001937224,
+          "min": 0.2599921874661959,
+          "max": 0.28046093751754597
+        },
+        "median_time_reduction_percent": -0.6013124045388896
+      },
+      "diagonal": {
+        "before": {
+          "median_ms_per_frame": 0.29171354168511243,
+          "min": 0.2916523437193064,
+          "max": 0.29220312495681355
+        },
+        "after": {
+          "median_ms_per_frame": 0.2637539062106953,
+          "min": 0.2620703125444379,
+          "max": 0.27393749996917904
+        },
+        "median_time_reduction_percent": 9.584620348066641
+      },
+      "horizontal": {
+        "before": {
+          "median_ms_per_frame": 0.29182291666529636,
+          "min": 0.2917200520755614,
+          "max": 0.29188671874180727
+        },
+        "after": {
+          "median_ms_per_frame": 0.2604947916893252,
+          "min": 0.2598750000402106,
+          "max": 0.2611770833595983
+        },
+        "median_time_reduction_percent": 10.73532035590702
+      },
+      "bar-diagonal": {
+        "before": {
+          "median_ms_per_frame": 0.29177473953723165,
+          "min": 0.2915898437549913,
+          "max": 0.2928385416680612
+        },
+        "after": {
+          "median_ms_per_frame": 0.2615195312500873,
+          "min": 0.2609726562354808,
+          "max": 0.27644531246551196
+        },
+        "median_time_reduction_percent": 10.369372048838265
+      }
+    }
+  },
+  "correctness": {
+    "cases": 84,
+    "mismatched_channels": 0,
+    "nonfinite_channels": 0,
+    "maximum_comparison_tolerance": 0.0001,
+    "format": "rgba32Float"
+  },
+  "limitations": [
+    "Native CPU percentages are per core (100% = one core); system load is recorded in the raw report.",
+    "GPU microbenchmark uses a mechanical Metal adaptation, not Ghostty's actual GLSL compiler or presentation pipeline.",
+    "CPU tests force animation=always to control scheduling; the normal configuration remains animation=true.",
+    "Earlier cursor-warp-2026-11-02.json contains exploratory runs affected by window visibility; excluded from the final comparison.",
+    "Live GUI visual inspection and unified shader logs were unavailable; rendering comparisons were offscreen."
+  ]
+}

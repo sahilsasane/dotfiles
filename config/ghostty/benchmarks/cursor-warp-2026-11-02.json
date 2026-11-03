@@ -1,0 +1,354 @@
+{
+  "ghostty_version": "Ghostty 1.4.1-main+a7e8e4d15\n\nVersion\n  - version: 1.4.1-main+a7e8e4d15\n  - channel: tip\nBuild Config\n  - Zig version   : 0.17.0\n  - build mode    : .fast\n  - app runtime   : .none\n  - font engine   : .coretext\n  - renderer      : renderer.generic.Renderer(renderer.Metal)\n  - libxev        : kqueue\n",
+  "platform": "ProductName:\t\tmacOS\nProductVersion:\t\t27.2\nBuildVersion:\t\t26B123\n",
+  "cpu_count": 8,
+  "load_before": [
+    6.54736328125,
+    4.68701171875,
+    3.6474609375
+  ],
+  "cpu_counter_calibration": {
+    "process_time_seconds": 0.24994899999999998,
+    "rusage_seconds": 0.25002516666666663
+  },
+  "seconds_per_mach_tick": 4.166666666666666e-08,
+  "seconds_per_phase": 6.0,
+  "animation_override": "always",
+  "shader_sha256": {
+    "before": "873cb023a74f85dd696259cd5c6e713596f881953e7ca6f0dd915cfe22d07c27",
+    "after": "9a8edace13bb0cc322367d4ece93d76b9c5166669a84c5c77ae3ecbab729f56a"
+  },
+  "runs": [
+    {
+      "round": 1,
+      "variant": "before",
+      "pid": 5514,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.142380249999405,
+          "cpu_percent_one_core": 8.116731294843692,
+          "idle_wakeups_per_second": 47.05016430723708,
+          "interrupt_wakeups_per_second": 701.5195778542719,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 24
+        },
+        "moving": {
+          "wall_seconds": 6.136866165999891,
+          "cpu_percent_one_core": 8.76586793294822,
+          "idle_wakeups_per_second": 80.00826264067639,
+          "interrupt_wakeups_per_second": 736.0434263705403,
+          "cursor_updates": 57,
+          "focus_samples": 24,
+          "focused_samples": 24
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 1,
+      "variant": "after",
+      "pid": 5668,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.137989999999263,
+          "cpu_percent_one_core": 8.886818676256105,
+          "idle_wakeups_per_second": 0.0,
+          "interrupt_wakeups_per_second": 864.9411289364494,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 24
+        },
+        "moving": {
+          "wall_seconds": 6.132638875000339,
+          "cpu_percent_one_core": 8.342309383630631,
+          "idle_wakeups_per_second": 92.2930587527818,
+          "interrupt_wakeups_per_second": 622.4074297868696,
+          "cursor_updates": 58,
+          "focus_samples": 24,
+          "focused_samples": 24
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 2,
+      "variant": "before",
+      "pid": 5937,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.143829749998986,
+          "cpu_percent_one_core": 8.388931458700524,
+          "idle_wakeups_per_second": 70.63997826438333,
+          "interrupt_wakeups_per_second": 663.5926068753245,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 24
+        },
+        "moving": {
+          "wall_seconds": 6.145140417000221,
+          "cpu_percent_one_core": 8.294241580820955,
+          "idle_wakeups_per_second": 57.44376467353672,
+          "interrupt_wakeups_per_second": 702.831783640241,
+          "cursor_updates": 58,
+          "focus_samples": 24,
+          "focused_samples": 24
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 2,
+      "variant": "after",
+      "pid": 6223,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.142415334001271,
+          "cpu_percent_one_core": 8.568279816898887,
+          "idle_wakeups_per_second": 0.0,
+          "interrupt_wakeups_per_second": 693.3754506023638,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 8
+        },
+        "moving": {
+          "wall_seconds": 6.149384583000938,
+          "cpu_percent_one_core": 7.812329188105902,
+          "idle_wakeups_per_second": 102.4492762644154,
+          "interrupt_wakeups_per_second": 729.1786583645058,
+          "cursor_updates": 58,
+          "focus_samples": 24,
+          "focused_samples": 2
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 3,
+      "variant": "before",
+      "pid": 6511,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.131036832999598,
+          "cpu_percent_one_core": 2.2076391049904416,
+          "idle_wakeups_per_second": 0.0,
+          "interrupt_wakeups_per_second": 148.0989308550219,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 4
+        },
+        "moving": {
+          "wall_seconds": 6.14008449999892,
+          "cpu_percent_one_core": 8.919929495000103,
+          "idle_wakeups_per_second": 145.1120094520127,
+          "interrupt_wakeups_per_second": 654.7141167195185,
+          "cursor_updates": 58,
+          "focus_samples": 24,
+          "focused_samples": 22
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 3,
+      "variant": "after",
+      "pid": 6785,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.140431584000908,
+          "cpu_percent_one_core": 8.246159650829387,
+          "idle_wakeups_per_second": 0.0,
+          "interrupt_wakeups_per_second": 659.7256144918235,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 0
+        },
+        "moving": {
+          "wall_seconds": 6.1296599580000475,
+          "cpu_percent_one_core": 7.220196601972688,
+          "idle_wakeups_per_second": 93.80618238855911,
+          "interrupt_wakeups_per_second": 708.6853152972187,
+          "cursor_updates": 58,
+          "focus_samples": 24,
+          "focused_samples": 0
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 4,
+      "variant": "before",
+      "pid": 6847,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.150054083000214,
+          "cpu_percent_one_core": 7.4572230391877685,
+          "idle_wakeups_per_second": 64.38967766065842,
+          "interrupt_wakeups_per_second": 635.6041666048328,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 0
+        },
+        "moving": {
+          "wall_seconds": 6.137683499999184,
+          "cpu_percent_one_core": 7.111826744841513,
+          "idle_wakeups_per_second": 65.17116759116907,
+          "interrupt_wakeups_per_second": 677.7801429481583,
+          "cursor_updates": 58,
+          "focus_samples": 24,
+          "focused_samples": 0
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 4,
+      "variant": "after",
+      "pid": 6927,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.146670125001037,
+          "cpu_percent_one_core": 7.369455587954193,
+          "idle_wakeups_per_second": 0.6507588529487459,
+          "interrupt_wakeups_per_second": 720.5527399274989,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 1
+        },
+        "moving": {
+          "wall_seconds": 6.135689209000702,
+          "cpu_percent_one_core": 7.60966400723834,
+          "idle_wakeups_per_second": 138.6967251782623,
+          "interrupt_wakeups_per_second": 739.770194575949,
+          "cursor_updates": 57,
+          "focus_samples": 24,
+          "focused_samples": 0
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 5,
+      "variant": "before",
+      "pid": 6970,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.1412832500009245,
+          "cpu_percent_one_core": 9.174087652336317,
+          "idle_wakeups_per_second": 56.177184141432996,
+          "interrupt_wakeups_per_second": 848.8453939979426,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 17
+        },
+        "moving": {
+          "wall_seconds": 6.14397416599968,
+          "cpu_percent_one_core": 7.805715872319825,
+          "idle_wakeups_per_second": 18.066482215089085,
+          "interrupt_wakeups_per_second": 731.1228658574789,
+          "cursor_updates": 58,
+          "focus_samples": 24,
+          "focused_samples": 0
+        }
+      },
+      "stderr": ""
+    },
+    {
+      "round": 5,
+      "variant": "after",
+      "pid": 7022,
+      "dimensions": [
+        100,
+        29
+      ],
+      "phases": {
+        "idle": {
+          "wall_seconds": 6.130957875000604,
+          "cpu_percent_one_core": 8.803651528377422,
+          "idle_wakeups_per_second": 0.0,
+          "interrupt_wakeups_per_second": 711.4712070990327,
+          "cursor_updates": 0,
+          "focus_samples": 24,
+          "focused_samples": 24
+        },
+        "moving": {
+          "wall_seconds": 6.136118458000055,
+          "cpu_percent_one_core": 8.146716366189523,
+          "idle_wakeups_per_second": 111.6340899688664,
+          "interrupt_wakeups_per_second": 633.4623470204142,
+          "cursor_updates": 57,
+          "focus_samples": 24,
+          "focused_samples": 24
+        }
+      },
+      "stderr": ""
+    }
+  ],
+  "summary": {
+    "before": {
+      "idle": {
+        "median_cpu_percent": 8.116731294843692,
+        "min": 2.2076391049904416,
+        "max": 9.174087652336317
+      },
+      "moving": {
+        "median_cpu_percent": 8.294241580820955,
+        "min": 7.111826744841513,
+        "max": 8.919929495000103
+      }
+    },
+    "after": {
+      "idle": {
+        "median_cpu_percent": 8.568279816898887,
+        "min": 7.369455587954193,
+        "max": 8.886818676256105
+      },
+      "moving": {
+        "median_cpu_percent": 7.812329188105902,
+        "min": 7.220196601972688,
+        "max": 8.342309383630631
+      }
+    }
+  },
+  "load_after": [
+    3.2646484375,
+    4.08740234375,
+    3.60400390625
+  ]
+}

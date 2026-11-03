@@ -24,10 +24,10 @@ Run the checks relevant to the files you changed:
 
 ```sh
 # Bash scripts
-bash -n bin/* tmux/scripts/*.sh
+bash -n bin/* config/tmux/scripts/*.sh
 
 # Zsh configuration
-zsh -n zsh/.zprofile zsh/.zshrc zsh/profile.d/*.zsh zsh/rc.d/*.zsh
+zsh -n home/.zshenv config/zsh/.zprofile config/zsh/.zshrc config/zsh/profile.d/*.zsh config/zsh/rc.d/*.zsh
 
 # Whitespace errors
 git diff --check

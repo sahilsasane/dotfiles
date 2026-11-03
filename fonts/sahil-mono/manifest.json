@@ -1,0 +1,367 @@
+{
+  "family": "Sahil Mono",
+  "upstream_commit": "19371302b95d218af43299bce79ddbddd0bc364d",
+  "upstream": "https://github.com/JetBrains/JetBrainsMono",
+  "features": [
+    "ss02",
+    "cv03",
+    "cv04",
+    "cv08",
+    "cv14",
+    "cv15",
+    "cv16",
+    "cv18",
+    "cv19",
+    "cv20",
+    "zero"
+  ],
+  "method": "merge selected GSUB lookups into calt",
+  "requires_calt": true,
+  "languages": [
+    null,
+    "nl",
+    "tr",
+    "ro",
+    "el",
+    "ru"
+  ],
+  "comparison": "glyph names, clusters, advances and offsets",
+  "faces": [
+    {
+      "source": "JetBrainsMono-Bold.ttf",
+      "output": "SahilMono-Bold.ttf",
+      "source_sha256": "d22c4f3821d725eb01210d278d95dfcfcaadc34699a06658d47c8a5cc5830ada",
+      "sha256": "714f195e8db9408c1a6e3d6479e47f8dcaee7297dd3517fc26a1a74da193291c",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono",
+        "style": "Bold",
+        "typographic_family": null,
+        "typographic_style": null,
+        "postscript_name": "SahilMono-Bold",
+        "weight": 558,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-BoldItalic.ttf",
+      "output": "SahilMono-BoldItalic.ttf",
+      "source_sha256": "cec9b489af5c98a94cb8d8d8708ef1640cca0f296b207de1f50b2dd95e967bdf",
+      "sha256": "54a41d73ad5d8f824b6f28d90c921ea84f682ad75618e2948a8ce901bf432140",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono",
+        "style": "Bold Italic",
+        "typographic_family": null,
+        "typographic_style": null,
+        "postscript_name": "SahilMono-BoldItalic",
+        "weight": 558,
+        "italic": true
+      }
+    },
+    {
+      "source": "JetBrainsMono-ExtraBold.ttf",
+      "output": "SahilMono-ExtraBold.ttf",
+      "source_sha256": "ee43f7507a07ed15c4bf6211d5cc78fa0bacca58e7afbc170f4b1e38a5d0cde4",
+      "sha256": "d7ee16993f608446e00715515068841e07815961efb1e52b5be0c84348a20206",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono ExtraBold",
+        "style": "Regular",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "ExtraBold",
+        "postscript_name": "SahilMono-ExtraBold",
+        "weight": 800,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-ExtraBoldItalic.ttf",
+      "output": "SahilMono-ExtraBoldItalic.ttf",
+      "source_sha256": "10fd8f4e1246ed7d62fec79e6d55b792ef4a45a46d36b09cc17dd8f240ae112b",
+      "sha256": "8a0a2481551452715c8eb76f8e9cf8231d01bab4177f9caefd47a69dff81457e",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono ExtraBold",
+        "style": "Italic",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "ExtraBold Italic",
+        "postscript_name": "SahilMono-ExtraBoldItalic",
+        "weight": 800,
+        "italic": true
+      }
+    },
+    {
+      "source": "JetBrainsMono-ExtraLight.ttf",
+      "output": "SahilMono-ExtraLight.ttf",
+      "source_sha256": "a6d4b0e43eecb3823925617bd8052af10cb1ff90247687f07c7676f1bd507714",
+      "sha256": "d38fa3417e88c1f2a1ea876392f2af0d8d39c9def464aa34aec54dbca54564dd",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono ExtraLight",
+        "style": "Regular",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "ExtraLight",
+        "postscript_name": "SahilMono-ExtraLight",
+        "weight": 240,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-ExtraLightItalic.ttf",
+      "output": "SahilMono-ExtraLightItalic.ttf",
+      "source_sha256": "e7d29fa12d5dfecccb31af42df160ec1929f102cf83ab4485bae8a4bcefc2c4d",
+      "sha256": "7f6727243ab17c5853b4c2b5ce4b5aefed83fa087b9333be4f9b8f438ae3c832",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono ExtraLight",
+        "style": "Italic",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "ExtraLight Italic",
+        "postscript_name": "SahilMono-ExtraLightItalic",
+        "weight": 240,
+        "italic": true
+      }
+    },
+    {
+      "source": "JetBrainsMono-Italic.ttf",
+      "output": "SahilMono-Italic.ttf",
+      "source_sha256": "6dc8e1322d4b2013b64e277bf66abc6748207c46a590471d4296876c2c235d0c",
+      "sha256": "57009fed35663f182fa37974720ef7feb90b11b4325fd4127f9b4fa2e06acdb0",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono",
+        "style": "Italic",
+        "typographic_family": null,
+        "typographic_style": null,
+        "postscript_name": "SahilMono-Italic",
+        "weight": 400,
+        "italic": true
+      }
+    },
+    {
+      "source": "JetBrainsMono-Light.ttf",
+      "output": "SahilMono-Light.ttf",
+      "source_sha256": "ba7e27ea0e9803e57fc1837eae3fa7dc4fe59f3dc548859958fa3f8b77f6909b",
+      "sha256": "599a8eaa1aadc24b58f0a660667f2fe8bc6459238b0bf88fbb00ed4ed5d11d1a",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono Light",
+        "style": "Regular",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "Light",
+        "postscript_name": "SahilMono-Light",
+        "weight": 336,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-LightItalic.ttf",
+      "output": "SahilMono-LightItalic.ttf",
+      "source_sha256": "9dcdba505dd0091f61e9da2f0f46633abed33d50450b7d6e93633d98de6007b5",
+      "sha256": "4e4b8992b0ceac21ac582f34058093d27b22d3d7d275df052081187685cf89f3",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono Light",
+        "style": "Italic",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "Light Italic",
+        "postscript_name": "SahilMono-LightItalic",
+        "weight": 336,
+        "italic": true
+      }
+    },
+    {
+      "source": "JetBrainsMono-Medium.ttf",
+      "output": "SahilMono-Medium.ttf",
+      "source_sha256": "d16e6dc99672734698d629705f617c79f6eb6040f5113efe3a145204dc988109",
+      "sha256": "a84cfbb526514fd1c04be6978aa57f67b2a6c10289213dc329f98f56c626834a",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono Medium",
+        "style": "Regular",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "Medium",
+        "postscript_name": "SahilMono-Medium",
+        "weight": 436,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-MediumItalic.ttf",
+      "output": "SahilMono-MediumItalic.ttf",
+      "source_sha256": "f85b9eec77d779b4831e763e70e076dafdedd3442cc3fa7fffd781317df0cfe3",
+      "sha256": "880a20f02d7acec9f9a473a9833bf0e37672708be9969b6e232acdcfb06468ce",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono Medium",
+        "style": "Italic",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "Medium Italic",
+        "postscript_name": "SahilMono-MediumItalic",
+        "weight": 436,
+        "italic": true
+      }
+    },
+    {
+      "source": "JetBrainsMono-Regular.ttf",
+      "output": "SahilMono-Regular.ttf",
+      "source_sha256": "e6fd0d7e91550b3ed2b735d4312474362c4716edc4fc0577a0f61ed782d5aed1",
+      "sha256": "0795cf11cdf1f51702c3f39cf60861dc1295f5d9c360d0b858a429d1f8eb61fe",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono",
+        "style": "Regular",
+        "typographic_family": null,
+        "typographic_style": null,
+        "postscript_name": "SahilMono-Regular",
+        "weight": 400,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-SemiBold.ttf",
+      "output": "SahilMono-SemiBold.ttf",
+      "source_sha256": "12d4b18fe6e1af528e4bea69cb0997aeff22f9e52fccffcf66342dd88aa32ab8",
+      "sha256": "5d140e8f1fd3dff8763b3e4aa83402af7d74af80aa0370f7b87595e9c7632d92",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono SemiBold",
+        "style": "Regular",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "SemiBold",
+        "postscript_name": "SahilMono-SemiBold",
+        "weight": 472,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-SemiBoldItalic.ttf",
+      "output": "SahilMono-SemiBoldItalic.ttf",
+      "source_sha256": "e4b0c5bc4d32e1ffd3a548c0baabbcd686745d1a236fc68727ef3a30b6ab8465",
+      "sha256": "26cac2c2ef4b64735fa375a35452734ee9e2ac39c1c3ddc38c17f8948d2315d1",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono SemiBold",
+        "style": "Italic",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "SemiBold Italic",
+        "postscript_name": "SahilMono-SemiBoldItalic",
+        "weight": 472,
+        "italic": true
+      }
+    },
+    {
+      "source": "JetBrainsMono-Thin.ttf",
+      "output": "SahilMono-Thin.ttf",
+      "source_sha256": "7ac062c7792f4539841b74b929e9fa3e74a108ef668c6c167e0e6733b0297ad7",
+      "sha256": "0b4fc95ad82699e392a05f29e2635619d94805363ec9e50a74b5b350661fc750",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono Thin",
+        "style": "Regular",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "Thin",
+        "postscript_name": "SahilMono-Thin",
+        "weight": 100,
+        "italic": false
+      }
+    },
+    {
+      "source": "JetBrainsMono-ThinItalic.ttf",
+      "output": "SahilMono-ThinItalic.ttf",
+      "source_sha256": "a46cb57297467702eccd24f379686ca07c8d570a7875b7e93ffece065fe47556",
+      "sha256": "a19711eb3301a4d6f04df087a834f6ac25963b0e1216cdc430d73f62e4f426ec",
+      "unicode_cases": 1372,
+      "ascii_pairs": 9025,
+      "example_cases": 30,
+      "cases_per_language": 10427,
+      "total_cases": 62562,
+      "mismatches": 0,
+      "metadata": {
+        "family": "Sahil Mono Thin",
+        "style": "Italic",
+        "typographic_family": "Sahil Mono",
+        "typographic_style": "Thin Italic",
+        "postscript_name": "SahilMono-ThinItalic",
+        "weight": 100,
+        "italic": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "measurement": "CLI action dispatch to first captured Neovim frame containing the end marker and correct line total; excludes native app paint/animation",
+  "poll_sleep_ms": 5,
+  "load_average_start": [
+    3.8662109375,
+    4.36865234375,
+    3.71728515625
+  ],
+  "rex": {
+    "rex_version": "0.0.1793377904-ge6592f",
+    "platform": "darwin_arm64",
+    "commit": "e6592f74969959db77f1f84261901ef599a025cf",
+    "built_at": "2026-10-30T16:31:44Z",
+    "dirty": false,
+    "api_revision": 8
+  },
+  "variants": {
+    "before": {
+      "init.lua": "64693db68d263b9fb50e94262d703232ef4fe5c63692682979d1313f7c001c31",
+      "copy-mode.lua": "aede04e900edd6f3edb905c67edf912b8faa95da3c8e64828eda7306a280754a"
+    }
+  },
+  "fixtures": [
+    {
+      "output_lines": 100,
+      "captured_lines": 101,
+      "captured_bytes": 6619
+    },
+    {
+      "output_lines": 10000,
+      "captured_lines": 10001,
+      "captured_bytes": 660019
+    }
+  ],
+  "profiles": [
+    {
+      "variant": "before",
+      "ready_ms": 1181.749542,
+      "action_ms": 46.385167,
+      "polls": 39,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "stages_ms": {
+        "dispatch_and_shell_start": 1100.427054,
+        "capture": 30.464683,
+        "nvim_start_and_redraw": 34.03122,
+        "frame_observation": 16.829043
+      },
+      "output_lines": 100
+    },
+    {
+      "variant": "before",
+      "ready_ms": 818.760084,
+      "action_ms": 37.299542,
+      "polls": 27,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "stages_ms": {
+        "dispatch_and_shell_start": 736.106672,
+        "capture": 36.203302,
+        "nvim_start_and_redraw": 37.673218,
+        "frame_observation": 8.778808
+      },
+      "output_lines": 10000
+    }
+  ],
+  "samples": [
+    {
+      "variant": "before",
+      "ready_ms": 820.511084,
+      "action_ms": 36.52125,
+      "polls": 25,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 1
+    },
+    {
+      "variant": "before",
+      "ready_ms": 849.240625,
+      "action_ms": 31.045833,
+      "polls": 29,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 2
+    },
+    {
+      "variant": "before",
+      "ready_ms": 812.746041,
+      "action_ms": 30.954666,
+      "polls": 27,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 3
+    },
+    {
+      "variant": "before",
+      "ready_ms": 851.122042,
+      "action_ms": 30.010875,
+      "polls": 28,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 4
+    },
+    {
+      "variant": "before",
+      "ready_ms": 864.160542,
+      "action_ms": 30.243959,
+      "polls": 28,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 101,
+      "output_lines": 100,
+      "iteration": 5
+    },
+    {
+      "variant": "before",
+      "ready_ms": 836.876958,
+      "action_ms": 29.844542,
+      "polls": 28,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 1
+    },
+    {
+      "variant": "before",
+      "ready_ms": 874.78975,
+      "action_ms": 39.008,
+      "polls": 29,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 2
+    },
+    {
+      "variant": "before",
+      "ready_ms": 943.16725,
+      "action_ms": 37.8225,
+      "polls": 30,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 3
+    },
+    {
+      "variant": "before",
+      "ready_ms": 859.868084,
+      "action_ms": 32.623084,
+      "polls": 28,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 4
+    },
+    {
+      "variant": "before",
+      "ready_ms": 825.19825,
+      "action_ms": 30.732666,
+      "polls": 27,
+      "columns": 80,
+      "rows": 24,
+      "verified_line_total": 10001,
+      "output_lines": 10000,
+      "iteration": 5
+    }
+  ],
+  "errors": [],
+  "load_average_end": [
+    4.41845703125,
+    4.46435546875,
+    3.7626953125
+  ],
+  "summary": [
+    {
+      "output_lines": 100,
+      "variant": "before",
+      "runs": 5,
+      "median_ms": 849.240625,
+      "min_ms": 812.746041,
+      "max_ms": 864.160542
+    },
+    {
+      "output_lines": 10000,
+      "variant": "before",
+      "runs": 5,
+      "median_ms": 859.868084,
+      "min_ms": 825.19825,
+      "max_ms": 943.16725
+    }
+  ]
+}

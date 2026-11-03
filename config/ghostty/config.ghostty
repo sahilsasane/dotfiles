@@ -1,0 +1,139 @@
+# Managed from dotfiles. The App Support config should only load this file.
+
+# Runtime-selected by `theme`; it overrides this dark default when installed.
+theme = /Users/sahilsasane/dotfiles/config/ghostty/themes/iterm-dark.ghostty
+config-file = ?~/.config/dotfiles-theme/ghostty.conf
+
+# Typography and color rendering
+font-family = "JetBrains Mono"
+font-family-bold = "JetBrains Mono"
+font-family-italic = "JetBrainsMono Nerd Font Mono"
+font-family-bold-italic = "JetBrainsMono Nerd Font Mono"
+font-codepoint-map = U+F0262=JetBrainsMono Nerd Font Mono
+font-codepoint-map = U+F0085-U+F008B,U+F089C-U+F089E=JetBrainsMono Nerd Font Propo
+# Kitty's bundled symbol font has the larger Apple glyph; installed in ~/Library/Fonts.
+font-codepoint-map = U+F179=Symbols Nerd Font Mono
+font-style = "Regular"
+font-style-bold = "SemiBold"
+font-style-italic = "ExtraLight Italic"
+font-style-bold-italic = "SemiBold Italic"
+font-size = 18
+# adjust-cell-height = 10%
+# Counter fallback metric scaling of Kitty's symbol font (79.2px to ~60px at 30pt/2x).
+adjust-icon-height = -24%
+font-thicken = false
+font-feature = "+calt,+ss02,+cv03,+cv04,+cv08,+cv14,+cv15,+cv16,+cv18,+cv19,+cv20,+zero"
+minimum-contrast = 1.1
+faint-opacity = 0.8
+progress-style = true
+window-colorspace = display-p3
+window-vsync = true
+
+# Window layout
+window-new-tab-position = end
+window-padding-x = 2
+window-padding-y = 0
+window-padding-balance = true
+window-padding-color = background
+window-step-resize = false
+maximize = true
+window-inherit-working-directory = true
+tab-inherit-working-directory = true
+split-inherit-working-directory = true
+window-inherit-font-size = true
+window-save-state = always
+macos-titlebar-proxy-icon = hidden
+window-decoration = server
+
+# Appearance
+macos-titlebar-style = tabs
+macos-window-buttons = hidden
+
+background-opacity = 0.75
+background-opacity-cells = false
+background-blur = 35
+unfocused-split-opacity = 0.97
+custom-shader = /Users/sahilsasane/dotfiles/config/ghostty/shaders/cursor_warp.glsl
+custom-shader-animation = true
+
+scrollbar = never
+mouse-reporting = true
+mouse-hide-while-typing = true
+mouse-scroll-multiplier = precision:1,discrete:4
+scroll-to-bottom = keystroke
+macos-window-shadow = false
+focus-follows-mouse = true
+macos-icon = glass
+macos-icon-frame = chrome
+macos-icon-ghost-color = #f5e0dc
+macos-icon-screen-color = #74c7ec,#89b4fa,#cba6f7
+
+# Shell integration and workflow
+shell-integration = detect
+shell-integration-features = no-cursor,sudo,ssh-env,path,no-title
+cursor-click-to-move = true
+notify-on-command-finish = always
+notify-on-command-finish-action = no-bell,notify
+notify-on-command-finish-after = 5s
+quick-terminal-position = top
+quick-terminal-size = 40%
+quick-terminal-screen = mouse
+quick-terminal-animation-duration = 0.12
+quick-terminal-autohide = true
+quick-terminal-space-behavior = move
+
+# Clipboard and safety
+# Ghostty uses a byte limit instead of iTerm's line count.
+scrollback-limit = 16777216
+
+copy-on-select = false
+clipboard-read = ask
+clipboard-write = allow
+clipboard-trim-trailing-spaces = true
+clipboard-paste-protection = true
+confirm-close-surface = false
+quit-after-last-window-closed = true
+
+# macOS behavior
+cursor-style = bar
+cursor-style-blink = false
+# Match Kitty's fixed cursor color instead of inheriting syntax colors.
+cursor-color = #cccccc
+cursor-text = cell-background
+macos-option-as-alt = true
+macos-auto-secure-input = true
+macos-secure-input-indication = true
+
+# Quality-of-life keybinds
+keybind = global:ctrl+backquote=toggle_quick_terminal
+keybind = super+shift+l=toggle_readonly
+keybind = super+alt+1=set_font_size:18
+keybind = super+alt+2=set_font_size:20
+keybind = super+k=text:\x1bk
+keybind = super+shift+p=toggle_command_palette
+keybind = super+shift+j=jump_to_prompt:-1
+keybind = super+shift+k=jump_to_prompt:1
+keybind = super+shift+b=toggle_background_opacity
+keybind = super+shift+o=write_scrollback_file:open
+keybind = super+shift+d=new_split:right
+keybind = super+shift+v=new_split:down
+keybind = super+alt+h=goto_split:left
+keybind = super+alt+j=goto_split:down
+keybind = super+alt+k=goto_split:up
+keybind = super+alt+l=goto_split:right
+keybind = super+enter=toggle_split_zoom
+
+# Named controls for the tmux workflow, available through Cmd+Shift+P.
+command-palette-entry = title:"Font: Laptop (18 pt)", action:set_font_size:18
+command-palette-entry = title:"Font: Dell (20 pt)", action:set_font_size:20
+command-palette-entry = title:"Input: Toggle Read-Only", action:toggle_readonly
+command-palette-entry = title:"Input: Toggle Mouse Capture", action:toggle_mouse_reporting
+
+# Shell-style editing keybinds
+keybind = alt+left=esc:b
+keybind = alt+right=esc:f
+keybind = alt+backspace=text:\x1b\x7f
+keybind = alt+delete=esc:d
+keybind = super+left=text:\x01
+keybind = super+right=text:\x05
+keybind = super+backspace=text:\x15
