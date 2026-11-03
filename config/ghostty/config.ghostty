@@ -15,11 +15,10 @@ font-codepoint-map = U+F0085-U+F008B,U+F089C-U+F089E=JetBrainsMono Nerd Font Pro
 font-codepoint-map = U+F179=Symbols Nerd Font Mono
 font-style = "Regular"
 font-style-bold = "SemiBold"
-font-style-italic = "ExtraLight Italic"
+font-style-italic = "Italic"
 font-style-bold-italic = "SemiBold Italic"
 font-size = 18
-# adjust-cell-height = 10%
-# Counter fallback metric scaling of Kitty's symbol font (79.2px to ~60px at 30pt/2x).
+adjust-cell-height = 10%
 adjust-icon-height = -24%
 font-thicken = false
 font-feature = "+calt,+ss02,+cv03,+cv04,+cv08,+cv14,+cv15,+cv16,+cv18,+cv19,+cv20,+zero"
@@ -49,7 +48,7 @@ window-decoration = server
 macos-titlebar-style = tabs
 macos-window-buttons = hidden
 
-background-opacity = 0.75
+background-opacity = 0.55
 background-opacity-cells = false
 background-blur = 35
 unfocused-split-opacity = 0.97

@@ -1,0 +1,153 @@
+$schema: https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+version: 3
+final_space: true
+blocks:
+  - type: prompt
+    alignment: left
+    segments:
+      - type: os
+        style: plain
+        foreground: '#4c4f69'
+        template: '╭─ {{ if .WSL }}WSL{{ else }}{{ .Icon }}{{ end }} '
+      - type: path
+        style: plain
+        foreground: '#8839ef'
+        template: '{{ .Path }} '
+        properties:
+          style: folder
+      - type: git
+        style: plain
+        foreground: '#7287fd'
+        foreground_templates:
+          - '{{ if or (gt .Working.Unmerged 0) (gt .Staging.Unmerged 0) }}#d20f39{{ end }}'
+          - '{{ if and (gt .Ahead 0) (gt .Behind 0) }}#fe640b{{ end }}'
+          - '{{ if or .Working.Changed .Staging.Changed }}#df8e1d{{ end }}'
+          - '{{ if gt .Behind 0 }}#04a5e5{{ end }}'
+          - '{{ if gt .Ahead 0 }}#40a02b{{ end }}'
+        template: |-
+           {{ .HEAD }}
+          {{- if gt .Behind 0 -}}
+            {{ " " }}<#df8e1d>⇣{{ .Behind }}</>
+          {{- end -}}
+          {{- if gt .Ahead 0 -}}
+            {{ " " }}<#fe640b>⇡{{ .Ahead }}</>
+          {{- end -}}
+          {{- if gt .PushBehind 0 -}}
+            {{ " " }}<#dd7878>⇠{{ .PushBehind }}</>
+          {{- end -}}
+          {{- if gt .PushAhead 0 -}}
+            {{ " " }}<#ea76cb>⇢{{ .PushAhead }}</>
+          {{- end -}}
+          {{- if .UpstreamGone -}}
+            {{ " " }}<#d20f39></>
+          {{- end -}}
+          {{- if .Merge -}}
+            {{ " " }}<#e64553></>
+          {{- end -}}
+          {{- if .Rebase -}}
+            {{ " " }}<#fe640b>{{ .Rebase.Current }}/{{ .Rebase.Total }}</>
+          {{- end -}}
+          {{- if .CherryPick -}}
+            {{ " " }}<#ea76cb></>
+          {{- end -}}
+          {{- if .Revert -}}
+            {{ " " }}<#dd7878>↶</>
+          {{- end -}}
+          {{- if gt .StashCount 0 -}}
+            {{ " " }}<#dc8a78>{{ .StashCount }}</>
+          {{- end -}}
+          {{- if .Working.Changed -}}
+            {{ " " }}<#d20f39> {{ .Working.String }}</>
+          {{- end -}}
+          {{- if .Staging.Changed -}}
+            {{ " " }}<#df8e1d> {{ .Staging.String }}</>
+          {{- end -}}
+          {{ " " }}
+        properties:
+          branch_icon: ""
+          fetch_status: true
+          fetch_push_status: true
+          status_formats:
+            Unmerged: %d
+            Added: +%d
+            Modified: ~%d
+            Deleted: -%d
+            Untracked: ?%d
+  - type: prompt
+    alignment: right
+    segments:
+      - type: docker
+        style: plain
+        foreground: '#1e66f5'
+        template: |-
+          {{- if .Containers -}}
+             <#179299>
+            {{- range $i, $container := .Containers -}}
+              {{- if lt $i 3 -}}
+                {{- if $i -}}
+                  {{ " " }}·{{ " " }}
+                {{- end -}}
+                {{ regexReplaceAll "^.+[-_]([^_-]+)[-_][0-9]+$" $container.Names "${1}" }}
+              {{- end -}}
+            {{- end -}}
+            {{- if gt (len .Containers) 3 -}}
+              {{ " " }}+{{ sub (len .Containers) 3 }}
+            {{- end -}}
+            </>{{ " " }}
+          {{- end -}}
+        properties:
+          display_mode: environment
+      - type: python
+        style: plain
+        foreground: '#1e66f5'
+        # shortcut: ownership compares paths; canonicalize aliases if symlinks cause false warnings.
+        template: |-
+          {{- $name := .Venv -}}
+          {{- $foreign := false -}}
+          {{- if .Env.VIRTUAL_ENV -}}
+            {{- $venv := clean .Env.VIRTUAL_ENV -}}
+            {{- $name = base $venv -}}
+            {{- $project := dir $venv -}}
+            {{- $location := clean .AbsolutePWD -}}
+            {{- if .Segments.Contains "Git" -}}
+              {{- $project = .Segments.Git.Dir -}}
+              {{- $location = $venv -}}
+              {{- if eq $project "~" -}}
+                {{- $project = .Env.HOME -}}
+              {{- else if hasPrefix "~/" $project -}}
+                {{- $project = printf "%s/%s" .Env.HOME (trimPrefix "~/" $project) -}}
+              {{- end -}}
+            {{- end -}}
+            {{- $foreign = not (hasPrefix
+              (printf "%s/" (trimSuffix "/" (clean $project)))
+              (printf "%s/" (trimSuffix "/" $location))
+            ) -}}
+          {{- end -}}
+          {{- if and (.Segments.Contains "Docker") .Segments.Docker.Containers -}}
+            {{ " " }}<#9ca0b0>│</>{{ "  " }}
+          {{- end -}}
+           <#8839ef>{{ $name }}</>
+          {{- if and .Major .Minor -}}
+            <#6c6f85> · {{ .Major }}.{{ .Minor }}</>
+          {{- end -}}
+          {{- if $foreign -}}
+            {{ " " }}<#df8e1d></>
+          {{- end -}}
+          {{ " " }}
+        properties:
+          display_mode: environment
+          fetch_version: true
+          tooling:
+            - python
+            - python3
+          fetch_virtual_env: true
+          folder_name_fallback: false
+          display_default: false
+  - type: prompt
+    alignment: left
+    newline: true
+    segments:
+      - type: text
+        style: plain
+        foreground: '#4c4f69'
+        template: '╰─❯ '
