@@ -215,7 +215,7 @@ nvim .
 | Trouble quickfix | `<leader>xq` |
 | Trouble location list | `<leader>xL` |
 | Toggle inlay hints | `<leader>th` |
-| Toggle Python LSP warnings | `<leader>tw` |
+| Toggle diagnostics globally | `<leader>tw` |
 | Insert nearest inlay hint | `<leader>ti` |
 
 ### 6. Folding

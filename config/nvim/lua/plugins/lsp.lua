@@ -53,7 +53,7 @@ return {
     },
     config = function()
       local inlay_hints_enabled = false
-      local python_diagnostics_enabled = true
+      local diagnostics_enabled = true
       local python_diagnostic_servers = {
         ty = true,
       }
@@ -97,39 +97,35 @@ return {
         end
       end
 
-      local function toggle_python_diagnostics()
-        python_diagnostics_enabled = not python_diagnostics_enabled
+      local function toggle_diagnostics()
+        diagnostics_enabled = not diagnostics_enabled
+        vim.diagnostic.enable(diagnostics_enabled)
 
-        for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-          if vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].filetype == 'python' then set_python_diagnostics(python_diagnostics_enabled, bufnr) end
+        if diagnostics_enabled then
+          for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].filetype == 'python' then set_python_diagnostics(true, bufnr) end
+          end
         end
 
         if package.loaded['trouble'] then require('trouble').refresh 'diagnostics' end
 
-        vim.notify(string.format('Python LSP diagnostics %s', python_diagnostics_enabled and 'enabled' or 'disabled'), vim.log.levels.INFO)
+        vim.notify(string.format('Diagnostics %s', diagnostics_enabled and 'enabled' or 'disabled'), vim.log.levels.INFO)
       end
 
-      vim.api.nvim_create_autocmd('FileType', {
-        group = vim.api.nvim_create_augroup('dotfiles-python-diagnostics-keymap', { clear = true }),
-        pattern = 'python',
-        callback = function(event)
-          vim.keymap.set('n', '<leader>tw', toggle_python_diagnostics, {
-            buffer = event.buf,
-            desc = 'LSP: [T]oggle Python diagnostics',
-          })
-        end,
+      vim.keymap.set('n', '<leader>tw', toggle_diagnostics, {
+        desc = 'LSP: [T]oggle diagnostics globally',
       })
 
       vim.api.nvim_create_autocmd('DiagnosticChanged', {
         group = vim.api.nvim_create_augroup('dotfiles-python-diagnostics', { clear = true }),
         callback = function(event)
-          if vim.bo[event.buf].filetype ~= 'python' then return end
+          if not diagnostics_enabled or vim.bo[event.buf].filetype ~= 'python' then return end
 
           local use_lsp_diagnostics = python.for_buffer(event.buf).type_checker == 'lsp'
 
           for _, diagnostic in ipairs(event.data.diagnostics or {}) do
             if is_python_diagnostic(diagnostic) then
-              local enabled = python_diagnostics_enabled and (not is_lsp_diagnostic(diagnostic) or use_lsp_diagnostics)
+              local enabled = not is_lsp_diagnostic(diagnostic) or use_lsp_diagnostics
               vim.diagnostic.enable(enabled, { bufnr = event.buf, ns_id = diagnostic.namespace })
             end
           end
@@ -180,7 +176,7 @@ return {
           root_dir = vim.fs.root(0, { '.git' }) or vim.fn.getcwd(),
         }
       end, { desc = 'Attach DataOS LSP to this YAML buffer' })
-      vim.cmd([[cnoreabbrev <expr> dls (getcmdtype() ==# ':' && getcmdline() ==# 'dls') ? 'Dls' : 'dls']])
+      vim.cmd [[cnoreabbrev <expr> dls (getcmdtype() ==# ':' && getcmdline() ==# 'dls') ? 'Dls' : 'dls']]
 
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('dotfiles-lsp-attach', { clear = true }),
@@ -238,8 +234,8 @@ return {
             map('<leader>th', toggle_inlay_hints, '[T]oggle Inlay [H]ints')
           end
 
-          if client and vim.bo[event.buf].filetype == 'python' and is_python_diagnostics_client(client) then
-            set_python_diagnostics(python_diagnostics_enabled, event.buf)
+          if diagnostics_enabled and client and vim.bo[event.buf].filetype == 'python' and is_python_diagnostics_client(client) then
+            set_python_diagnostics(true, event.buf)
           end
         end,
       })
