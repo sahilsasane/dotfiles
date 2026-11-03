@@ -29,6 +29,7 @@ alias gal='git add --all'
 alias ff='fastfetch --config "$DOTFILES_ZSH_DIR/../fastfetch/config.jsonc"'
 alias bcat='bat --style=plain'
 alias watch='watch '
+alias rex='/Users/sahilsasane/Library/Application\ Support/com.superlogical.rex/RexServer/Versions/Current/Rex\ Server.app/Contents/MacOS/rex'
 
 alias -s md='bat'
 alias -s yaml='bat'
