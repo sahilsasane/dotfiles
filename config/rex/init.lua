@@ -170,11 +170,6 @@ rex.action({
 -- Without the prefix (bind -n)
 rex.unbind("cmd+k", "session.switch")
 rex.bind("cmd+k", "pane.send_key", { key = "alt+k" })
-rex.bind("alt+h", "client.tab.previous")
-rex.bind("alt+l", "client.tab.next")
-for i = 1, 4 do
-	rex.bind("alt+" .. i, "client.tab.goto", { index = i })
-end
 
 -- Behind the prefix
 rex.bind(PREFIX .. "ctrl+space", "pane.send_key", { key = "ctrl+space" })
@@ -185,7 +180,8 @@ rex.bind(PREFIX .. "ctrl+p", "floating_shell_here")
 
 local directions = { h = "left", j = "down", k = "up", l = "right" }
 for key, direction in pairs(directions) do
-	rex.bind(PREFIX .. key, "pane.focus", { direction = direction })
+	rex.bind("alt+" .. key, "pane.focus", { direction = direction })
+	-- rex.bind(PREFIX .. key, "pane.focus", { direction = direction })
 	rex.bind(PREFIX .. "shift+" .. key, "resize_repeat", { direction = direction })
 	rex.bind("resize/" .. key, "pane.resize", { direction = direction, amount = 7 })
 	rex.bind("resize/shift+" .. key, "pane.resize", { direction = direction, amount = 7 })
@@ -195,12 +191,12 @@ rex.bind("resize/enter", "client.mode.exit")
 rex.bind("resize/q", "client.mode.exit")
 
 rex.bind(PREFIX .. "c", "tab_here")
-rex.bind(PREFIX .. "shift+\\", "split_here", { direction = "right" })
-rex.bind(PREFIX .. "-", "split_here", { direction = "down" })
+-- rex.bind(PREFIX .. "\\", "split_here", { direction = "right" })
+-- rex.bind(PREFIX .. "-", "split_here", { direction = "down" })
 rex.bind(PREFIX .. "z", "pane.zoom")
 rex.bind(PREFIX .. "o", "pane.focus_next")
 rex.bind(PREFIX .. "x", "pane.close")
-rex.bind(PREFIX .. "shift+1", "pane.move_to_new_tab")
+rex.bind(PREFIX .. "m", "pane.move_to_new_tab")
 rex.bind(PREFIX .. "shift+7", "client.tab.close")
 rex.bind(PREFIX .. "n", "client.tab.next")
 rex.bind(PREFIX .. "p", "client.tab.previous")
@@ -208,3 +204,42 @@ rex.bind(PREFIX .. ",", "client.tab.rename")
 rex.bind(PREFIX .. "4", "session.rename")
 rex.bind(PREFIX .. "e", "session.switch")
 rex.bind(PREFIX .. "ctrl+f", "session.switch")
+
+-- >>> md-viewer: Cmd-F binding (managed by md-viewer setup; edits are replaced) >>>
+local function md_viewer_pane(block)
+	if block == nil then
+		return false
+	end
+	local terminal = "com.superlogical.terminal"
+	local process = rex.block.call(terminal, "process", { block_id = block })
+	if process ~= nil then
+		return process.foreground ~= nil and process.foreground.name == "md-viewer"
+	end
+	local listed = rex.session.list_blocks({})
+	for _, entry in ipairs((listed or {}).blocks or {}) do
+		if entry.block_id == block then
+			return entry.label == "md-viewer"
+		end
+	end
+	return false
+end
+
+rex.action({
+	name = "md_viewer_find",
+	title = "Find (md-viewer aware)",
+	description = "Opens md-viewer's find in an md-viewer pane and Rex's Find everywhere else.",
+	run = function(ctx, args)
+		if md_viewer_pane(ctx.block_id) then
+			local _, err =
+				rex.block.call("com.superlogical.terminal", "write", { block_id = ctx.block_id, data = "\27[102;9u" })
+			if err == nil then
+				return { target = "md-viewer" }
+			end
+		end
+		rex.client.queue("client.find.open")
+		return { target = "rex" }
+	end,
+})
+
+rex.bind("cmd+f", "md_viewer_find")
+-- <<< md-viewer <<<

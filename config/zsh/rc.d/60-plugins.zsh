@@ -15,9 +15,6 @@ fi
 plugins=(git)
 
 source "$ZSH/oh-my-zsh.sh"
-# OMZ lib/key-bindings.zsh runs `bindkey -e`; restore vi mode from 20-shell.zsh
-bindkey -v
-
 source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 if (( ${+widgets[autosuggest-accept]} )); then
