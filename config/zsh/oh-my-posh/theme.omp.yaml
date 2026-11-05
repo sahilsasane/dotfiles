@@ -8,7 +8,7 @@ blocks:
       - type: os
         style: plain
         foreground: '#cdd6f4'
-        template: '╭─ {{ if .WSL }}WSL {{ else }}{{ .Icon }}{{ end }} '
+        template: '╭─ '
       - type: path
         style: plain
         foreground: '#fab387'
@@ -149,4 +149,4 @@ blocks:
       - type: text
         style: plain
         foreground: '#ffffff'
-        template: '╰─❯ '
+        template: '╰─>'

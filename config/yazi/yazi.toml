@@ -7,3 +7,9 @@ wrap = "yes"
 [mgr]
 ratio = [0, 3, 5]
 show_hidden = true
+
+# [plugin]
+# prepend_previewers = [
+#   { url = "*.html", run = "w3m -dump '$1'" },
+#   { url = "*.htm", run = "w3m -dump '$1'" },
+# ]
