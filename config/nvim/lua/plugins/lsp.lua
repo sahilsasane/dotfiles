@@ -246,6 +246,7 @@ return {
       }
 
       local servers = {
+        docker_language_server = {},
         gopls = {
           settings = {
             gopls = {

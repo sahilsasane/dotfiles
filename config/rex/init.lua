@@ -108,35 +108,11 @@ local function open_overlay(ctx, label, command, overlay_bounds)
 	error("The focused pane is no longer in the layout")
 end
 
-rex.action({
-	name = "copy_mode",
-	title = "Copy Mode (Neovim)",
-	run = function(ctx)
-		return open_overlay(ctx, "Copy Mode", function(zoomed)
-			return {
-				"/bin/sh",
-				"-c",
-				[[
-set -eu
-scrollback=$(mktemp "${TMPDIR:-/tmp}/rex-copy-mode.XXXXXX")
-trap '
-  rm -f "$scrollback"
-  rex focus -s "$1" "$2" >/dev/null 2>&1 || :
-  if [ "$4" = true ]; then rex zoom -s "$1" "$2" --on >/dev/null 2>&1 || :; fi
-' EXIT
-trap 'exit 130' INT
-trap 'exit 143' HUP TERM
-rex capture -s "$1" -b "$2" --trim --unwrap > "$scrollback"
-nvim -u "$3" -i NONE -n -R -- "$scrollback"
-]],
-				"rex-copy-mode",
-				ctx.session_id,
-				ctx.block_id,
-				CONFIG_HOME .. "/rex/copy-mode.lua",
-				tostring(zoomed),
-			}
-		end)
-	end,
+require("copy-mode").setup({
+	key = false, -- The existing prefix binding below opens copy mode.
+	nvim = "/opt/homebrew/bin/nvim",
+	rex = os.getenv("HOME")
+		.. "/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex",
 })
 
 rex.action({
@@ -169,7 +145,29 @@ rex.action({
 
 -- Without the prefix (bind -n)
 rex.unbind("cmd+k", "session.switch")
-rex.bind("cmd+k", "pane.send_key", { key = "alt+k" })
+
+-- Send directly to the block: pane.send_key misses floating terminals.
+rex.action({
+	name = "clear_scrollback",
+	title = "Clear Scrollback and Redraw Prompt",
+	run = function(ctx)
+		local modes = check(rex.block.call(TERMINAL, "modes", { block_id = ctx.block_id }))
+		if modes.screen == "alternate" then
+			return
+		end
+		check(rex.block.call(TERMINAL, "write", { block_id = ctx.block_id, data = "\27k" }))
+	end,
+})
+rex.bind("cmd+k", "clear_scrollback")
+
+rex.action({
+	name = "clear_input_line",
+	title = "Clear Input Line",
+	run = function(ctx)
+		check(rex.block.call(TERMINAL, "write", { block_id = ctx.block_id, data = "\21" }))
+	end,
+})
+rex.bind("cmd+backspace", "clear_input_line")
 
 -- Behind the prefix
 rex.bind(PREFIX .. "ctrl+space", "pane.send_key", { key = "ctrl+space" })

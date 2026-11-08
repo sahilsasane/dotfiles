@@ -28,3 +28,16 @@ if (( ${+widgets} )) && (( $+functions[_omp_create_widget] || $+functions[enable
 fi
 
 eval "$(oh-my-posh init zsh --config "$OMP_CONFIG")"
+
+set_poshcontext() {
+  local tenants line
+  export DOTFILES_DATAOS_NAMESPACE=''
+  (( $+commands[dataos-ctl] )) || return 0
+  tenants="$(command dataos-ctl tenant ls 2>/dev/null)" || return 0
+
+  for line in "${(@f)tenants}"; do
+    [[ "$line" == \**\(*\) ]] || continue
+    export DOTFILES_DATAOS_NAMESPACE="${${line##*\(}%\)}"
+    break
+  done
+}

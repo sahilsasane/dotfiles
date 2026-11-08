@@ -76,6 +76,10 @@ blocks:
   - type: prompt
     alignment: right
     segments:
+      - type: text
+        style: plain
+        foreground: '#179299'
+        template: '{{ if .Env.DOTFILES_DATAOS_NAMESPACE }}DataOS {{ .Env.DOTFILES_DATAOS_NAMESPACE }} {{ end }}'
       - type: docker
         style: plain
         foreground: '#1e66f5'

@@ -240,6 +240,7 @@ nvim .
 | What | Key |
 | --- | --- |
 | Open lazygit | `<leader>gg` |
+| Current line / selected lines history (Delta) | `<leader>gl` |
 | Open working-tree Diffview | `<leader>gd` |
 | Close Diffview | `<leader>gD` |
 | Current file history | `<leader>gh` |

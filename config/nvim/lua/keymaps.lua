@@ -1,4 +1,10 @@
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set({ 'i', 'c' }, '<M-BS>', '<C-w>', { desc = 'Delete previous word' })
+
+if vim.env.TERM_PROGRAM == 'rex' then
+  -- Rex forwards Cmd+Delete as Ctrl+U.
+  vim.keymap.set('i', '<C-u>', '<C-\\><C-o>"_d0', { desc = 'Delete to beginning of line' })
+end
 
 vim.diagnostic.config {
   update_in_insert = false,
@@ -22,6 +28,8 @@ end
 
 vim.api.nvim_create_user_command('W', write_without_format, { bang = true, desc = 'Write without formatting' })
 vim.api.nvim_create_user_command('WriteNoFormat', write_without_format, { bang = true, desc = 'Write without formatting' })
+
+vim.keymap.set({ 'n', 'x' }, '<leader>gl', function() require('dotfiles.git_line_history').open() end, { desc = '[G]it [L]ine history' })
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
