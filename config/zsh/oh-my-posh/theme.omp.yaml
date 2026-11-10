@@ -72,10 +72,10 @@ blocks:
             Modified: ~%d
             Deleted: -%d
             Untracked: ?%d
-      - type: text
-        style: plain
-        foreground: '#94e2d5'
-        template: '{{ if .Env.DOTFILES_DATAOS_NAMESPACE }}{{ .Env.DOTFILES_DATAOS_NAMESPACE }} {{ end }}'
+      # - type: text
+      #   style: plain
+      #   foreground: '#94e2d5'
+      #   template: '{{ if .Env.DOTFILES_DATAOS_NAMESPACE }}{{ .Env.DOTFILES_DATAOS_NAMESPACE }} {{ end }}'
   - type: prompt
     alignment: right
     segments:
@@ -146,6 +146,10 @@ blocks:
           fetch_virtual_env: true
           folder_name_fallback: false
           display_default: false
+      - type: text
+        style: plain
+        foreground: '#94e2d5'
+        template: '{{ if .Env.DOTFILES_DATAOS_NAMESPACE }}{{ .Env.DOTFILES_DATAOS_NAMESPACE }} {{ end }}'
   - type: prompt
     alignment: left
     newline: true

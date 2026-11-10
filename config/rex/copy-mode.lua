@@ -39,23 +39,22 @@ end
 
 local function write_capture(ctx, directory)
   local part = block_call(ctx, "format", {
-    format = "vt", trim = true, unwrap = true, max_bytes = CHUNK,
+    format = "vt", trim = false, unwrap = false, extra_cursor = true, max_bytes = CHUNK,
   })
   local file = assert(io.open(directory .. "/capture.vt", "wb"))
   local ok, err = pcall(function()
-    local offset, blob_id, tail = 0, part.id, ""
+    local offset, blob_id = 0, part.id
     local content = part.content
     while true do
       if #content == 0 and offset == 0 then error("Rex returned an empty capture", 0) end
       assert(file:write(content))
-      offset, tail = offset + #content, content:sub(-1)
+      offset = offset + #content
       if offset > 128 * 1024 * 1024 then error("Rex capture exceeds 128 MiB", 0) end
       if not blob_id or part.eof == true or (part.total and offset >= part.total) then break end
       part = block_call(ctx, "blob_read", { id = blob_id, offset = offset, max_bytes = CHUNK })
       content = part.data
       if #content == 0 then error("Rex returned an incomplete capture", 0) end
     end
-    if tail ~= "\n" then assert(file:write("\n")) end
   end)
   file:close()
   if not ok then error(err, 0) end
@@ -92,6 +91,8 @@ function M.setup(user)
       local view = checked(rex.session.view{ session_id = ctx.session_id })
       local bounds, source_zoomed = common.pane_bounds(view, window_id, ctx.block_id)
       local title = common.title(block_call(ctx, "title").title or "", source.block.label)
+      local size = block_call(ctx, "size")
+      local source_size = { columns = size.columns, rows = size.rows }
       local temporary_root = (os.getenv("TMPDIR") or "/tmp"):gsub("/+$", "")
       local directory = exec({ "mktemp", "-d", temporary_root .. "/rex-copy-mode-XXXXXXXX" }).stdout:gsub("%s+$", "")
       local opened = false
@@ -100,7 +101,7 @@ function M.setup(user)
         local metadata = {
           title = title, session = ctx.session_id,
           source_block = ctx.block_id, source_window = window_id, source_zoomed = source_zoomed,
-          source_bounds = bounds,
+          source_bounds = bounds, source_size = source_size,
           rex_cli = options.rex, copy_key = options.copy_key, toast_seconds = options.toast_seconds,
         }
         local encoded = checked(rex.json.encode(metadata))
@@ -116,6 +117,7 @@ function M.setup(user)
             flavor = "com.superlogical.terminal.shell", label = title,
             options = {
               shell = "none",
+              size = source_size,
               command = {
                 options.nvim, "-u", "NONE", "-i", "NONE", "-n", "--cmd", "set nomodeline",
                 "--cmd", "lua vim.g.rex_copy_mode_directory = " .. string.format("%q", directory),

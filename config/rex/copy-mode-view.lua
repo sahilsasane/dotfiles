@@ -76,7 +76,14 @@ end
 
 local function start()
   metadata = vim.json.decode(read_file(directory .. "/meta.json"))
-  local snapshot = common.sanitize_vt(read_file(directory .. "/capture.vt"))
+  local capture = read_file(directory .. "/capture.vt")
+  -- Rex appends the screen-relative cursor position when extra_cursor is set.
+  -- Read it as data; the sanitizer still strips all cursor-control sequences.
+  local cursor_row, cursor_column = capture:match("\27%[(%d+);(%d+)H$")
+  assert(cursor_row and cursor_column, "Capture has no cursor position")
+  local snapshot = common.sanitize_vt(capture)
+  local _, line_breaks = snapshot:gsub("\n", "")
+  local screen_top = math.max(0, math.min(line_breaks + 1 - metadata.source_size.rows, 100000)) + 1
 
   vim.opt.termguicolors = true
   vim.opt.clipboard = "unnamedplus"
@@ -103,7 +110,7 @@ local function start()
   vim.opt.hlsearch = true
   vim.opt.incsearch = true
   vim.opt.mouse = "a"
-  vim.opt.virtualedit = "block"
+  vim.opt.virtualedit = "all"
   vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", fg = "NONE" })
 
   vim.keymap.set({ "n", "x", "o" }, "s", function()
@@ -133,14 +140,26 @@ local function start()
   vim.defer_fn(function()
     if vim.api.nvim_buf_is_valid(buffer) then
       vim.cmd.stopinsert()
-      vim.api.nvim_win_set_cursor(0, { math.max(1, vim.fn.prevnonblank("$")), 0 })
-      vim.cmd("normal! zb")
+      local line = math.min(vim.api.nvim_buf_line_count(buffer), screen_top + tonumber(cursor_row) - 1)
+      vim.api.nvim_win_set_cursor(0, { line, 0 })
+      -- | uses terminal display cells, including tabs, wide text and empty space.
+      vim.cmd("normal! " .. cursor_column .. "|")
+      vim.fn.winrestview({ topline = screen_top, leftcol = 0 })
     end
   end, 50)
 end
 
-local ok = pcall(start)
-if not ok then
-  -- Fail closed instead of leaving a half-rendered pager or printing payloads.
-  vim.cmd("cquit 1")
+local function start_safe()
+  local ok = pcall(start)
+  if not ok then
+    -- Fail closed instead of leaving a half-rendered pager or printing payloads.
+    vim.cmd("cquit 1")
+  end
+end
+
+if #vim.api.nvim_list_uis() == 0 then
+  -- -c runs before the TUI attaches; its initial 80-column grid is still active.
+  vim.api.nvim_create_autocmd("UIEnter", { once = true, callback = start_safe })
+else
+  start_safe()
 end

@@ -63,9 +63,16 @@ return {
           files = {
             args = { '--full-path' },
           },
+          git_status = {
+            preview = function(ctx)
+              Snacks.picker.preview.git_status(ctx)
+              ctx.preview:set_title(ctx.item.file)
+            end,
+            previewers = { diff = { style = 'syntax' } },
+            win = { preview = { minimal = true } },
+          },
         },
         layout = {
-          -- reverse = true,
           layout = {
             box = 'horizontal',
             width = 0.85,
@@ -75,22 +82,21 @@ return {
             {
               box = 'vertical',
               width = 0.50,
-              title = '{title} {live} {flags}',
-              title_pos = 'center',
-              { win = 'input', height = 1, border = true },
-              { win = 'list', border = true, title = '{title} {live} {flags}', title_pos = 'center' },
+              { win = 'input', height = 1, border = 'single', title = '{title} {live} {flags}', title_pos = 'center' },
+              { win = 'list', border = 'single' },
             },
             {
               win = 'preview',
               title = '{preview}',
               width = 0.50,
-              border = 'rounded',
+              border = 'single',
               title_pos = 'center',
             },
           },
         },
         ui_select = true,
         win = {
+          preview = { wo = { fillchars = 'eob: ' } },
           input = {
             keys = {
               ['<C-y>'] = { 'history_back', mode = { 'i', 'n' } },
