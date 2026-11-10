@@ -77,3 +77,4 @@ bin/update-ds
 *.lock
 *.out
 *.pid
+config/zsh/tests/
