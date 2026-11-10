@@ -17,6 +17,7 @@ path=(
   /usr/local/bin
   $path
   /usr/local/go/bin
+  "$HOME/.local/share/snowflake-cli/bin"
 )
 
 export LDFLAGS="-L/opt/homebrew/opt/libpq/lib -L/opt/homebrew/opt/openssl@3/lib ${LDFLAGS}"
