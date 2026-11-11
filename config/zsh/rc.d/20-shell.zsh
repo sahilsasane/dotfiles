@@ -7,6 +7,7 @@ unset LSCOLORS
 export CLAUDE_CODE_NO_FLICKER=1
 export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
 export HOMEBREW_NO_ENV_HINTS=1
+export BUN_OPTIONS="${BUN_OPTIONS:+$BUN_OPTIONS }--preload=/Users/sahilsasane/.local/share/no-agent-summary.js"
 unalias man 2>/dev/null
 export MANPAGER='col -b | bat --style=plain --language=man --color=always'
 
