@@ -30,16 +30,20 @@ fi
 eval "$(oh-my-posh init zsh --config "$OMP_CONFIG")"
 
 set_poshcontext() {
-  local tenants line host
-  export DATAOS_TENANT='' DATAOS_INSTANCE=''
-  (( $+commands[dataos-ctl] )) || return 0
-  tenants="$(command dataos-ctl tenant ls 2>/dev/null)" || return 0
+  local dataos_dir="$HOME/.dataos/v2"
+  local context_name tenancy host tenant
+  export DATAOS_TENANT='' DATAOS_INSTANCE='' DATAOS_INSTANCE_URL=''
+  (( $+commands[yq] )) || return 0
 
-  for line in "${(@f)tenants}"; do
-    [[ "$line" == \**\(*\) ]] || continue
-    export DATAOS_TENANT="${${line##*\(}%\)}"
-    host="${${line#* - }%% *}"
-    export DATAOS_INSTANCE="${host%%.*}"
-    break
-  done
+  context_name="$(command yq -er '.contexts.current_context_name // ""' \
+    "$dataos_dir/dataos.context.yaml" 2>/dev/null)" || return 0
+  [[ -n "$context_name" ]] || return 0
+  tenancy="$(command yq -r '.tenancy | [.dataos_fqdn // "", .dataos_tenant // ""] | @tsv' \
+    "$dataos_dir/$context_name/.dataos.tenancy.config.yaml" 2>/dev/null)" || return 0
+  IFS=$'\t' read -r host tenant <<< "$tenancy"
+  [[ -n "$host" && -n "$tenant" ]] || return 0
+
+  export DATAOS_TENANT="$tenant"
+  export DATAOS_INSTANCE="${host%%.*}"
+  export DATAOS_INSTANCE_URL="$host"
 }
