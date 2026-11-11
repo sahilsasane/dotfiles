@@ -176,21 +176,27 @@ rex.bind(PREFIX .. "[", "copy_mode")
 rex.bind(PREFIX .. "ctrl+e", "extrakto")
 rex.bind(PREFIX .. "ctrl+p", "floating_shell_here")
 
-local directions = { h = "left", j = "down", k = "up", l = "right" }
-for key, direction in pairs(directions) do
-	rex.bind("alt+" .. key, "pane.focus", { direction = direction })
-	-- rex.bind(PREFIX .. key, "pane.focus", { direction = direction })
-	rex.bind(PREFIX .. "shift+" .. key, "resize_repeat", { direction = direction })
-	rex.bind("resize/" .. key, "pane.resize", { direction = direction, amount = 7 })
-	rex.bind("resize/shift+" .. key, "pane.resize", { direction = direction, amount = 7 })
-end
+rex.bind("alt+h", "pane.focus", { direction = "left" })
+rex.bind("alt+j", "pane.focus", { direction = "down" })
+rex.bind("alt+k", "pane.focus", { direction = "up" })
+rex.bind("alt+l", "pane.focus", { direction = "right" })
+
+rex.bind(PREFIX .. "h", "resize_repeat", { direction = "left" })
+rex.bind(PREFIX .. "j", "resize_repeat", { direction = "down" })
+rex.bind(PREFIX .. "k", "resize_repeat", { direction = "up" })
+rex.bind(PREFIX .. "l", "resize_repeat", { direction = "right" })
+rex.bind(PREFIX .. "=", "pane.balance")
+
+rex.bind("resize/h", "pane.resize", { direction = "left", amount = 1 })
+rex.bind("resize/j", "pane.resize", { direction = "down", amount = 1 })
+rex.bind("resize/k", "pane.resize", { direction = "up", amount = 1 })
+rex.bind("resize/l", "pane.resize", { direction = "right", amount = 1 })
+
 rex.mode("resize", { exclusive = true })
 rex.bind("resize/enter", "client.mode.exit")
 rex.bind("resize/q", "client.mode.exit")
 
 rex.bind(PREFIX .. "c", "tab_here")
--- rex.bind(PREFIX .. "\\", "split_here", { direction = "right" })
--- rex.bind(PREFIX .. "-", "split_here", { direction = "down" })
 rex.bind(PREFIX .. "z", "pane.zoom")
 rex.bind(PREFIX .. "o", "pane.focus_next")
 rex.bind(PREFIX .. "x", "pane.close")
