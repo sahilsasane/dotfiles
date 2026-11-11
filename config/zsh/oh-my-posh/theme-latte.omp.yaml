@@ -79,7 +79,7 @@ blocks:
       - type: text
         style: plain
         foreground: '#179299'
-        template: '{{ if and .Env.DOTFILES_DATAOS_INSTANCE .Env.DOTFILES_DATAOS_NAMESPACE }}{{ .Env.DOTFILES_DATAOS_INSTANCE }}/{{ .Env.DOTFILES_DATAOS_NAMESPACE }} {{ end }}'
+        template: '{{ if and .Env.DATAOS_INSTANCE .Env.DATAOS_TENANT }}{{ .Env.DATAOS_INSTANCE }}/{{ .Env.DATAOS_TENANT }} {{ end }}'
       - type: docker
         style: plain
         foreground: '#1e66f5'

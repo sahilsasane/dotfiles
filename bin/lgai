@@ -82,6 +82,9 @@ trap cleanup EXIT
 
 require_cmd git
 require_cmd mktemp
+require_cmd python3
+
+lgai_bin_dir="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().parent)' "${BASH_SOURCE[0]}")"
 
 if ! command -v aichat >/dev/null 2>&1; then
   die "lg-ai-commit: aichat is not installed. Install it with 'brew install aichat' and configure a model with 'aichat'."
@@ -198,7 +201,7 @@ $'- If the full staged change set is breaking, mark it with ! immediately before
 $'- Never suggest multiple commits, a commit plan, or subjects like "commit 1" / "commit 2"'
 
 selected_message="$(
-  aichat "$prompt" \
+  python3 "${lgai_bin_dir}/lgai-generate.py" "$prompt" \
     | awk '
         BEGIN { RS="<LGAI_CANDIDATE>" }
         { gsub(/^[[:space:]]+|[[:space:]]+$/, ""); if ($0 != "") { print; exit } }

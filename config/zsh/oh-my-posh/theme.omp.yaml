@@ -75,7 +75,7 @@ blocks:
       # - type: text
       #   style: plain
       #   foreground: '#94e2d5'
-      #   template: '{{ if .Env.DOTFILES_DATAOS_NAMESPACE }}{{ .Env.DOTFILES_DATAOS_NAMESPACE }} {{ end }}'
+      #   template: '{{ if .Env.DATAOS_TENANT }}{{ .Env.DATAOS_TENANT }} {{ end }}'
   - type: prompt
     alignment: right
     segments:
@@ -149,7 +149,7 @@ blocks:
       - type: text
         style: plain
         foreground: '#94e2d5'
-        template: '{{ if and .Env.DOTFILES_DATAOS_INSTANCE .Env.DOTFILES_DATAOS_NAMESPACE }}{{ .Env.DOTFILES_DATAOS_INSTANCE }}/{{ .Env.DOTFILES_DATAOS_NAMESPACE }} {{ end }}'
+        template: '{{ if and .Env.DATAOS_INSTANCE .Env.DATAOS_TENANT }}{{ .Env.DATAOS_INSTANCE }}/{{ .Env.DATAOS_TENANT }} {{ end }}'
   - type: prompt
     alignment: left
     newline: true
