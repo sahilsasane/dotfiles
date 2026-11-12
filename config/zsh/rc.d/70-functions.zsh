@@ -125,10 +125,6 @@ procs() {
 }
 
 
-tlb() {
-  command tldr --raw "$@" |
-    bat --style=plain --language=markdown --color=always --paging=always
-}
 rc() {
   uv run ruff check "$@"
 }
