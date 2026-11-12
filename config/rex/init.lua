@@ -143,6 +143,16 @@ rex.action({
 	end,
 })
 
+rex.action({
+	name = "move_repeat",
+	title = "Move Pane and Keep Rearranging",
+	args = { direction = "string" },
+	run = function(ctx, args)
+		rex.client.queue("pane.move." .. args.direction)
+		rex.client.queue("client.mode.enter", { name = "resize" })
+	end,
+})
+
 -- Without the prefix (bind -n)
 rex.unbind("cmd+k", "session.switch")
 
@@ -185,12 +195,21 @@ rex.bind(PREFIX .. "h", "resize_repeat", { direction = "left" })
 rex.bind(PREFIX .. "j", "resize_repeat", { direction = "down" })
 rex.bind(PREFIX .. "k", "resize_repeat", { direction = "up" })
 rex.bind(PREFIX .. "l", "resize_repeat", { direction = "right" })
+rex.bind(PREFIX .. "shift+h", "move_repeat", { direction = "left" })
+rex.bind(PREFIX .. "shift+j", "move_repeat", { direction = "down" })
+rex.bind(PREFIX .. "shift+k", "move_repeat", { direction = "up" })
+rex.bind(PREFIX .. "shift+l", "move_repeat", { direction = "right" })
 rex.bind(PREFIX .. "=", "pane.balance")
 
 rex.bind("resize/h", "pane.resize", { direction = "left", amount = 1 })
 rex.bind("resize/j", "pane.resize", { direction = "down", amount = 1 })
 rex.bind("resize/k", "pane.resize", { direction = "up", amount = 1 })
 rex.bind("resize/l", "pane.resize", { direction = "right", amount = 1 })
+
+rex.bind("resize/shift+h", "pane.move.left")
+rex.bind("resize/shift+j", "pane.move.down")
+rex.bind("resize/shift+k", "pane.move.up")
+rex.bind("resize/shift+l", "pane.move.right")
 
 rex.mode("resize", { exclusive = true })
 rex.bind("resize/enter", "client.mode.exit")
