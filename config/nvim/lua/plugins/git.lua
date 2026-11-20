@@ -40,6 +40,36 @@ return {
     'kdheepak/lazygit.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     cmd = { 'LazyGit', 'LazyGitConfig', 'LazyGitCurrentFile', 'LazyGitFilter', 'LazyGitFilterCurrentFile' },
+    init = function()
+      -- bin/lg-nvim-edit calls _G.dotfiles_lazygit_open from inside the LazyGit float.
+      -- lazygit is suspended while that command runs and discards input typed then, so
+      -- the quit key is retried until lazygit exits, and the file opens in the exit
+      -- callback once the float has closed.
+      local pending
+      vim.g.lazygit_on_exit_callback = function()
+        if not pending then
+          return
+        end
+        local file, line = pending.file, pending.line
+        pending = nil
+        vim.cmd.edit(vim.fn.fnameescape(file))
+        if line ~= '' then
+          vim.cmd(line)
+        end
+      end
+
+      function _G.dotfiles_lazygit_open(file, line)
+        pending = { file = file, line = line }
+        local job = vim.b.terminal_job_id
+        vim.fn.timer_start(150, function(timer)
+          if vim.fn.jobwait({ job }, 0)[1] == -1 then
+            vim.fn.chansend(job, 'q')
+          else
+            vim.fn.timer_stop(timer)
+          end
+        end, { ['repeat'] = 30 })
+      end
+    end,
     keys = {
       { '<leader>gg', '<cmd>LazyGit<CR>', desc = 'Open Lazy[G]it' },
     },

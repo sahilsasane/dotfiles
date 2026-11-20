@@ -75,6 +75,7 @@ blocks:
             Untracked: ?%d
   - type: prompt
     alignment: right
+    overflow: hide
     segments:
       - type: text
         style: plain

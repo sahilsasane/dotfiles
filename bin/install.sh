@@ -61,6 +61,7 @@ clone_or_update https://github.com/laktak/extrakto \
 link_path "$DOTFILES_ROOT/home/.zshenv" "$HOME/.zshenv"
 
 link_path "$DOTFILES_ROOT/bin/lgai" "$HOME/.local/bin/lgai"
+link_path "$DOTFILES_ROOT/bin/lg-nvim-edit" "$HOME/.local/bin/lg-nvim-edit"
 link_path "$DOTFILES_ROOT/bin/tmx" "$HOME/.local/bin/tmx"
 link_path "$DOTFILES_ROOT/bin/ds" "$HOME/.local/bin/ds"
 link_path "$DOTFILES_ROOT/bin/dotfiles-theme" "$HOME/.local/bin/dotfiles-theme"

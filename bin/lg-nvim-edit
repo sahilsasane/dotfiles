@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Open a file from lazygit. Inside nvim's LazyGit float ($NVIM set) it asks that
+# nvim to quit lazygit and open the file (see config/nvim/lua/plugins/git.lua).
+# Otherwise it starts a new nvim.
+set -euo pipefail
+
+file=${1:?usage: lg-nvim-edit FILE [LINE]}
+line=${2:-}
+
+if [ -z "${NVIM:-}" ]; then
+  exec nvim ${line:++$line} -- "$file"
+fi
+
+case $file in /*) ;; *) file=$PWD/$file ;; esac
+esc=${file//\'/\'\'}
+nvim --server "$NVIM" --remote-expr \
+  "luaeval('_G.dotfiles_lazygit_open(_A[1], _A[2])', ['${esc}', '${line}'])" >/dev/null

@@ -34,3 +34,8 @@ customCommands:
     command: "~/.local/bin/lgai"
     output: "terminal"
 promptToReturnFromSubprocess: false
+os:
+  edit: 'lg-nvim-edit {{filename}}'
+  editAtLine: 'lg-nvim-edit {{filename}} {{line}}'
+  editAtLineAndWait: 'nvim +{{line}} {{filename}}'
+  open: 'lg-nvim-edit {{filename}}'

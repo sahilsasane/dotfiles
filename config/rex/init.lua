@@ -46,13 +46,13 @@ rex.action({
 	end,
 })
 
-rex.action({
-	name = "tab_here",
-	title = "New Tab Here",
-	run = function(ctx)
-		check(rex.session.new_window({ layout = shell_here(ctx), focus = true }))
-	end,
-})
+-- rex.action({
+-- 	name = "tab_here",
+-- 	title = "New Tab Here",
+-- 	run = function(ctx)
+-- 		check(rex.session.new_window({ layout = shell_here(ctx), focus = true }))
+-- 	end,
+-- })
 
 rex.action({
 	name = "floating_shell_here",
@@ -108,12 +108,12 @@ local function open_overlay(ctx, label, command, overlay_bounds)
 	error("The focused pane is no longer in the layout")
 end
 
-require("copy-mode").setup({
-	key = false, -- The existing prefix binding below opens copy mode.
-	nvim = "/opt/homebrew/bin/nvim",
-	rex = os.getenv("HOME")
-		.. "/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex",
-})
+-- require("copy-mode").setup({
+-- 	key = false, -- The existing prefix binding below opens copy mode.
+-- 	nvim = "/opt/homebrew/bin/nvim",
+-- 	rex = os.getenv("HOME")
+-- 		.. "/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex",
+-- })
 
 rex.action({
 	name = "extrakto",
@@ -182,7 +182,7 @@ rex.bind("cmd+backspace", "clear_input_line")
 -- Behind the prefix
 rex.bind(PREFIX .. "ctrl+space", "pane.send_key", { key = "ctrl+space" })
 rex.bind(PREFIX .. "r", "client.config.reload")
-rex.bind(PREFIX .. "[", "copy_mode")
+-- rex.bind(PREFIX .. "[", "copy_mode")
 rex.bind(PREFIX .. "ctrl+e", "extrakto")
 rex.bind(PREFIX .. "ctrl+p", "floating_shell_here")
 
@@ -191,6 +191,15 @@ rex.bind("alt+j", "pane.focus", { direction = "down" })
 rex.bind("alt+k", "pane.focus", { direction = "up" })
 rex.bind("alt+l", "pane.focus", { direction = "right" })
 
+-- rex.bind(PREFIX .. "ctrl+k", "scroll_up")
+-- rex.bind(PREFIX .. "ctrl+j", "scroll_down")
+--
+-- rex.bind("scroll/k", "client.scroll.page_up", { direction = "up", amount = 1 })
+-- rex.bind("scoll/j", "client.scroll.page_down", { direction = "down", amount = 1 })
+--
+-- rex.mode("scroll", { exclusive = true })
+-- rex.bind("scroll/q", "client.mode.exit")
+--
 rex.bind(PREFIX .. "h", "resize_repeat", { direction = "left" })
 rex.bind(PREFIX .. "j", "resize_repeat", { direction = "down" })
 rex.bind(PREFIX .. "k", "resize_repeat", { direction = "up" })
@@ -215,7 +224,7 @@ rex.mode("resize", { exclusive = true })
 rex.bind("resize/enter", "client.mode.exit")
 rex.bind("resize/q", "client.mode.exit")
 
-rex.bind(PREFIX .. "c", "tab_here")
+-- rex.bind(PREFIX .. "c", "tab_here")
 rex.bind(PREFIX .. "z", "pane.zoom")
 rex.bind(PREFIX .. "o", "pane.focus_next")
 rex.bind(PREFIX .. "x", "pane.close")
@@ -225,7 +234,6 @@ rex.bind(PREFIX .. "n", "client.tab.next")
 rex.bind(PREFIX .. "p", "client.tab.previous")
 rex.bind(PREFIX .. ",", "client.tab.rename")
 rex.bind(PREFIX .. "4", "session.rename")
-rex.bind(PREFIX .. "e", "session.switch")
 rex.bind(PREFIX .. "ctrl+f", "session.switch")
 
 -- >>> md-viewer: Cmd-F binding (managed by md-viewer setup; edits are replaced) >>>

@@ -78,6 +78,7 @@ blocks:
       #   template: '{{ if .Env.DATAOS_TENANT }}{{ .Env.DATAOS_TENANT }} {{ end }}'
   - type: prompt
     alignment: right
+    overflow: hide
     segments:
       - type: docker
         style: plain
