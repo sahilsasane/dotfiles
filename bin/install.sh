@@ -98,11 +98,14 @@ mkdir -p "$CONFIG_HOME/dotfiles-theme" "$HOME/.cache"
 "$DOTFILES_ROOT/bin/dotfiles-theme" apply
 
 if [[ "$(uname)" = Darwin ]]; then
-  launch_agent="$HOME/Library/LaunchAgents/com.sahilsasane.dotfiles-theme.plist"
-  mkdir -p "$(dirname "$launch_agent")"
-  sed "s#__HOME__#$HOME#g" "$DOTFILES_ROOT/macos/launchd/com.sahilsasane.dotfiles-theme.plist" > "$launch_agent"
-  launchctl bootout "gui/$(id -u)/com.sahilsasane.dotfiles-theme" 2>/dev/null || true
-  launchctl bootstrap "gui/$(id -u)" "$launch_agent"
+  mkdir -p "$HOME/Library/LaunchAgents"
+  for plist in "$DOTFILES_ROOT"/macos/launchd/*.plist; do
+    label="$(basename "$plist" .plist)"
+    launch_agent="$HOME/Library/LaunchAgents/$label.plist"
+    sed "s#__HOME__#$HOME#g" "$plist" > "$launch_agent"
+    launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$launch_agent"
+  done
 fi
 
 echo "Linked dotfiles into $HOME."

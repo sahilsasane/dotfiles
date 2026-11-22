@@ -5,7 +5,13 @@ export VISUAL="$EDITOR"
 export FCEDIT="$EDITOR"
 unset LSCOLORS
 export CLAUDE_CODE_NO_FLICKER=1
-export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
+# Keeps tmux session titles. Not in Rex: this flag also stops Claude's
+# OSC 7501 status, which Rex needs for tab activity and notifications.
+if [[ "${TERM_PROGRAM:-}" == rex ]]; then
+  unset CLAUDE_CODE_DISABLE_TERMINAL_TITLE
+else
+  export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
+fi
 export HOMEBREW_NO_ENV_HINTS=1
 export BUN_OPTIONS="${BUN_OPTIONS:+$BUN_OPTIONS }--preload=/Users/sahilsasane/.local/share/no-agent-summary.js"
 unalias man 2>/dev/null
