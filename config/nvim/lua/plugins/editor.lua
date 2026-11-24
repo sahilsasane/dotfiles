@@ -11,7 +11,7 @@ return {
       { 'P', '<Plug>(YankyPutBefore)', mode = { 'n', 'x' }, desc = 'Put before cursor' },
       { 'gp', '<Plug>(YankyGPutAfter)', mode = { 'n', 'x' }, desc = 'Put after cursor and move' },
       { 'gP', '<Plug>(YankyGPutBefore)', mode = { 'n', 'x' }, desc = 'Put before cursor and move' },
-      { '<leader>y', '<cmd>YankyRingHistory<CR>', mode = { 'n', 'x' }, desc = 'Yank history' },
+      { '<leader>Y', '<cmd>YankyRingHistory<CR>', mode = { 'n', 'x' }, desc = 'Yank history' },
       { ']p', '<Plug>(YankyPutIndentAfterLinewise)', desc = 'Put below with indent' },
       { '[p', '<Plug>(YankyPutIndentBeforeLinewise)', desc = 'Put above with indent' },
     },

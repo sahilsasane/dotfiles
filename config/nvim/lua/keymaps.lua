@@ -45,6 +45,19 @@ vim.keymap.set('n', '<C-i>', '<C-i>zz', { desc = 'Jump forwared in the list and 
 vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
 vim.keymap.set('v', '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
 
+-- Copy "path:12-20" for the selected lines (or "path:12" for the cursor line),
+-- to point an agent at them. The path is relative to Neovim's working directory.
+local function copy_line_reference()
+  local first, last = vim.fn.line 'v', vim.fn.line '.'
+  if first > last then first, last = last, first end
+  local path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':.')
+  local ref = first == last and ('%s:%d'):format(path, first) or ('%s:%d-%d'):format(path, first, last)
+  vim.fn.setreg('+', ref)
+  if vim.fn.mode():match '[vV\22]' then vim.api.nvim_feedkeys(vim.keycode '<Esc>', 'n', false) end
+  vim.notify('Copied ' .. ref)
+end
+vim.keymap.set({ 'n', 'x' }, '<leader>y', copy_line_reference, { desc = 'Copy file:lines reference' })
+
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result and center' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result and center' })
 
