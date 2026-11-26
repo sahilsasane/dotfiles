@@ -15,6 +15,9 @@ fi
 plugins=(git)
 
 source "$ZSH/oh-my-zsh.sh"
+# Oh My Zsh selects Emacs mode during startup.
+bindkey -v
+
 source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 if (( ${+widgets[autosuggest-accept]} )); then

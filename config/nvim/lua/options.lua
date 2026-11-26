@@ -40,8 +40,6 @@ vim.o.scrolloff = 10
 
 vim.o.confirm = true
 
-vim.o.lazyredraw = true
-
 vim.o.autoread = true
 
 vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
