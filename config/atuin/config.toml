@@ -46,3 +46,6 @@ model = "fast"
 [daemon]
 enabled = true
 autostart = true
+
+[threads]
+enabled = true
